@@ -1,33 +1,22 @@
-import React, { Component } from 'react';
+import React from 'react';
+// import 'antd/dist/antd.css';
 import {withRouter} from 'react-router-dom';
 import 'lib-flexible';
-import logo from './logo.svg';
-import './App.scss';
+import 'antd-mobile/dist/antd-mobile.css';
 
-@withRouter
-class App extends Component{
-  render(){
-    return (
-      <div className = "App" >
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-            cascascasc
-          </a>
-          <p className="lili">ashdjhasjkdahk</p>
-        </header>
-      </div>
-    );
-  }
+// components
+import AppHead from './components/AppHead';
+import AppMain from './components/AppMain';
+import AppFooter from './components/AppFooter';
+
+
+function App() {
+  return (
+    <div className="App">
+      <AppHead />
+      <AppFooter />
+    </div>
+  );
 }
 
 export default App;

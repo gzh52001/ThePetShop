@@ -1,0 +1,18 @@
+
+
+footer{
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  // height: ;
+  #tab-bar.demo {
+    display: flex;
+    flex-direction: column;
+  }
+  #tab-bar .demoName {
+    height: 50px;
+  }
+  #tab-bar .demo-preview-item .am-tab-bar {
+    background-color: white;
+  }
+}
