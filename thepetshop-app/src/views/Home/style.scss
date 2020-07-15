@@ -1,0 +1,84 @@
+.home{
+    // height: 800px;
+    background: #fff;
+    width: 100%;
+
+    // 顶部
+    .home-head{
+        width: 100%;
+        padding: 0 15px;
+        position: fixed;
+        top: 0;
+        height: 44px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .iconfont {
+            font-size: 22px;
+            color: #fff;
+        }
+        .home-search{
+            height: 34px;
+            width: 290px;
+            background: #fff;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: rgb(102,102,102);
+            .iconfont{
+                font-size: 20px;
+                padding: 0 10px 0 4px;
+                color: rgb(102,102,102);
+            }
+        }
+    }
+
+    // 轮播图
+    .am-wingblank{
+        margin: 0;
+        width: 100%;
+        height: 255px;
+        .slider-decorator-0{
+            bottom: 20px !important;
+        }
+    }
+
+    // 圈圈跳转
+    .home-nav{
+        width: 100%;
+        height: 82px;
+        .am-grid{
+            width: 100%;
+            height: 100%;
+            .am-flexbox{
+                height: 100%;
+                background: url('../../assets/img/nV3tsTMF.gif') ;
+                background-size: contain;
+            }
+            .am-grid-item-content{
+                background: none !important;
+            }
+        }
+    }
+
+    // 礼包
+    .home-discounts{
+        width: 100%;
+        height: 148px;
+        img{
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    // title分隔
+    .home-title{
+        width: 100%;
+        height: 28px;
+        img{
+            width: 100%;
+            height: 100%;
+        }
+    }
+}

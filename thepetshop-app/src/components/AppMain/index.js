@@ -2,6 +2,7 @@ import React,{Component} from 'react';
 
 // views
 import Home from '../../views/Home';
+import './style.scss'
 
 class AppMain extends Component {
     constructor(){
@@ -14,9 +15,11 @@ class AppMain extends Component {
 
     render(){
         return(
-            <div className="main">
-                <Home />
-            </div>
+            <main>
+                <section className="show-wrap">
+                    <Home />
+                </section>
+            </main>
         )
     }
 }	

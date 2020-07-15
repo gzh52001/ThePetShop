@@ -1,9 +1,10 @@
 
-
 footer{
   width: 100%;
   position: fixed;
   bottom: 0;
+  height: 50px;
+  z-index: 99;
   // height: ;
   #tab-bar.demo {
     display: flex;
@@ -14,5 +15,8 @@ footer{
   }
   #tab-bar .demo-preview-item .am-tab-bar {
     background-color: white;
+  }
+  .footer-wrap{
+    height: 50px;
   }
 }

@@ -8,7 +8,7 @@ class AppFooter extends Component {
         super();
 
         this.state = {
-            selectedTab: 'redTab',
+            selectedTab: 'blueTab',
             hidden: false,
             fullScreen: true,
             ftrWrapData:[
@@ -24,47 +24,25 @@ class AppFooter extends Component {
     renderContent(components) {
         return (
             <div style={{ backgroundColor: 'white', height: '100%', textAlign: 'center' }}>
-                {pageText}
+                {/* {pageText} */}
                 {components}
-            {/* <div style={{ paddingTop: 60 }}>Clicked “{pageText}” tab， show “{pageText}” information</div>
-            <a style={{ display: 'block', marginTop: 40, marginBottom: 20, color: '#108ee9' }}
-                onClick={(e) => {
-                e.preventDefault();
-                this.setState({
-                    hidden: !this.state.hidden,
-                });
-                }}
-            >
-                Click to show/hide tab-bar
-            </a>
-            <a style={{ display: 'block', marginBottom: 600, color: '#108ee9' }}
-                onClick={(e) => {
-                e.preventDefault();
-                this.setState({
-                    fullScreen: !this.state.fullScreen,
-                });
-                }}
-            >
-                Click to switch fullscreen
-            </a> */}
             </div>
         );
     }
 
     render(){
         const {ftrWrapData} = this.state;
-
         return(
             <footer>
-                <div className="footer-wrap" style={this.state.fullScreen ? { position: 'fixed', height: '100%', width: '100%', top: 0, paddingTop: '44px' } : { height: 50 }}>
+                <div className="footer-wrap">
                     <TabBar
                     unselectedTintColor="#949494"
-                    tintColor="#33A3F4"
+                    tintColor="#f55b50"
                     barTintColor="white"
                     hidden={this.state.hidden}
                     >
                     <TabBar.Item
-                        title={ftrWrapData.title}
+                        title={ftrWrapData[0].title}
                         key="Life"
                         icon={<div style={{
                         width: '22px',
@@ -87,7 +65,7 @@ class AppFooter extends Component {
                         }}
                         data-seed="logId"
                     >
-                        {this.renderContent(ftrWrapData.components)}
+                        {this.renderContent(ftrWrapData[0].components)}
                     </TabBar.Item>
                     <TabBar.Item
                         icon={
