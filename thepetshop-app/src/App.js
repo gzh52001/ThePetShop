@@ -6,7 +6,8 @@ import 'antd-mobile/dist/antd-mobile.css';
 import '@/assets/icon/iconfont.css'
 
 // components
-import AppHead from './components/AppHead';
+// import AppHead from './components/AppHead';
+import AppMain from './components/AppMain';
 import AppFooter from './components/AppFooter';
 import Login from '@/views/Login';
 
@@ -14,17 +15,17 @@ import Login from '@/views/Login';
 class App extends Component {
   render() {
     // console.log(this.props);
-    const { location: { pathname } } = this.props
+    const { location: { pathname } } = this.props;
     return (
       <div className="App">
         {
-          pathname === '/login' || '/reg' ? (
+          pathname === '/login' || pathname ==='/reg' ? (
             <>
               <Route path='/login' component={Login} />
             </>
           ) : (
             <>
-              <AppHead />
+              <AppMain />
               <AppFooter />
             </>
           )
