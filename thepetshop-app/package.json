@@ -12,6 +12,7 @@
     "axios": "^0.19.2",
     "lib-flexible": "^0.3.2",
     "postcss-pxtorem": "^5.1.1",
+    "rc-form": "^2.4.11",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1"

@@ -1,0 +1,38 @@
+.loginBox{
+    background-color: #fff;
+    height: 100%;
+}
+.am-list-item{
+    width: 95%;
+    margin: 0 auto;
+}
+.login{
+    margin-top: 50px ;
+}
+.am-list-body::before,.am-list-body::after{
+    display: none!important;
+}
+.am-list-line::after{
+    content: '';
+    position: absolute;
+    background-color: #ddd;
+    display: block;
+    z-index: 1;
+    top: auto;
+    right: auto;
+    bottom: 0;
+    left: 0;
+    width: 95%!important;
+    height: 2PX!important;
+    transform-origin: 50% 100%;
+    transform: scaleY(0.5);
+}
+.am-input-control input{
+    font-size: 14px!important;
+}
+.loginbtn{
+    background-color: #fa564a;
+    width: 90%;
+    margin: 50px auto;
+    border-radius: 50px;
+}

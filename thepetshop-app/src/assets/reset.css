@@ -2,10 +2,16 @@
 html,body,ul,li,ol,dl,dd,dt,p,h1,h2,h3,h4,h5,h6,span,form,fieldset,legend,img,input,figure,figcaption{
     margin:0;
     padding:0;
+    touch-action: none;
+}
+html,body{
+    width: 100%;
+    height: 100%;
 }
 *{
     /* 让所有的元素触发怪异盒模型 */
     box-sizing: border-box;
+    /* background-color: #fff; */
 }
 h1,h2,h3,h4,h5,h6,i,span{
     font-size:16px;
@@ -31,4 +37,27 @@ img{
 input{
     outline:none;
     display:block;
+}
+#root{
+    width: 100%;
+    height: 100%;
+}
+.App{
+    width: 100%;
+    height: 100%;
+}
+.border-1px::before{
+    content: '';
+    position: absolute;
+    background-color: #ddd;
+    display: block;
+    z-index: 1;
+    top: auto;
+    right: auto;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1PX;
+    transform-origin: 50% 100%;
+    transform: scaleY(0.5); 
 }

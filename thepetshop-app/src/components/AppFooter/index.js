@@ -21,11 +21,11 @@ class AppFooter extends Component {
         };
     }
 
-    renderContent(components) {
+    renderContent(pageText) {
         return (
             <div style={{ backgroundColor: 'white', height: '100%', textAlign: 'center' }}>
                 {pageText}
-                {components}
+                {/* {components} */}
             {/* <div style={{ paddingTop: 60 }}>Clicked “{pageText}” tab， show “{pageText}” information</div>
             <a style={{ display: 'block', marginTop: 40, marginBottom: 20, color: '#108ee9' }}
                 onClick={(e) => {
@@ -87,7 +87,7 @@ class AppFooter extends Component {
                         }}
                         data-seed="logId"
                     >
-                        {this.renderContent(ftrWrapData.components)}
+                        {this.renderContent(ftrWrapData.title)}
                     </TabBar.Item>
                     <TabBar.Item
                         icon={
