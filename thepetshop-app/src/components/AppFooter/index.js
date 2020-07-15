@@ -21,7 +21,7 @@ class AppFooter extends Component {
         };
     }
 
-    renderContent(components) {
+    renderContent(pageText) {
         return (
             <div style={{ backgroundColor: 'white', height: '100%', textAlign: 'center' }}>
                 {/* {pageText} */}
