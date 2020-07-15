@@ -1,5 +1,4 @@
 const express = require('express')
-const bodyParser = require('body-parser')
 
 const query = require("../../db/mysql")
 const { create, verify } = require("../token")
@@ -7,13 +6,11 @@ const bcryptjs = require("bcryptjs");
 
 const router = express.Router()
 
-router.use(bodyParser.json())
-router.use(bodyParser.urlencoded({ extended: false }))
 //验证用户名
 router.get('/checkName', async (req, res) => {
-    let { name } = req.query
+    let { username } = req.query
     try {
-        let sql = `SELECT * FROM user WHERE NAME='${name}'`
+        let sql = `SELECT * FROM user WHERE NAME='${username}'`
         let p = await query(sql)
         let inf = {};
         if (p.length) {
@@ -77,14 +74,13 @@ router.post('/login', async (req, res) => {
     try {
         let sql = `select * from user where username='${username}'`
         let p = await query(sql)
-        console.log(p)
         let inf = {}
         if (p.length) {
             let miwen = p[0].password
             let result = bcryptjs.compareSync(password, miwen);
             if (result) {
                 let token = ""
-                if (keep == "true") {
+                if (keep) {
                     token = create(password)
                 }
                 inf = {

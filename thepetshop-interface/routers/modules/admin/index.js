@@ -1,14 +1,10 @@
 const express = require('express')
-const bodyParser = require('body-parser')
 
 const query = require("../../db/mysql")
 const { create, verify } = require("../token")
 const bcryptjs = require("bcryptjs");
 
 const router = express.Router()
-
-router.use(bodyParser.json())
-router.use(bodyParser.urlencoded({ extended: false }))
 
 //验证用户名
 router.get('/checkName', async (req, res) => {
@@ -84,7 +80,7 @@ router.post('/login', async (req, res) => {
             let result = bcryptjs.compareSync(password, miwen);
             if (result) {
                 let token = ""
-                if (keep == "true") {
+                if (keep) {
                     token = create(password)
                 }
                 inf = {
@@ -118,6 +114,26 @@ router.post('/login', async (req, res) => {
         }
         res.send(inf)
     }
+})
+//验证token
+router.get('/verify', (req, res) => {
+    let { token } = req.query
+    let result = verify(token)
+    let inf = {}
+    if (result) {
+        inf = {
+            code: 2000,
+            flag: true,
+            message: "校验成功"
+        }
+    } else {
+        inf = {
+            code: 3000,
+            flag: false,
+            message: "检验失败"
+        }
+    }
+    res.send(inf)
 })
 
 module.exports = router
