@@ -1,0 +1,53 @@
+.loginfooter{
+    width: 100%;
+    height: 25%;
+    position: absolute;
+    bottom: 0;
+    .foot_title{
+        position: relative;
+        text-align:center;
+        color: #646464;
+        font-size:14px;
+    }
+    .foot_title::after,.foot_title::before{
+        content: '';
+        display: block;
+        position: absolute;
+        top: 6px;
+        background-color: #ddd;
+        width: 30%;
+        height: 3PX;
+        z-index: 1;
+        transform-origin: 50% 100%;
+        transform: scaleY(0.5);
+    }
+    .foot_title::after{
+        left: 25px;
+    }
+    .foot_title::before{
+        right: 26px;
+    }
+    .foot_shejiao{
+        width: 150px;
+        margin: 15px auto;
+        .iconfont{
+            width: 100%;
+            height: 100%;
+            font-size: 30px;
+        }
+        .icon-sousuo2{
+            color: #64aa25;
+        }
+        .icon-zhifubao{
+            color:#00a5e6;
+        }
+        .icon-weibo{
+            color:#bc3635;
+        }
+    }
+    .foot_desc{
+        text-align:center;
+        margin-top:60px;
+        color:#696969;
+    }
+}

@@ -1,10 +1,13 @@
 .loginBox{
+    position: relative;
     background-color: #fff;
     height: 100%;
+    touch-action: none;
 }
 .am-list-item{
     width: 95%;
-    margin: 0 auto;
+    height: 54px!important;
+    margin: 12px auto;
 }
 .login{
     margin-top: 50px ;
@@ -28,11 +31,25 @@
     transform: scaleY(0.5);
 }
 .am-input-control input{
-    font-size: 14px!important;
+    font-size: 13px!important;
+}
+.red .am-list-line::after{
+    background-color: red!important;
+}
+.red .am-input-label{
+    color: red!important;
 }
 .loginbtn{
-    background-color: #fa564a;
     width: 90%;
     margin: 50px auto;
     border-radius: 50px;
+}
+.loginfoo{
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 12px;
+    > a{
+        color: #646464;
+    }
 }

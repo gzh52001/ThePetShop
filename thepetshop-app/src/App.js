@@ -10,6 +10,7 @@ import '@/assets/icon/iconfont.css'
 import AppMain from './components/AppMain';
 import AppFooter from './components/AppFooter';
 import Login from '@/views/Login';
+import Reg from '@/views/Reg';
 
 @withRouter
 class App extends Component {
@@ -22,6 +23,7 @@ class App extends Component {
           pathname === '/login' || pathname ==='/reg' ? (
             <>
               <Route path='/login' component={Login} />
+              <Route path='/reg' component={Reg} />
             </>
           ) : (
             <>

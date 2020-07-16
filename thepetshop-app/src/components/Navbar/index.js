@@ -10,7 +10,7 @@ function Navbar(props) {
             mode="light"
             icon={<Icon type="left" size='md' />}
             onLeftClick={() => console.log('onLeftClick')}
-            rightContent={skip}
+            rightContent={props.isshow?null:skip}
             className='border-1px navbar'
         >
             {props.name}
