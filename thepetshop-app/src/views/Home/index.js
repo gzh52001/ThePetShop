@@ -79,37 +79,48 @@ class Home extends Component {
             classifyTabs: [
                 {
                     title: '海淘精选',
-                    classifyData:[]
+                    classifyData:[],
+                    tid:0
                 },
                 {
-                    title: '猫咪主粮',
-                    classifyData:[]
+                    title: '狗狗窝垫',
+                    classifyData:[],
+                    tid:3
                 },
                 {
                     title: '狗狗主粮',
-                    classifyData:[]
+                    classifyData:[],
+                    tid:1
                 },
                 {
                     title: '营养保健',
-                    classifyData:[]
+                    classifyData:[],
+                    tid:6
                 },
                 {
                     title: '狗狗零食',
-                    classifyData:[]
+                    classifyData:[],
+                    tid:2
                 },
                 {
-                    title: '猫咪零食',
-                    classifyData:[]
+                    title: '狗狗美容',
+                    classifyData:[],
+                    tid:12
                 },
                 {
                     title: '日常用品',
-                    classifyData:[]
+                    classifyData:[],
+                    tid:8
                 },
                 {
                     title: '医疗护理',
-                    classifyData:[]
+                    classifyData:[],
+                    tid:7
                 },
-              ],
+            ],
+            classifyIdx:0,
+            classifyFD:null,
+            classifyPage:0,
 
             // 每日上新
             newDayData:[]
@@ -145,6 +156,9 @@ class Home extends Component {
         this.topStyle();
     }
 
+    componentDidUpdate(){
+        this.topStyle()
+    }
     topStyle(){
         let home = document.getElementsByClassName('show-wrap')[0]
         let head = document.getElementsByClassName('home-head')[0]
@@ -152,7 +166,12 @@ class Home extends Component {
         let icon2 = head.querySelector('.goCart .iconfont')
         let search = head.querySelector('.home-search')
         let istop = document.querySelector('.classify-wrap .am-tabs-tab-bar-wrap')
-        home.onscroll = function(){
+
+        let istops = 0
+        let domHeight = document.getElementsByClassName('home')[0].offsetHeight
+        const {classifyIdx,classifyTabs,classifyFD,classifyPage} = this.state
+        home.onscroll = ()=>{
+            istops = home.scrollTop + window.innerHeight;
             if(home.scrollTop<=200){
                 head.style.background = `rgba(255,255,255,${home.scrollTop/50})`;
                 icon1.style.color = `rgba(51,51,51,${home.scrollTop/50})`
@@ -164,16 +183,33 @@ class Home extends Component {
                 icon2.style.color = `rgb(255,255,255)`
                 search.style.background = `rgb(255,255,255)`
             }
-            if(home.scrollTop>=1100){
+            if(home.scrollTop>=1070){
                 istop.style.cssText = `
                     z-index: 999;
                     position: fixed;
                     top: 0;
                 `
             }else{
-                istop.style.cssText = `
-                position:sticky
-                `
+                istop.style.cssText = `position:sticky`;
+            }
+            // console.log(home.scrollTop);
+            if(istops>=domHeight){
+                if(classifyFD==null){
+                    GoodsApi.allGoods(classifyIdx,classifyPage+1,8).then(res=>{
+                        if(res.data.flag){
+                            classifyTabs.forEach(item=>{
+                                if(item.tid==classifyIdx){
+                                    item.classifyData = [...item.classifyData,...res.data.data.goodsinfo]
+                                }
+                            })
+                            this.setState({
+                                classifyTabs,
+                                classifyPage:classifyPage+1,
+                                classifyFD:null
+                            })
+                        }
+                    });
+                }
             }
         }
     }
@@ -311,6 +347,7 @@ class Home extends Component {
                          swipeable={false}
                          tabBarActiveTextColor='#f55b50'
                          tabBarUnderlineStyle={{borderColor:'#f55b50'}}
+                         onTabClick={ (tab, index) => {this.classifyShow(tab,index)}}
                         //  animated={false} 
                          renderTabBar={props => <Tabs.DefaultTabBar {...props} page={4.7} />}
                         >
@@ -345,8 +382,8 @@ class Home extends Component {
     classifyContent = tab =>
     (<div className="classify-info" >
       {
-          tab.classifyData.map(item=>(
-            <div key={item.gid} className='classify-item'>
+          tab.classifyData.map((item,index)=>(
+            <div key={index} className='classify-item'>
                 <div className='img-item'>
                     <img src={item.gimgs} />
                 </div>
@@ -363,21 +400,31 @@ class Home extends Component {
     async getClassifyData(){
         try {
             const {classifyTabs} = this.state
-            let p = await GoodsApi.randomGoods(8);
-            if(p.data.flag){
-                classifyTabs.forEach((item,index)=>{
-                    if(index==0){
-                        item.classifyData = p.data.data;
+                classifyTabs.forEach(async (item,index)=>{
+                    let p2 = await GoodsApi.allGoods(item.tid);
+                    if(p2.data.flag){
+                        item.classifyData = p2.data.data.goodsinfo;
                     }
-                    item.classifyData = p.data.data;
                 })
                 this.setState({
                     classifyTabs:classifyTabs
                 })
-            }
         } catch (error) {
             console.log(error);
         }
+    }
+
+    classifyShow(tab,index){
+        const {classifyTabs} = this.state;
+        let home = document.getElementsByClassName('show-wrap')[0]
+        if(home.scrollTop>=1070){
+            document.getElementsByClassName('show-wrap')[0].scrollTop = 1070
+        }
+        this.setState({
+            classifyIdx:classifyTabs[index].tid,
+            classifyPage:0,
+            classifyFD:null
+        })
     }
 
     
