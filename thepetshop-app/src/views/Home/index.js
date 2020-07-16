@@ -58,7 +58,7 @@ class Home extends Component {
         (<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '150px', backgroundColor: '#fff' }}>
             {
                 data.map(item => (
-                    <div>{item.gtitle}
+                    <div key={item.gimgs}>{item.gtitle}
                         <img src={item.gimgs} style={{ width: "100px", height: "100px" }} />
                     </div>
                 ))
