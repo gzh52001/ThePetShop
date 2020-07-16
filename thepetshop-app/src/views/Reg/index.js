@@ -3,6 +3,7 @@ import Navbar from '@/components/Navbar';
 import { List, InputItem, Toast, Button, Flex } from 'antd-mobile';
 
 import Loginfoot from '@/components/Loginfoot';
+import regApi from '@/api/reg';
 class Reg extends Component {
     constructor() {
         super();
@@ -12,11 +13,36 @@ class Reg extends Component {
             userpass2: '',//密码2
             phone: '',//手机号
             email: '',//邮箱
+            isUserError: false,//验证用户名
             isPassError: false,//验证密码
             isPass2Error: false,//确认密码
             isPhoneError: false,//验证手机号码
             isEmailError: false,//验证手机号码
         }
+    }
+    //用户
+    user = (val)=>{
+        this.setState({
+            username: val,
+            isUserError: false
+        })
+    }
+    //验证用户名
+    checkUser =async (val)=>{
+        try{
+            let p = await regApi.checkuser(val);
+            if(!p.data.flag){
+                this.setState({
+                    isUserError:true
+                })
+            }
+        }catch(err){
+            console.log(err);
+        }
+    }
+    //用户名感叹号
+    onUserError = () => {
+        Toast.fail('用户已存在', 3);
     }
     //密码
     pass = (val) => {
@@ -99,19 +125,40 @@ class Reg extends Component {
     onEmailError=()=>{
         Toast.fail('请输入正确格式的邮箱，如:xxxxxx@xx.xxx,注:数字或字母开头', 3);
     }
+    //注册
+    reg=async ()=>{
+        try{
+            let p = await regApi.reg(this.state);
+            console.log(p.data);
+            if(p.data.flag){
+                Toast.success('注册成功',2);
+                this.props.history.push('/login');
+            }else{
+                Toast.fail('注册失败', 2);
+            }
+        }catch(err){
+            console.log(err);
+        }
+    }
     render() {
-        const { username, userpass, userpass2, phone, email, isPassError, isPass2Error,isPhoneError,isEmailError } = this.state;
+        const { username, userpass, userpass2, phone, email, isPassError, isPass2Error,isPhoneError,isEmailError,isUserError } = this.state;
+        const {history} = this.props
         // console.log(username);
         return (
             <div className='loginBox'>
                 {/* 头部导航 */}
-                <Navbar name="注册" isshow={true} />
+                <Navbar name="注册" history={history}/>
                 {/* 注册标点 */}
                 <List>
                     <InputItem
                         clear
                         placeholder="请输入账号"
                         value={username}
+                        onChange={this.user}
+                        onBlur={this.checkUser}
+                        error={isUserError}
+                        className={isUserError ? 'red' : null}
+                        onErrorClick={this.onUserError}
                     >账号</InputItem>
                     <InputItem
                         clear
@@ -159,8 +206,8 @@ class Reg extends Component {
                 </List>
                 {/* 注册按钮 */}
                 {
-                    username && userpass && userpass2&&phone&&email&& isPassError&& isPass2Error&&isPhoneError&&isEmailError ?
-                        <Button type="warning" className='loginbtn' style={{ marginBottom: 15, marginTop: 25 }}>注册 </Button>
+                    !isPassError&&!isPass2Error&&!isPhoneError&&!isEmailError&&!isUserError?
+                        <Button type="warning" className='loginbtn' style={{ marginBottom: 15, marginTop: 25 }} onClick={this.reg}>注册 </Button>
                         :
                         <Button type="warning" disabled className='loginbtn' style={{ marginBottom: 15, marginTop: 25 }} >注册</Button>
                 }
