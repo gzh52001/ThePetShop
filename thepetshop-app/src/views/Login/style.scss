@@ -1,55 +1,105 @@
-.loginBox{
-    position: relative;
+.loginBox {
+    position        : relative;
     background-color: #fff;
-    height: 100%;
-    touch-action: none;
+    height          : 100%;
+    touch-action    : none;
 }
-.am-list-item{
-    width: 95%;
-    height: 54px!important;
+
+.am-list-item {
+    width : 95%;
+    height: 54px !important;
     margin: 12px auto;
 }
-.login{
-    margin-top: 50px ;
+
+.login {
+    margin-top: 50px;
 }
-.am-list-body::before,.am-list-body::after{
-    display: none!important;
+
+.am-list-body::before,
+.am-list-body::after {
+    display: none !important;
 }
-.am-list-line::after{
-    content: '';
-    position: absolute;
+
+.am-list-line::after {
+    content         : '';
+    position        : absolute;
     background-color: #ddd;
-    display: block;
-    z-index: 1;
-    top: auto;
-    right: auto;
-    bottom: 0;
-    left: 0;
-    width: 95%!important;
-    height: 2PX!important;
+    display         : block;
+    z-index         : 1;
+    top             : auto;
+    right           : auto;
+    bottom          : 0;
+    left            : 0;
+    width           : 95% !important;
+    height          : 2PX !important;
     transform-origin: 50% 100%;
-    transform: scaleY(0.5);
+    transform       : scaleY(0.5);
 }
-.am-input-control input{
-    font-size: 13px!important;
+
+.am-input-control input {
+    font-size: 13px !important;
 }
-.red .am-list-line::after{
-    background-color: red!important;
+
+.red .am-list-line::after {
+    background-color: red !important;
 }
-.red .am-input-label{
-    color: red!important;
+
+.red .am-input-label {
+    color: red !important;
 }
-.loginbtn{
-    width: 90%;
-    margin: 50px auto;
+
+.loginbtn {
+    width        : 90%;
+    margin       : 50px auto;
     border-radius: 50px;
 }
-.loginfoo{
-    width: 80%;
-    margin: 0 auto;
+
+.loginfoo {
+    width     : 80%;
+    margin    : 0 auto;
     text-align: center;
-    font-size: 12px;
-    > a{
+    font-size : 12px;
+
+    >a {
         color: #646464;
     }
+}
+
+.sevenday {
+    .am-list-body {
+        height: 20px !important;
+    }
+
+    .am-list-item {
+        height: 20px !important;
+    }
+
+    .am-list-line {
+        height: 20px !important;
+    }
+
+    .am-list-content {
+        font-size: 12px !important;
+        color    : #646464 !important;
+    }
+
+    .am-checkbox-inner {
+        width : 15px;
+        height: 15px;
+        left  : 30px !important;
+        top   : 4px !important;
+    }
+
+    .am-checkbox-inner::after {
+        top         : 0px;
+        right       : 3px;
+        z-index     : 999;
+        height      : 10px;
+        border-style: solid;
+        transform   : rotate(45deg);
+    }
+}
+
+.sevenday .am-list-line::after {
+    display: none;
 }

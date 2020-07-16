@@ -7,7 +7,7 @@ export default{
     randomGoods(num) {
         return request({
             method:'get',
-            url:host2+'/goods/randomgoods',
+            url:host1+'/goods/randomgoods',
             params:{
                 num
             }
