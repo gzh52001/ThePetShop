@@ -5,27 +5,118 @@ import GoodsApi from '@/api/goods';
 
 
 import './style.scss'
+import TextArea from 'antd/lib/input/TextArea';
 
 class Home extends Component {
     constructor() {
         super();
-
         this.state = {
             data: ['1', '2', '3'],
             imgHeight: 176,
-            tabs: [
+            // 限时秒杀
+            tabs: [],
+            killdata: [],
+            killTime :[
                 {
-                    title: '09:00',
+                    title:'09:00'
                 },
-                { title: '2nd Tab' },
-                { title: '3rd Tab' },
+    
+                {
+                    title:'10:00'
+                },
+    
+                {
+                    title:'11:00'
+                },
+    
+                {
+                    title:'12:00'
+                },
+    
+                {
+                    title:'13:00'
+                },
+    
+                {
+                    title:'14:00'
+                },
+    
+                {
+                    title:'15:00'
+                },
+    
+                {
+                    title:'16:00'
+                },
+    
+                {
+                    title:'17:00'
+                },
+    
+                {
+                    title:'18:00'
+                },
+    
+                {
+                    title:'19:00'
+                },
+    
+                {
+                    title:'20:00'
+                },
+    
+                {
+                    title:'21:00'
+                },
+    
+                {
+                    title:'22:00'
+                },
+    
             ],
-            killdata: []
+            // 分类展示
+            // ["海淘精选", "猫咪主粮", "狗狗主粮", "营养保健", "狗狗零食", "猫咪零食", "日常用品", "医疗护理"]
+            classifyTabs: [
+                {
+                    title: '海淘精选',
+                    classifyData:[]
+                },
+                {
+                    title: '猫咪主粮',
+                    classifyData:[]
+                },
+                {
+                    title: '狗狗主粮',
+                    classifyData:[]
+                },
+                {
+                    title: '营养保健',
+                    classifyData:[]
+                },
+                {
+                    title: '狗狗零食',
+                    classifyData:[]
+                },
+                {
+                    title: '猫咪零食',
+                    classifyData:[]
+                },
+                {
+                    title: '日常用品',
+                    classifyData:[]
+                },
+                {
+                    title: '医疗护理',
+                    classifyData:[]
+                },
+              ],
+
+            // 每日上新
+            newDayData:[]
         }
     }
 
-    async componentDidMount() {
-
+    componentDidMount() {
         // simulate img loading
         setTimeout(() => {
             this.setState({
@@ -40,30 +131,52 @@ class Home extends Component {
                 ]
             });
         }, 100);
-        try {
+        // 限时秒杀，打开网站第一个高亮
+        this.killShow();
+        // 调用请求限时秒杀数据函数
+        this.killData();
 
-            let p = await GoodsApi.randomGoods(2);
-            if (p.data) {
-                this.setState({
-                    killdata: p.data.data
-                })
-            }
-        } catch (error) {
-            console.log(error);
-        }
+        // 调用请求分类展示数据函数
+        this.getClassifyData();
+
+        // 调用请求每日上新数据函数
+        this.getNewDayData();
+
+        this.topStyle();
     }
 
-    // 限时秒杀
-    renderContent = (data) =>
-        (<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '150px', backgroundColor: '#fff' }}>
-            {
-                data.map(item => (
-                    <div>{item.gtitle}
-                        <img src={item.gimgs} style={{ width: "100px", height: "100px" }} />
-                    </div>
-                ))
+    topStyle(){
+        let home = document.getElementsByClassName('show-wrap')[0]
+        let head = document.getElementsByClassName('home-head')[0]
+        let icon1 = head.querySelector('.goMine .iconfont')
+        let icon2 = head.querySelector('.goCart .iconfont')
+        let search = head.querySelector('.home-search')
+        let istop = document.querySelector('.classify-wrap .am-tabs-tab-bar-wrap')
+        home.onscroll = function(){
+            if(home.scrollTop<=200){
+                head.style.background = `rgba(255,255,255,${home.scrollTop/50})`;
+                icon1.style.color = `rgba(51,51,51,${home.scrollTop/50})`
+                icon2.style.color = `rgba(51,51,51,${home.scrollTop/50})`
+                search.style.background = '#f6f6f6'
             }
-        </div>);
+            if(home.scrollTop<=20){
+                icon1.style.color = `rgb(255,255,255)`
+                icon2.style.color = `rgb(255,255,255)`
+                search.style.background = `rgb(255,255,255)`
+            }
+            if(home.scrollTop>=1100){
+                istop.style.cssText = `
+                    z-index: 999;
+                    position: fixed;
+                    top: 0;
+                `
+            }else{
+                istop.style.cssText = `
+                position:sticky
+                `
+            }
+        }
+    }
 
     render() {
 
@@ -74,13 +187,18 @@ class Home extends Component {
         }));
 
         // 限时秒杀
-        const { tabs, killdata } = this.state;
+        const { tabs, killdata,classifyTabs,newDayData } = this.state;
 
-        // 
-        // const {} = this.state;
+        // 每日上新
+        const newdata = Array.from(newDayData).map((item, i) => ({
+            icon: item.gimgs,
+            title: item.gtitle,
+            price: item.gprice,
+        }));
         return (
 
             <div className="home">
+                {/* 顶部 */}
                 <div className='home-head'>
                     <Link className="goMine" to="/mine">
                         <i className="iconfont icon-geren11"></i>
@@ -93,6 +211,7 @@ class Home extends Component {
                         <i className="iconfont icon-gouwuche"></i>
                     </Link>
                 </div>
+                {/* 轮播图 */}
                 <WingBlank>
                     <Carousel
                         autoplay={true}
@@ -137,13 +256,230 @@ class Home extends Component {
                 {/* 限时秒杀 */}
                 <div className="home-kill">
                     <WhiteSpace />
-                    <Tabs tabs={tabs} renderTabBar={props => <Tabs.DefaultTabBar {...props} page={3} />}>
+                    <Tabs 
+                        tabs={tabs}
+                        swipeable={false} 
+                        onTabClick = { (tab, index) => {this.killActive(tab,index)}}
+                        tabBarUnderlineStyle={{display:'none'}}
+                        
+                        renderTabBar={props =>  
+                        <Tabs.DefaultTabBar {...props} page={3.6}/>}
+                        tabBarActiveTextColor='rgba(255,255,255,1)'
+                        tabBarInactiveTextColor='rgba(255,255,255,.6)'
+                    >
                         {this.renderContent(killdata)}
                     </Tabs>
                     <WhiteSpace />
                 </div>
+
+                {/* 每日上新 */}
+                <div className='newDay-img'>
+                    <img src={require('../../assets/img/setNewDay.jpg')} />
+                </div>
+                <div className='newDay-wrap'>
+                    <Grid
+                     data={newdata} 
+                     carouselMaxRow={1} 
+                     isCarousel 
+                     hasLine={false}
+                    //  onClick={_el => console.log(_el)} 
+                    itemStyle={{height:'170px' ,padding:'5px 0' }}
+                     renderItem={dataItem => (
+                        <div style={{ padding: '5px' }}>
+                          <img src={dataItem.icon} style={{ width: '75px', height: '75px' }} alt="" />
+                          <div style={{ color: '#888', fontSize: '14px', marginTop: '12px' }}>
+                            <span className="new-title">{dataItem.title}</span>
+                            <span className="price">￥{dataItem.price}</span>
+                          </div>
+                        </div>
+                      )}
+                    />
+                </div>
+
+                {/* vip卡 */}
+                <div className='vip-card'>
+                    <img src={require('../../assets/img/isVip.gif')} />
+                </div>
+
+                {/* 分类展示模块 */}
+                <div className='classify-wrap'>
+                    <div>
+                        <WhiteSpace />
+                        <Tabs
+                         tabs={classifyTabs} 
+                         useOnPan={false}
+                         swipeable={false}
+                         tabBarActiveTextColor='#f55b50'
+                         tabBarUnderlineStyle={{borderColor:'#f55b50'}}
+                        //  animated={false} 
+                         renderTabBar={props => <Tabs.DefaultTabBar {...props} page={4.7} />}
+                        >
+                            {this.classifyContent}
+                        </Tabs>
+                        <WhiteSpace />
+                    </div>
+                </div>
+
             </div>
         )
+    }
+
+
+    // 每日上新
+    // 获取商品数据
+    async getNewDayData(){
+        try {
+            let p = await GoodsApi.randomGoods(8);
+            if(p.data.flag){
+                this.setState({
+                    newDayData:p.data.data
+                })
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    // 分类展示模块
+    // 点击触发的函数
+    classifyContent = tab =>
+    (<div className="classify-info" >
+      {
+          tab.classifyData.map(item=>(
+            <div key={item.gid} className='classify-item'>
+                <div className='img-item'>
+                    <img src={item.gimgs} />
+                </div>
+                <h3>{item.gtitle}</h3>
+                <div className='price-item'>
+                    <span className="now">￥{item.gprice}</span>
+                    <del className="old">￥{item.gprice}</del>
+                </div>
+            </div>
+          ))
+      }
+    </div>);
+    // 请求数据
+    async getClassifyData(){
+        try {
+            const {classifyTabs} = this.state
+            let p = await GoodsApi.randomGoods(8);
+            if(p.data.flag){
+                classifyTabs.forEach((item,index)=>{
+                    if(index==0){
+                        item.classifyData = p.data.data;
+                    }
+                    item.classifyData = p.data.data;
+                })
+                this.setState({
+                    classifyTabs:classifyTabs
+                })
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    
+    // 限时秒杀
+    // 渲染页面
+    renderContent = (data) =>(
+        <div className="kill-wrap" style={{ display: 'flex', alignItems: 'center'}}>
+            {
+                data.map(item => (
+                    <div className="kill-item" key={item.gtitle}>
+                        <div className='img-item'>
+                            <img src={item.gimgs}/>
+                        </div>
+                        <h3>{item.gtitle}</h3>
+                        <div className='price-item'>
+                            <span className="now">￥{item.gprice}</span>
+                            <del className="old">￥{item.gprice}</del>
+                        </div>
+                    </div>
+                ))
+            }
+        </div>
+    );
+    // 获取限时秒杀数据
+    async killData(){
+        try {
+            let p = await GoodsApi.randomGoods(10);
+            if (p.data.flag) {
+                this.setState({
+                    killdata: p.data.data
+                })
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    // 限时秒杀点击
+    killActive = (tab,index)=>{
+        let killTime = this.killTime();
+        let activeTime = killTime[index].title.props.children[0].props.children;
+        killTime.forEach((item,idx)=>{
+            item.title = <>
+                <h4>{killTime[idx].title.props.children[0].props.children}</h4>
+                <span className={idx==index?"spanActive":""}>即将开始</span>
+            </>
+            if(idx==0){
+                item.title = <>
+                    <h4>{killTime[idx].title.props.children[0].props.children}</h4>
+                    <span className={idx==index?"spanActive":""}>抢购中</span>
+                </>
+            }
+        })
+        this.killData()
+        this.setState({
+            tabs:killTime
+        })
+    }
+    // 打开网站第一个高亮
+    killShow(){
+        let arr = this.killTime();
+        let nowHours = this.getNowHours();
+        arr.forEach((item,index)=>{
+            if(index==0){
+                item.title= <>
+                    <h4>{item.title}</h4>
+                    <span className="spanActive">{parseInt(item.title)==nowHours?'抢购中':'即将开始'}</span>
+                </>
+            }else{
+                item.title= <>
+                    <h4>{item.title}</h4>
+                    <span>{parseInt(item.title)==nowHours?'抢购中':'即将开始'}</span>
+                </>
+            }
+        })
+        this.setState({
+            tabs:arr
+        })
+    }
+    // 获取时间条
+    killTime(){
+        const {killTime} = this.state;
+        let nowHours = this.getNowHours();
+        let num = 0;
+        if(nowHours>=9&&nowHours<=22){
+            for(let i=0;i<killTime.length;i++){
+                // console.log(killTime[i].title);
+                if(parseInt(killTime[i].title)<nowHours){
+                    num++;
+                }
+            }
+            killTime.splice(0,num)
+            return killTime
+        }else{
+            return killTime
+        }
+        // let nowMinutes = this.jialing(d1.getMinutes());
+        // let nowTime = nowHours + ':' + nowMinutes
+    }
+    // 获取当前小时
+    getNowHours(){
+        const d1 = new Date();
+        return d1.getHours();
     }
 }
 export default Home;

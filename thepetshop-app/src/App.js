@@ -34,5 +34,5 @@ class App extends Component {
     );
   }
 }
-App = withRouter(App)
+// App = withRouter(App)
 export default App;

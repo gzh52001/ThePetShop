@@ -1,6 +1,7 @@
 import request from '@/utils/request.js'
+import url from '@/utils/url'
 
-const url = "http://192.168.0.105:3099";
+// const url = "http://192.168.0.105:3099";
 
 export default{
     randomGoods(num) {

@@ -13,6 +13,8 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        z-index: 99;
+        transition: .2s;
         .iconfont {
             font-size: 22px;
             color: #fff;
@@ -79,6 +81,190 @@
         img{
             width: 100%;
             height: 100%;
+        }
+    }
+
+    // 限时秒杀
+    .home-kill{
+        padding: 0 15px;
+        .am-tabs{
+            box-shadow: 0 3px 8px rgba(0,0,0,.2);
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+            .am-tabs-default-bar-prevpage,.am-tabs-default-bar-nextpage{
+                display: none;
+            }
+            .am-tabs-tab-bar-wrap{
+                .am-tabs-default-bar{
+                    background: linear-gradient(to right,#ff9282,#ff4436);
+                    border-top-left-radius: 8px;
+                    border-top-right-radius: 8px;
+                    padding: 6px;
+                    .am-tabs-default-bar-tab{
+                        height:52px;
+                        padding: 6px;
+                        display: flex;
+                        flex-direction: column;
+                        h4{
+                            line-height: 22px;
+                            font-size: 18px;
+                        }
+                        span{
+                            font-size: 10px;
+                            line-height: 10px;
+                            padding: 3px 14px;
+                            display: block;
+                        }
+                        .spanActive{
+                            background: #fff;
+                            color: #f55b50;
+                            border-radius: 10px;
+                        }
+                    }
+                }
+            }
+            
+            .am-tabs-content-wrap{
+                width: auto;
+                .kill-wrap{
+                    overflow-x: auto;
+                    height: 175px;
+                    padding: 6px 0;
+                    .kill-item{
+                        // box-shadow: 0 0 5px 10px rgba(0,0,0,.2);
+                        // display: inline-block;
+                        margin: 0 6px;
+                        width: 88px;
+                        height: 155px;
+                        .img-item{
+                            width: 88px;
+                            height: 88px;
+                            img{
+                                width: 100%;
+                                height: 100%;
+                            }
+                        }
+                        h3{
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            display: -webkit-box;
+                            -webkit-line-clamp: 2;
+                            -webkit-box-orient: vertical;
+                            font-size: 12px;
+                            line-height: 16px;
+                            color:#444;
+                        }
+                        .price-item{
+                            padding-top: 5px;
+                            .now{
+                                font-size: 12px;
+                                color:#f55b50;
+                                padding: 0 6px 0 3px;
+                            }
+                            .old{
+                                font-size: 10px;
+                                color:#999;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // 每日上新
+    .newDay-img{
+        width: 100%;
+        height: 62px;
+        img{
+            width: 100%;
+            height: 100%;
+        }
+    }
+    .newDay-wrap{
+        .new-title{
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            font-size: 12px;
+            line-height: 14px;
+            color:#444;
+            text-align: left;
+            margin-bottom: 5px;
+        }
+        .price{
+            font-size: 12px;
+            color: #f55b50;
+        }
+    }
+
+    // Vip卡
+    .vip-card{
+        width: 100%;
+        height: 105px;
+        img{
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    // 分类展示模块
+    .classify-wrap{
+            
+        .classify-info{
+            display: flex;
+            flex-wrap:wrap ;
+            background-color: rgb(249, 249, 249);
+            justify-content: space-between;
+            padding: 9px 9px 0;
+            .classify-item{
+                width: 173px;
+                height: 250px;
+                background: #fff;
+                margin-bottom: 12px;
+                .img-item{
+                    width: 173px;
+                    height: 173px;
+                    img{
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+                h3{
+                    padding: 0 6px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    font-size: 16px;
+                    line-height: 18px;
+                    color:#444;
+                }
+                
+                .price-item{
+                    padding-top: 10px;
+                    .now{
+                        font-size: 16px;
+                        color:#f55b50;
+                        padding: 0 14px 0 10px;
+                    }
+                    .old{
+                        font-size: 12px;
+                        color:#999;
+                    }
+                }
+            }
+
+        }
+        .am-whitespace.am-whitespace-md{
+            display: none;
+        }
+
+        .am-tabs-tab-bar-wrap{
+            transition: .3s;
         }
     }
 }
