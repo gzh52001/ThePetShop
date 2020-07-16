@@ -4,13 +4,16 @@ import { NavBar, Icon } from 'antd-mobile';
 import './style.scss';
 function Navbar(props) {
     // console.log(props);
-    const skip = '跳过';
+    const gotohome = function(){
+        const {history} = props;
+        // console.log(props);
+        history.push('/home')
+    }
     return (
         <NavBar
             mode="light"
             icon={<Icon type="left" size='md' />}
-            onLeftClick={() => console.log('onLeftClick')}
-            rightContent={props.isshow?null:skip}
+            onLeftClick={gotohome}
             className='border-1px navbar'
         >
             {props.name}
