@@ -21,7 +21,7 @@ export default{
         };
         return request({
             method:'post',
-            url:host1+'/user/login',
+            url:host2+'/user/login',
             data
         })
     }

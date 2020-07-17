@@ -7,7 +7,7 @@ function Navbar(props) {
     const gotohome = function(){
         const {history} = props;
         // console.log(props);
-        history.push('/home')
+        history.push('/main/home')
     }
     return (
         <NavBar
