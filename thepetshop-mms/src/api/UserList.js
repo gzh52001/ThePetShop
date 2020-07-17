@@ -3,24 +3,62 @@ import request from '@/utils/request';//引入axios对象
 const BAST_API = process.env.REACT_APP_SERVICE_URL;
 
 export default {
-    loginIn(username, password, keep) {
+    getUserList(sort,page, num) {        //获取用户列表
         return request({
-            method: 'post',
-            url: "http://192.168.0.105:3099/admin/login",
-            data: {
-                username,
-                password,
-                keep
+            method: 'get',
+            url: `${BAST_API}/admin/userlist`,
+            params: {
+                sort,
+                page,
+                num
             }
         });
     },
-    getUserInf(token) {
+    getUserDetailed(uid) {        //获取用户列表
         return request({
             method: 'get',
-            url: BAST_API + '/user/verify',
-            params:{
-                token
+            url: `${BAST_API}/admin/userinfo`,
+            params: {
+                uid
             }
         });
-    }
+    },
+    searchUser(type,value) {        //获取用户列表
+        return request({
+            method: 'get',
+            url: `${BAST_API}/admin/searchuser`,
+            params: {
+                type,
+                value
+            }
+        });
+    },
+    delUserList(uid) {      //删除用户
+        return request({
+            method: 'delete',
+            url: `${BAST_API}/admin/deluser`,
+            data: {
+                uid
+            }
+        });
+    },
+    delAllUserList(ids) {      //批量删除用户
+        return request({
+            method: 'delete',
+            url: `${BAST_API}/admin/delpart`,
+            data: {
+                ids
+            }
+        });
+    },
+    changeUserList(uid,msg) {      //批量删除用户
+        return request({
+            method: 'put',
+            url: `${BAST_API}/admin/edituser`,
+            data: {
+                uid,
+                msg
+            }
+        });
+    },
 }

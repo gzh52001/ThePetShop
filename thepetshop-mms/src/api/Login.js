@@ -6,7 +6,7 @@ export default {
     loginIn(username, password, keep) {
         return request({
             method: 'post',
-            url: "http://192.168.0.105:3099/admin/login",
+            url:  `${BAST_API}/admin/login`,
             data: {
                 username,
                 password,

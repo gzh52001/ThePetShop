@@ -4,7 +4,7 @@ import { PageHeader, Avatar, Row, Col, Descriptions, Badge } from 'antd';
 import { LeftOutlined } from '@ant-design/icons';
 
 
-function UserDetailed(props){
+function GoodsDetailed(props){
         const {userData} = props;
         return (
             <div className="UserDetailed">
@@ -48,4 +48,4 @@ function UserDetailed(props){
     }
 
 
-export default UserDetailed;
+export default GoodsDetailed;

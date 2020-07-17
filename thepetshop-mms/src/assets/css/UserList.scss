@@ -13,15 +13,35 @@
                 height: 35px;
             }
         }
+        .selectChange {
+            position: absolute;
+            top: 16px;
+            right: 270px;
+            z-index: 999;
+            .ant-select{
+                width: 100px;      
+            }
+            .ant-select-selector {
+                width: 100px;
+                height: 33px;
+                border: none;
+                border-right: 1px solid #d9d9d9;
+                border-radius: 0;
+            }
+            .ant-select-selection-item {
+                text-align: center;
+                line-height: 32px;
+            }
+        }
         .formSearch {
             position: absolute;
-            width: 250px;
+            width: 356px;
             right: 15px;
-
             .ant-input-wrapper .ant-input-group {
                 height: 35px;
             }
             .ant-input-group .ant-input {
+                padding-left: 110px;
                 height: 35px;
             }
             .ant-input-lg {
@@ -65,22 +85,21 @@
     transform: translateX(-25%);
 }
 
-.UserDetailed{
+.UserDetailed {
     position: relative;
     height: 80vh;
     padding: 15px;
-    .ant-page-header{
+    .ant-page-header {
         padding: 0;
     }
-    .userTab{
+    .userTab {
         width: 100%;
         padding: 20px 0;
         overflow: hidden;
-        .userHeader{
+        .userHeader {
             position: relative;
-
             background-color: #e0e0e0;
-            .portrait{
+            .portrait {
                 position: absolute;
                 top: 20px;
                 left: 50%;
@@ -88,7 +107,7 @@
                 border: 2px solid rgba(0, 0, 0, 0.25);
             }
         }
-        h2{
+        h2 {
             position: absolute;
             display: block;
             top: 150px;
@@ -100,5 +119,7 @@
             font-weight: bold;
         }
     }
-
+}
+.changeWindows{
+    
 }

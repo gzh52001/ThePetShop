@@ -60,6 +60,9 @@ export function VerifyLogin(InComponent) {
                 case "/user/userList":
                     this.setState({ openKeys: ['sub2'] })
                     break;
+                case "/user/goodsList":
+                    this.setState({ openKeys: ['sub3'] })
+                    break;
 
                 default:
                     break;

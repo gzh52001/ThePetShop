@@ -2,12 +2,12 @@ import React, { Component } from "react";
 // import { Route, Redirect, Switch } from 'react-router-dom';
 
 import "@/assets/css/UserList.scss"
-import UserForm from '@/views/UserList/UserForm'
-import UserDetailed from '@/views/UserList/UserDetailed'
+import GoodsForm from '@/views/GoodsList/GoodsForm'
+import GoodsDetailed from '@/views/GoodsList/GoodsDetailed'
 
 import UserListApi from "@/api/UserList";
 
-class UserList extends Component {
+class GoodsList extends Component {
     constructor() {
         super();
         this.state = {
@@ -44,14 +44,14 @@ class UserList extends Component {
         return (
             <>
                 <div style={{display: this.state.DetailedFlag?"block":"none"}}>
-                    <UserForm data={this.loklok}></UserForm>
+                    <GoodsForm data={this.loklok}></GoodsForm>
                 </div>
                 <div style={{display: this.state.DetailedFlag?"none":"block"}}>
-                    <UserDetailed data={this.state.loklokID} userData={this.state.userData} fn={this.loklok}></UserDetailed>
+                    <GoodsDetailed data={this.state.loklokID} userData={this.state.userData} fn={this.loklok}></GoodsDetailed>
                 </div>
             </>
         )
     }
 }
 
-export default UserList;
+export default GoodsList;

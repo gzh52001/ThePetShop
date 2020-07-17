@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 
-import { Input, Form, Table, Button, Modal, Popconfirm, message, Select } from 'antd';
+import { Input, Form, Table, Button, Modal, Popconfirm, message} from 'antd';
 import "@/assets/css/UserList.scss"
 
 
 import UserListApi from "@/api/UserList";
-class UserForm extends Component {
+import GoodsListApi from "@/api/GoodsList";
+class GoodsForm extends Component {
     constructor() {
         super();
         this.state = {
@@ -13,20 +14,17 @@ class UserForm extends Component {
             pageSize: 10,    //一页显示的条数
             userList: [],
             totalList: "",
-            sort: 0,
             changeList: {},
             delSelectID: "",
-            searchData: "uid",
-            modifyVisible: false,
-            serchVisible: false
+            modifyVisible: false
         }
     }
     componentDidMount() {
-        this.getUserList(this.state.sort,this.state.page, this.state.pageSize)
+        this.GoodsListApi(this.state.page, this.state.pageSize)
     }
-    getUserList = async (sort,page, num) => {     //获取用户列表
+    GoodsListApi = async (page, num) => {     //获取用户列表
         try {
-            let p = await UserListApi.getUserList(sort,page, num);
+            let p = await UserListApi.GoodsListApi(page, num);
             if (p.data.flag) {
                 p.data.data.map(item => {
                     let b = item.time;
@@ -42,28 +40,6 @@ class UserForm extends Component {
             }
         } catch (error) {
             console.log(error);
-        }
-    }
-    searchUser = async (type, value) => {     //搜索用户列表
-        try {
-            let p = await UserListApi.searchUser(type, value);
-            if (p.data.flag) {
-                p.data.data.map(item => {
-                    let b = item.time;
-                    b = b - 0;
-                    item.time = this.toDate(b)
-                })
-                this.setState({
-                    userList: p.data.data,
-                    totalList: p.data.total,
-                    serchVisible: true
-                })
-                message.success('查找成功！');
-            } else {
-                console.log("获取失败")
-            }
-        } catch (error) {
-            message.error('查找的内容不存在！');
         }
     }
     delUserList = async (uid) => {     //删除用户
@@ -82,7 +58,6 @@ class UserForm extends Component {
         try {
             let p = await UserListApi.delAllUserList(arr);
             if (p.data.flag) {
-                this.getUserList(this.state.page, this.state.pageSize)
                 message.success('删除成功！');
             } else {
                 message.error('删除失败！未知错误');
@@ -91,41 +66,25 @@ class UserForm extends Component {
             console.log(error);
         }
     }
-    changeUserList = async (uid, msg) => {     //修改用户信息
-        try {
-            let p = await UserListApi.changeUserList(uid, msg);
-            if (p.data.flag) {
-                this.getUserList(this.state.sort,this.state.page, this.state.pageSize)
-                message.success('修改成功！');
-            } else {
-                message.error('修改成功！未知错误');
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    }
     handleChange = (value) => {
         console.log(`selected ${value}`);
     }
-    onChange = (pagination, a, sorter, extra) => {     //分页、排序、筛选变化时触发
-        console.log(pagination) 
+    onChange = (pagination, sorter, extra) => {     //分页、排序、筛选变化时触发
         if (sorter.order === "ascend" && sorter.field === "uid") {
-            this.getUserList(0,pagination.current,pagination.pageSize);
+            console.log("正序");
+
         } else if (sorter.order === "descend" && sorter.field === "uid") {
-            this.getUserList(1,pagination.current,pagination.pageSize);
+            console.log("倒序");
+
         } else if (sorter.order === undefined && sorter.field === "uid") {
-            this.getUserList(0,pagination.current,pagination.pageSize);
+            console.log("默认")
         }
     }
     pageChange = (page, pageSize) => {
         this.getUserList(page, pageSize)
-        this.setState({
-            page,
-            pageSize
-        })
     }
     onShowSizeChange = (current, pageSize) => {     //切换页
-
+        console.log("触发了a")
     }
     selectRow = (selectedRowKeys, selectedRows) => {     //多选按钮
         console.log(selectedRowKeys, selectedRows)
@@ -150,22 +109,9 @@ class UserForm extends Component {
             changeList: data
         });
     };
-    selectChange = (value) => {     //搜索选项
-        console.log(value)
-        this.setState({
-            searchData: value
-        })
-    }
-    searchUserList = (value) => {       //确定搜索
-        console.log(value)
-        this.setState({
-            serchVisible: false
-        })
-        this.searchUser(this.state.searchData, value);
-    }
+
     handleOk = values => {  //确定修改
-        console.log(values.uid);
-        this.changeUserList(values.uid, values)
+        console.log(values);
         this.setState({
             modifyVisible: false,
         });
@@ -185,12 +131,7 @@ class UserForm extends Component {
     onFinishFailed = errorInfo => {
         console.log("修改");
     };
-    searchV=()=>{
-        this.setState({
-            serchVisible: false
-        })
-        this.getUserList(this.state.sort,this.state.page, this.state.pageSize)
-    }
+
     toDate = (now) => {
         let a = new Date(now)
         var year = a.getFullYear();  //取得4位数的年份
@@ -203,7 +144,7 @@ class UserForm extends Component {
     }
     render() {
         const { Search } = Input;
-        const { Option } = Select;
+
         const columns = [
             {
                 title: 'ID',
@@ -211,7 +152,7 @@ class UserForm extends Component {
                 width: "125px",
                 align: "center",
                 showSorterTooltip: false,
-                sorter: () => {  },
+                sorter: () => { },
             },
             {
                 title: '用户名',
@@ -237,7 +178,7 @@ class UserForm extends Component {
                 align: "center",
                 width: "100%",
                 ellipsis: true,
-                showSorterTooltip: false,
+                sorter: (a, b) => a.age - b.age,
             },
             {
                 title: '操作',
@@ -264,27 +205,12 @@ class UserForm extends Component {
                             删除选中
                         </Button>
                     </Popconfirm>
-                    {
-                        this.state.serchVisible ?
-                            <Button type="primary" onClick={this.searchV}>
-                                返回列表
-                            </Button>
-                            : <></>
-                    }
-
-                    <Select className="selectChange" defaultValue="ID" style={{ width: 100 }} onChange={this.selectChange}>
-                        <Option value="uid">ID</Option>
-                        <Option value="username">用户名</Option>
-                        <Option value="phonenum">手机号码</Option>
-                        <Option value="email">邮箱</Option>
-                        <Option value="time">注册时间</Option>
-                    </Select>
                     <Search
                         className="formSearch"
                         placeholder="请输入关键字"
                         enterButton="查找"
                         size="large"
-                        onSearch={this.searchUserList}
+                        onSearch={value => console.log(value)}
                     />
                 </div>
                 <Table
@@ -312,7 +238,6 @@ class UserForm extends Component {
                 {
                     this.state.modifyVisible ?
                         <Modal
-                            className="changeWindows"
                             title="修改用户信息"
                             visible={this.state.modifyVisible}
                             footer={null}
@@ -326,12 +251,12 @@ class UserForm extends Component {
                                 onFinishFailed={this.onFinishFailed}
                             >
                                 <Form.Item
-                                    label="ID"
+                                    label="id"
                                     name="uid"
                                     initialValue={this.state.changeList.uid}
                                     rules={[{ required: true, message: 'Please input your username!' }]}
                                 >
-                                    <Input disabled />
+                                    <Input />
                                 </Form.Item>
                                 <Form.Item
                                     label="用户名"
@@ -343,7 +268,7 @@ class UserForm extends Component {
                                 </Form.Item>
                                 <Form.Item
                                     label="手机号码"
-                                    name="phonenum"
+                                    name="phone"
                                     initialValue={this.state.changeList.phonenum}
                                     rules={[{ required: true, message: 'Please input your username!' }]}
                                 >
@@ -351,7 +276,7 @@ class UserForm extends Component {
                                 </Form.Item>
                                 <Form.Item
                                     label="邮箱"
-                                    name="email"
+                                    name="Email"
                                     initialValue={this.state.changeList.email}
                                     rules={[{ required: true, message: 'Please input your username!' }]}
                                 >
@@ -371,4 +296,4 @@ class UserForm extends Component {
     }
 }
 
-export default UserForm;
+export default GoodsForm;
