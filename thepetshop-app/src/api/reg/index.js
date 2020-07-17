@@ -1,5 +1,5 @@
 import request from '@/utils/request.js';
-import {host1,host2} from '@/config.json';
+import host from '@/config.js';
 
 export default {
     // 注册
@@ -14,14 +14,14 @@ export default {
         // console.log(data);
         return request({
             method: 'post',
-            url:host2+'/user/reg',
+            url:host+'/user/reg',
             data
         })
     },
     checkuser(username){
          return request({
             method: 'get',
-            url:host2+'/user/checkname',
+            url:host+'/user/checkname',
             params:{
                 username
             }

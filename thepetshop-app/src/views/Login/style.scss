@@ -4,7 +4,8 @@
     height          : 100%;
     touch-action    : none;
     .am-list-item-active{
-        display: none;
+        // display: none;
+        background: transparent;
     }
 }
 

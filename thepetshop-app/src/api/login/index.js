@@ -1,5 +1,5 @@
 import request from '@/utils/request.js';
-import {host1,host2} from '@/config.json';
+import host from '@/config.js';
 
 // const url = "http://192.168.0.105:3099";
 
@@ -21,7 +21,7 @@ export default{
         };
         return request({
             method:'post',
-            url:host2+'/user/login',
+            url:host+'/user/login',
             data
         })
     }
