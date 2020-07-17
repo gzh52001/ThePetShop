@@ -206,7 +206,7 @@ class Reg extends Component {
                 </List>
                 {/* 注册按钮 */}
                 {
-                    !isPassError&&!isPass2Error&&!isPhoneError&&!isEmailError&&!isUserError?
+                     username&&userpass&&userpass2&&phone&&email?
                         <Button type="warning" className='loginbtn' style={{ marginBottom: 15, marginTop: 25 }} onClick={this.reg}>注册 </Button>
                         :
                         <Button type="warning" disabled className='loginbtn' style={{ marginBottom: 15, marginTop: 25 }} >注册</Button>

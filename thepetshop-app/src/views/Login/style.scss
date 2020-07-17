@@ -3,6 +3,10 @@
     background-color: #fff;
     height          : 100%;
     touch-action    : none;
+    .am-list-item-active{
+        // display: none;
+        background: transparent;
+    }
 }
 
 .am-list-item {
@@ -13,6 +17,7 @@
 
 .login {
     margin-top: 50px;
+    touch-action    : none;
 }
 
 .am-list-body::before,
