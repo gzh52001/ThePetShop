@@ -8,42 +8,49 @@ class AppFooter extends Component {
     constructor(){
         super();
         this.state = {
-            selectedTab: '/home',
+            selectedTab: '/main/home',
             hidden: false,
             fullScreen: true,
             ftrWrapData:[
                 {
                     title:'主页',
-                    path:'/home',
-                    icon:<i className="iconfont icon-qq-copy" style={{fontSize:'24px'}} />
+                    path:'/main/home',
+                    icon:<i className="iconfont icon-home1" style={{fontSize:'24px'}} />,
+                    iconActive:<i className="iconfont icon-home"  style={{fontSize:'24px'}} />
                 },
                 {
                     title:'分类',
-                    path:'/classify',
-                    icon:<i className="iconfont icon-liwu" style={{fontSize:'24px'}} />
+                    path:'/main/classify',
+                    icon:<i className="iconfont icon-leimupinleifenleileibie" style={{fontSize:'24px'}} />,
+                    iconActive:<i className="iconfont icon-leimupinleifenleileibie2"  style={{fontSize:'24px'}} />
                 },
                 {
                     title:'购物车',
-                    path:'/cart',
-                    icon:<i className="iconfont icon-gouwuche" style={{fontSize:'24px'}} />
+                    path:'/main/cart',
+                    icon:<i className="iconfont icon-gouwuche2" style={{fontSize:'24px'}} />,
+                    iconActive:<i className="iconfont icon-gouwuche2"  style={{fontSize:'24px'}} />
                 },
                 {
                     title:'我的',
-                    path:'/mine',
-                    icon:<i className="iconfont icon-geren11" style={{fontSize:'24px'}} />
+                    path:'/main/mine',
+                    icon:<i className="iconfont icon-buoumaotubiao03" style={{fontSize:'24px'}} />,
+                    iconActive:<i className="iconfont icon-wodedangxuan"  style={{fontSize:'24px'}} />
                 },
             ]
         };
     }
 
     componentDidMount(){
-        // console.log(this.props);
+        const {location:{pathname}} = this.props
+        this.setState({
+            selectedTab:pathname
+        })
     }
 
-    renderContent(path) {
-
+    renderContent = ()=>{
+        console.log(11);
         const {history} = this.props
-        history.push(path)
+        // history.push(path)
         // return (
         //     <div style={{ backgroundColor: 'white', height: '100%', textAlign: 'center' }}>
                 
@@ -53,8 +60,7 @@ class AppFooter extends Component {
 
     render(){
         const {ftrWrapData} = this.state;
-        const {location:{pathname}} = this.props
-        console.log(pathname);
+        const {location:{pathname},history} = this.props
         return(
             <footer>
                 <div className="footer-wrap">
@@ -68,17 +74,17 @@ class AppFooter extends Component {
                             ftrWrapData.map(item=>(
                                 <TabBar.Item
                                     title={item.title}
-                                    key='blueTab'
+                                    key={item.path}
                                     icon={item.icon}
-                                    selectedIcon={item.icon}
-                                    selected={this.state.selectedTab === item.title}
-                                    onPress={() => {
-                                    this.setState({
-                                        selectedTab: item.title,
-                                    });
+                                    selectedIcon={item.iconActive}
+                                    selected={this.state.selectedTab === item.path}
+                                    data-seed="logId"
+                                    onPress={()=>{
+                                        this.setState({
+                                            selectedTab: item.path,
+                                        });
+                                        history.push(item.path)
                                     }}
-                                    // data-seed="logId"
-                                    onClick={this.renderContent.bind(this,item.path)}
                                 >
                                 </TabBar.Item>
                             ))

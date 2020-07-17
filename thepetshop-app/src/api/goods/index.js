@@ -1,5 +1,4 @@
-import request from '@/utils/request.js';
-import host from '@/config.js';
+import request,{host} from '@/utils/request.js';
 
 export default{
     randomGoods(num) {

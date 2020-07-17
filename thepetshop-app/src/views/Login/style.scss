@@ -7,6 +7,9 @@
         // display: none;
         background: transparent;
     }
+    .am-list-body{
+        border: none;
+    }
 }
 
 .am-list-item {
@@ -19,7 +22,6 @@
     margin-top: 50px;
     touch-action    : none;
 }
-
 .am-list-body::before,
 .am-list-body::after {
     display: none !important;
