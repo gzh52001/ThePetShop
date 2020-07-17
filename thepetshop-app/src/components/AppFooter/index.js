@@ -43,7 +43,7 @@ class AppFooter extends Component {
     renderContent(path) {
 
         const {history} = this.props
-        history.push(path)
+        // history.push(path)
         // return (
         //     <div style={{ backgroundColor: 'white', height: '100%', textAlign: 'center' }}>
                 
@@ -54,7 +54,7 @@ class AppFooter extends Component {
     render(){
         const {ftrWrapData} = this.state;
         const {location:{pathname}} = this.props
-        console.log(pathname);
+        // console.log(pathname);
         return(
             <footer>
                 <div className="footer-wrap">

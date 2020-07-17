@@ -11,7 +11,7 @@ export default{
             }
         })
     },
-
+    //所有商品
     allGoods(tid,page,index){
         return request({
             method:'get',
@@ -19,9 +19,15 @@ export default{
             params:{
                 tid,
                 page,
-                index
+                num:index
             }
         })
+    },
+    //获取商品分类
+    getTypes(){
+        return request({
+            method:'get',
+            url: host + '/goods/getclassify'
+        })
     }
-    
 }

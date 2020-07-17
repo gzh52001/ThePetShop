@@ -9,3 +9,14 @@
         font-size: 14px;
     }
 }
+.navbar::after{
+    content: '';
+    display: block;
+    height: 2px;
+    position: absolute;
+    bottom: 0;
+    background-color: #ccc;
+    width: 100%;
+    transform: scaleY(.5);
+    transform-origin: 50% 100%;
+}
