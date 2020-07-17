@@ -9,28 +9,24 @@ import '@/assets/icon/iconfont.css'
 // import AppHead from './components/AppHead';
 import AppMain from './components/AppMain';
 import AppFooter from './components/AppFooter';
-import Login from '@/views/Login';
-import Reg from '@/views/Reg';
-
+import { Switch } from 'antd-mobile';
+import AppLayout from './components/AppLayout';
 @withRouter
 class App extends Component {
   render() {
-    // console.log(this.props);
     const { location: { pathname } } = this.props;
+    console.log(pathname);
     return (
       <div className="App">
+        <AppLayout />
         {
-          pathname === '/login' || pathname ==='/reg' ? (
-            <>
-              <Route path='/login' component={Login} />
-              <Route path='/reg' component={Reg} />
-            </>
-          ) : (
-            <>
-              <AppMain />
-              <AppFooter />
-            </>
-          )
+          pathname=="/home"|'classify'?
+          <>
+            <AppMain />
+            <AppFooter /> 
+          </>
+          : 
+          null
         }
       </div>
     );

@@ -1,38 +1,60 @@
 import React,{Component} from 'react';
 import './style.scss'
-import {Route} from 'react-router-dom'
+import {Route,withRouter} from 'react-router-dom'
 import { TabBar } from 'antd-mobile';
-import Home from '@/views/Home'
 
+@withRouter
 class AppFooter extends Component {
     constructor(){
         super();
-
         this.state = {
-            selectedTab: 'blueTab',
+            selectedTab: '/home',
             hidden: false,
             fullScreen: true,
             ftrWrapData:[
                 {
                     title:'主页',
                     path:'/home',
-                    components:Home
-                }
+                    icon:<i className="iconfont icon-qq-copy" style={{fontSize:'24px'}} />
+                },
+                {
+                    title:'分类',
+                    path:'/classify',
+                    icon:<i className="iconfont icon-liwu" style={{fontSize:'24px'}} />
+                },
+                {
+                    title:'购物车',
+                    path:'/cart',
+                    icon:<i className="iconfont icon-gouwuche" style={{fontSize:'24px'}} />
+                },
+                {
+                    title:'我的',
+                    path:'/mine',
+                    icon:<i className="iconfont icon-geren11" style={{fontSize:'24px'}} />
+                },
             ]
         };
     }
 
-    renderContent(components) {
-        return (
-            <div style={{ backgroundColor: 'white', height: '100%', textAlign: 'center' }}>
-                {/* {pageText} */}
-                <Route path='/login' component={components} />
-            </div>
-        );
+    componentDidMount(){
+        // console.log(this.props);
+    }
+
+    renderContent(path) {
+
+        const {history} = this.props
+        history.push(path)
+        // return (
+        //     <div style={{ backgroundColor: 'white', height: '100%', textAlign: 'center' }}>
+                
+        //     </div>
+        // );
     }
 
     render(){
         const {ftrWrapData} = this.state;
+        const {location:{pathname}} = this.props
+        console.log(pathname);
         return(
             <footer>
                 <div className="footer-wrap">
@@ -42,28 +64,26 @@ class AppFooter extends Component {
                     barTintColor="white"
                     hidden={this.state.hidden}
                     >
-                        {/* 主页 */}
-                    <TabBar.Item
-                        title={ftrWrapData[0].title}
-                        key="Life"
-                        icon={
-                            <i className="iconfont icon-qq-copy" style={{fontSize:'24px'}} />
+                        {
+                            ftrWrapData.map(item=>(
+                                <TabBar.Item
+                                    title={item.title}
+                                    key='blueTab'
+                                    icon={item.icon}
+                                    selectedIcon={item.icon}
+                                    selected={this.state.selectedTab === item.title}
+                                    onPress={() => {
+                                    this.setState({
+                                        selectedTab: item.title,
+                                    });
+                                    }}
+                                    // data-seed="logId"
+                                    onClick={this.renderContent.bind(this,item.path)}
+                                >
+                                </TabBar.Item>
+                            ))
                         }
-                        selectedIcon={
-                            <i className="iconfont icon-qq-copy" style={{fontSize:'24px'}} />
-                        }
-                        selected={this.state.selectedTab === 'blueTab'}
-                        onPress={() => {
-                        this.setState({
-                            selectedTab: 'blueTab',
-                        });
-                        }}
-                        data-seed="logId"
-                    >
-                        {this.renderContent(ftrWrapData[0].components)}
-                    </TabBar.Item>
-                    {/* 分类 */}
-                    <TabBar.Item
+                    {/* <TabBar.Item
                         icon={
                             <i className="iconfont icon-liwu" style={{fontSize:'24px'}} />
                         }
@@ -80,9 +100,7 @@ class AppFooter extends Component {
                         }}
                         data-seed="logId1"
                     >
-                        {/* {this.renderContent('Koubei')} */}
                     </TabBar.Item>
-                    {/* 购物车 */}
                     <TabBar.Item
                         icon={
                             <i className="iconfont icon-gouwuche" style={{fontSize:'24px'}} />
@@ -100,9 +118,7 @@ class AppFooter extends Component {
                         });
                         }}
                     >
-                        {/* {this.renderContent('Friend')} */}
                     </TabBar.Item>
-                    {/* 我的 */}
                     <TabBar.Item
                         icon={
                             <i className="iconfont icon-geren11" style={{fontSize:'24px'}} />
@@ -120,8 +136,8 @@ class AppFooter extends Component {
                         });
                         }}
                     >
-                        {/* {this.renderContent('My')} */}
                     </TabBar.Item>
+                     */}
                     </TabBar>
                 </div>
             </footer>

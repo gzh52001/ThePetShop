@@ -1,8 +1,9 @@
 import React,{Component} from 'react';
-
 // views
 import Home from '../../views/Home';
 import './style.scss'
+import {Route,Switch,Redirect} from 'react-router-dom'
+
 
 class AppMain extends Component {
     constructor(){
@@ -17,7 +18,11 @@ class AppMain extends Component {
         return(
             <main>
                 <section className="show-wrap">
-                    <Home />
+                    <Switch>
+                        <Route path="/home" component={Home} />
+
+                    </Switch>
+                    <Redirect from="/" to="/home" />
                 </section>
             </main>
         )

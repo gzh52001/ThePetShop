@@ -3,6 +3,9 @@
     background-color: #fff;
     height          : 100%;
     touch-action    : none;
+    .am-list-item-active{
+        display: none;
+    }
 }
 
 .am-list-item {
