@@ -7,7 +7,7 @@ class Home extends Component {
 
         }
     }
-    render(){
+    render() {
         return (
             <div>主页</div>
         )

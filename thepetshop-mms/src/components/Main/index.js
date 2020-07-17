@@ -5,7 +5,7 @@ import { VerifyLogin } from '@/utils/HOC';
 
 import { DownCircleOutlined } from '@ant-design/icons';
 import { Layout, Menu, Row, Col, Dropdown, Button } from 'antd';
-import { HomeOutlined, TeamOutlined, ShopOutlined, BarChartOutlined } from '@ant-design/icons';
+import { HomeOutlined, TeamOutlined, ShopOutlined, BarChartOutlined, SnippetsOutlined } from '@ant-design/icons';
 
 import "@/assets/css/Main.scss"
 import Home from '@/views/Home'
@@ -44,7 +44,7 @@ class Main extends Component {
                     component: UserList,
                 },
                 {
-                    tltle: "用户列表",
+                    tltle: "活跃用户",
                     path: "/user/userList2",
                     component: Home,
                 },
@@ -59,7 +59,7 @@ class Main extends Component {
                     component: Home,
                 },
             ],
-           
+
         }
     }
     goPath = ({ item, key, keyPath, domEvent }) => {
@@ -83,6 +83,8 @@ class Main extends Component {
         }
     };
     render() {
+        let adminName = localStorage.getItem("userData");
+        adminName = JSON.parse(adminName);
         const { contentRouter } = this.state;
         const backstageRouter = contentRouter.slice(0, 4);
         const userRouter = contentRouter.slice(4, 8);
@@ -111,7 +113,7 @@ class Main extends Component {
                             <h2>后台管理系统</h2>
                         </div>
                         <Row className="operation">
-                            <Col className="col" span={12}>欢迎您：<span>{"LHCIAO"}</span></Col>
+                            <Col className="col" span={12}>欢迎您：<span>{adminName.username}</span></Col>
                             <Col span={12}>
                                 <Dropdown overlay={menu} placement="bottomCenter">
                                     <Button className="personal" type="link">个人中心<DownCircleOutlined style={{ fontSize: "16px" }} /></Button>
@@ -148,7 +150,10 @@ class Main extends Component {
                                 <SubMenu key="sub3" icon={<ShopOutlined />} title="商品管理">
 
                                 </SubMenu>
-                                <SubMenu key="sub4" icon={<BarChartOutlined />} title="统计">
+                                <SubMenu key="sub4" icon={<SnippetsOutlined />} title="订单管理">
+
+                                </SubMenu>
+                                <SubMenu key="sub5" icon={<BarChartOutlined />} title="统计">
 
                                 </SubMenu>
                             </Menu>

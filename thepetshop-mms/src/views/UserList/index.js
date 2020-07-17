@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Route, Redirect, Switch } from 'react-router-dom';
+// import { Route, Redirect, Switch } from 'react-router-dom';
 
 import "@/assets/css/UserList.scss"
 import UserForm from '@/views/UserList/UserForm'
@@ -8,19 +8,25 @@ class UserList extends Component {
     constructor() {
         super();
         this.state = {
-            DetailedFlag: false
+            DetailedFlag: true,
+            loklokID: ""
         }
     }
+    loklok = (id) =>{
+        const {DetailedFlag} = this.state;
+        this.setState({
+            DetailedFlag: !DetailedFlag,
+            loklokID: id.id
+        })
+    }
     render() {
-        const DetailedFlag = this.state;
         return (
             <>
-
-                <div style={{display: DetailedFlag?"block":"none"}}>
-                    <UserForm></UserForm>
+                <div style={{display: this.state.DetailedFlag?"block":"none"}}>
+                    <UserForm data={this.loklok}></UserForm>
                 </div>
-                <div style={{display: DetailedFlag?"none":"block"}}>
-                    <UserDetailed></UserDetailed>
+                <div style={{display: this.state.DetailedFlag?"none":"block"}}>
+                    <UserDetailed data={this.state.loklokID} fn={this.loklok}></UserDetailed>
                 </div>
             </>
         )

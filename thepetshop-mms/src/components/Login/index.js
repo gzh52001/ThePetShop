@@ -28,11 +28,11 @@ class Login extends Component {
                 const { checked } = this.state;
                 const { history } = this.props;
                 if (checked) {
-                    localStorage.setItem("userData", JSON.stringify({ username: values.username, password: values.username, token: p.data.data.token }))
+                    localStorage.setItem("userData", JSON.stringify({ username: values.username, token: p.data.data.token }))
                 }else{
-                    localStorage.setItem("userData", JSON.stringify({ username: values.username, password: values.username}))
+                    localStorage.setItem("userData", JSON.stringify({ username: values.username, }))
                 }
-                // history.go(0);
+                history.go(0);
             } else {
                 console.log("登录失败")
             }
