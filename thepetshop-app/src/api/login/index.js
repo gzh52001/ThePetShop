@@ -1,8 +1,6 @@
 import request from '@/utils/request.js';
 import host from '@/config.js';
 
-// const url = "http://192.168.0.105:3099";
-
 export default{
     login(username,userpass,keep) {
         let data = {};

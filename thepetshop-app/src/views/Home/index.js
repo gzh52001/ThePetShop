@@ -239,7 +239,7 @@ class Home extends Component {
                     <Link className="goMine" to="/mine">
                         <i className="iconfont icon-geren11"></i>
                     </Link>
-                    <h1 className='home-search'>
+                    <h1 className='home-search' onClick={()=>{this.props.history.push('/search')}}>
                         <i className="iconfont icon-sousuo1"></i>
                         请输入搜索关键字
                     </h1>
