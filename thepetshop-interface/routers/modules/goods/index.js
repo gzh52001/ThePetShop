@@ -11,9 +11,9 @@ router.use(bodyParser.urlencoded({ extended: false }))
 //获取所有商品，传入tid 获取某一分类商品
 router.get('/allgoods', async (req, res) => {
     let { tid, page, num } = req.query
-    console.log(page,num)
-    page = page || 1
-    num = num || 8
+    // console.log(page,num)
+    page = page - 0 || 1
+    num = num - 0 || 8
     let index = (page - 1) * num
     let sql
     let inf
@@ -23,6 +23,8 @@ router.get('/allgoods', async (req, res) => {
         // `select gid,gtitle,gimgs,gprice,gxiaoliang from goodsinfo limit ${index},${num}`
         sql = `SELECT gid,gtitle,gimgs,gprice,gxiaoliang FROM goodsinfo WHERE gid >= ((SELECT MAX(gid) FROM
          goodsinfo)-(SELECT MIN(gid) FROM goodsinfo)) * RAND() + (SELECT MIN(gid) FROM goodsinfo) LIMIT ${index},${num}`
+    } else {
+        sql = `select gid,gtitle,gimgs,gprice,gxiaoliang from goodsinfo`
     }
     try {
         let p = await query(sql);
@@ -39,10 +41,23 @@ router.get('/allgoods', async (req, res) => {
                     flag: true,
                     message: '获取成功',
                     data: {
-                        totle:totle.length,
-                        page: page,
-                        num: num,
+                        totle: totle.length,
+                        page: page - 0,
+                        num: num - 0,
                         goodstype,
+                        goodsinfo: p
+                    }
+                }
+            } else if (tid == 0) {
+                inf = {
+                    code: 2000,
+                    flag: true,
+                    message: '获取成功',
+                    data: {
+                        totle: totle.length,
+                        page: page - 0,
+                        num: num - 0,
+                        goodstype: "宠物精选",
                         goodsinfo: p
                     }
                 }
@@ -52,10 +67,9 @@ router.get('/allgoods', async (req, res) => {
                     flag: true,
                     message: '获取成功',
                     data: {
-                        totle:totle.length,
-                        page: page,
-                        num:  num ,
-                        goodstype: "宠物精选",
+                        totle: totle.length,
+                        page: page - 0,
+                        num: num - 0,
                         goodsinfo: p
                     }
                 }
@@ -73,6 +87,36 @@ router.get('/allgoods', async (req, res) => {
             code: err.errno,
             flag: false,
             message: '服务器出错'
+        }
+        res.send(inf)
+    }
+})
+
+//获取商品分类
+router.get('/getclassify', async (req, res) => {
+    let sql = `select * from goodstype`
+    try {
+        let p = await query(sql)
+        if (p.length) {
+            inf = {
+                code: 2000,
+                flag: true,
+                message: '获取成功',
+                data: p
+            }
+        } else {
+            inf = {
+                code: 3000,
+                flag: false,
+                message: '获取失败'
+            }
+        }
+        res.send(inf)
+    } catch (err) {
+        inf = {
+            code: err.errno,
+            flag: true,
+            message: '服务器错误'
         }
         res.send(inf)
     }
@@ -113,7 +157,7 @@ router.get('/goodsinfo', async (req, res) => {
 //模糊搜索商品(*)
 router.get('/searchgoods', async (req, res) => {
     let { gtitle } = req.query
-    console.log(gtitle)
+    // console.log(gtitle)
     let inf
     try {
         let sql = `select gid,gtitle,gprice,gxiaoliang,gimgs from goodsinfo where gtitle like '%${gtitle}%'`;
@@ -184,7 +228,7 @@ router.get('/randomgoods', async (req, res) => {
 // 搜索商品和排序
 router.get('/searchandsort', async (req, res) => {
     let { value, page, num, sort } = req.query
-    console.log(value, page, num, sort)
+    // console.log(value, page, num, sort)
     value = value || ''
     page = page || 1
     num = num || 8
@@ -192,11 +236,15 @@ router.get('/searchandsort', async (req, res) => {
     let sql
     //order by 字段 desc 倒序 , order by 字段  正序
     if (sort == "0") {
-        sql = `SELECT gid,gimgs,gtitle,gprice,gxiaoliang FROM goodsinfo where gtitle REGEXP '${value}' ORDER BY gxiaoliang DESC LIMIT ${index},${num}`;
+        sql = `SELECT gid,gimgs,gtitle,gprice,gxiaoliang,ghot FROM goodsinfo where gtitle REGEXP '${value}' ORDER BY gxiaoliang DESC LIMIT ${index},${num}`;
     } else if (sort == "1") {
-        sql = `SELECT gid,gimgs,gtitle,gprice,gxiaoliang FROM goodsinfo where gtitle REGEXP '${value}' ORDER BY gprice DESC LIMIT ${index},${num}`;
+        sql = `SELECT gid,gimgs,gtitle,gprice,gxiaoliang,ghot FROM goodsinfo where gtitle REGEXP '${value}' ORDER BY gprice DESC LIMIT ${index},${num}`;
+    } else if (sort == "2") {
+        sql = `SELECT gid,gimgs,gtitle,gprice,gxiaoliang,ghot FROM goodsinfo where gtitle REGEXP '${value}' ORDER BY gprice LIMIT ${index},${num}`;
+    } else if (sort == "3") {
+        sql = `SELECT gid,gimgs,gtitle,gprice,gxiaoliang,ghot FROM goodsinfo where gtitle REGEXP '${value}' ORDER BY ghot DESC LIMIT ${index},${num}`;
     } else {
-        sql = `SELECT gid,gimgs,gtitle,gprice,gxiaoliang FROM goodsinfo where gtitle REGEXP '${value}' LIMIT ${index},${num}`;
+        sql = `SELECT gid,gimgs,gtitle,gprice,gxiaoliang,ghot FROM goodsinfo where gtitle REGEXP '${value}' LIMIT ${index},${num}`;
     }
     try {
         let p = await query(sql);//[{},{}]
@@ -230,4 +278,210 @@ router.get('/searchandsort', async (req, res) => {
     }
 })
 
+//添加购物车
+router.get('/addcart', async (req, res) => {
+    let { uid, gid, count, gsize } = req.query
+    console.log(uid, gid, count, gsize)
+    let inf
+    try {
+
+        let p1 = await query(`select * from goodscart where uid='${uid}' and gid='${gid}' and gsize='${gsize}'`)
+        if (p1.length) {
+            count = count - 0 + p1[0].count - 0
+            let p2 = await query(`update goodscart set count=${count} where uid='${uid}' and gid='${gid}' and gsize='${gsize}'`)
+            if (p2.affectedRows) {
+                inf = {
+                    code: 2000,
+                    flag: true,
+                    message: '添加成功'
+                }
+            } else {
+                inf = {
+                    code: 3000,
+                    flag: false,
+                    message: '添加失败'
+                }
+            }
+        } else {
+            let p3 = await query(`insert goodscart(uid,gid,count,gsize) values('${uid}','${gid}','${count}','${gsize}')`)
+            if (p3.affectedRows) {
+                inf = {
+                    code: 2000,
+                    flag: true,
+                    message: '添加成功'
+                }
+            } else {
+                inf = {
+                    code: 3000,
+                    flag: false,
+                    message: '添加失败'
+                }
+            }
+        }
+        res.send(inf)
+    } catch (err) {
+        inf = {
+            code: err.errno,
+            flag: false,
+            message: '服务器错误'
+        }
+        res.send(inf)
+    }
+})
+
+//获取购物车商品
+router.get('/getcart', async (req, res) => {
+    let { uid } = req.query
+    try {
+        let p = await query(`select gid,count,gsize,ischeck from goodscart where uid='${uid}'`)
+        let str = ''
+        // console.log(p)
+        p.forEach(item => {
+            str += `${item.gid},`
+        })
+        str = str.substr(0, str.length - 1)
+        if (p.length) {
+            let result = await query(`select gid,gimgs,gtitle,gprice,gxiaoliang,gsize from goodsinfo where gid in(${str})`)
+            if (result) {
+                result.forEach(item => {
+                    item.gimgs = JSON.parse(item.gimgs).length == 1 ? JSON.parse(item.gimgs)[0] : JSON.parse(item.gimgs)[1]
+                })
+                p.forEach(item1 => {
+                    result.forEach(item2 => {
+                        if (item1.gid == item2.gid) {
+                            item1.gsize = JSON.parse(item2.gsize)[item1.gsize]
+                            item1.gimgs = item2.gimgs
+                            item1.gtitle = item2.gtitle
+                            item1.gprice = item2.gprice
+                            item1.gxiaoliang = item2.gxiaoliang
+                        }
+                    })
+                })
+                inf = {
+                    code: 2000,
+                    flag: true,
+                    message: '获取成功',
+                    data: p
+                }
+            } else {
+                inf = {
+                    code: 3000,
+                    flag: false,
+                    message: '获取失败',
+                    data: result
+                }
+            }
+        } else {
+            inf = {
+                code: 3000,
+                flag: false,
+                message: '获取失败'
+            }
+        }
+        res.send(inf)
+    } catch (err) {
+        inf = {
+            code: err.errno,
+            flag: false,
+            message: '服务器错误'
+        }
+        res.send(inf)
+    }
+})
+
+//购物车删除(*)
+router.delete('/delcart', async (req, res) => {
+    let { uid, gid } = req.body
+    let inf
+    try {
+        let p = await query(`delete from goodscart where uid='${uid}' and gid='${gid}'`)
+        if (p.affectedRows) {
+            inf = {
+                code: 2000,
+                flag: true,
+                message: '删除成功'
+            }
+        } else {
+            inf = {
+                code: 3000,
+                flag: false,
+                message: '删除失败'
+            }
+        }
+        res.send(inf)
+    } catch (err) {
+        inf = {
+            code: err.errno,
+            flag: false,
+            message: '服务器错误'
+        }
+        res.send(inf)
+    }
+})
+
+//购物车批量删除(*)
+router.delete('/delcartpart', async (req, res) => {
+    let sql = `delete from goodscart where ischeck='1'`
+    try {
+        let p = await query(sql)
+        if (p.affectedRows) {
+            inf = {
+                code: 2000,
+                flag: true,
+                message: '删除成功'
+            }
+        } else {
+            inf = {
+                code: 3000,
+                flag: false,
+                message: '删除失败'
+            }
+        }
+        res.send(inf)
+    } catch (err) {
+        inf = {
+            code: err.errno,
+            flag: false,
+            message: '服务器错误'
+        }
+        res.send(inf)
+    }
+})
+
+//购物车选中(*)
+router.put('/checkcart', async (req, res) => {
+    let { uid, gid, check } = req.body
+    console.log(uid, gid, check)
+    if (check == "true") {
+        check = 1
+    } else {
+        check = 0
+    }
+    let inf
+    let sql = `update goodscart set ischeck='${check}' where uid='${uid}' and gid='${gid}'`
+    try {
+        let p = await query(sql)
+        if (p.affectedRows) {
+            inf = {
+                code: 2000,
+                flag: true,
+                message: '选中成功'
+            }
+        } else {
+            inf = {
+                code: 3000,
+                flag: false,
+                message: '选中失败'
+            }
+        }
+        res.send(inf)
+    } catch (err) {
+        inf = {
+            code: err.errno,
+            flag: false,
+            message: '服务器错误'
+        }
+        res.send(inf)
+    }
+})
 module.exports = router

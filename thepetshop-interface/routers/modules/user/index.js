@@ -36,13 +36,13 @@ router.get('/checkname', async (req, res) => {
         res.send(inf)
     }
 })
-//注册
+//用户注册
 router.post('/reg', async (req, res) => {
-    let { username, password,phonenum,email } = req.body
-    console.log(username, password,phonenum,email)
+    let { username, password, phonenum, email } = req.body
     let miwen = bcryptjs.hashSync(password)
     let time = Date.now()
-    let userface = 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3956916030,3079747949&fm=26&gp=0.jpg'
+    time = time - 0
+    let userface = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1595014189445&di=c7f719e793b77c081e5a037484158eb8&imgtype=0&src=http%3A%2F%2Fqny.smzdm.com%2F202007%2F03%2F5efe844574cd74989.jpg_d250.jpg'
     try {
         let sql = `insert into user(username,password,userface,time,phonenum,email) values('${username}','${miwen}','${userface}','${time}','${phonenum}','${email}')`
         let p = await query(sql)
@@ -71,7 +71,7 @@ router.post('/reg', async (req, res) => {
         res.send(inf)
     }
 })
-//登录
+//用户登录
 router.post('/login', async (req, res) => {
     let { username, password, keep } = req.body
     try {
@@ -90,6 +90,7 @@ router.post('/login', async (req, res) => {
                 let userface = p[0].userface
                 let phonenum = p[0].phonenum
                 let email = p[0].email
+                let address = p[0].address
                 inf = {
                     code: 2000,
                     flag: true,
@@ -100,10 +101,11 @@ router.post('/login', async (req, res) => {
                         userface,
                         phonenum,
                         email,
+                        address,
                         token
                     }
                 }
-            }else{
+            } else {
                 inf = {
                     code: 3000,
                     flag: false,
@@ -127,7 +129,7 @@ router.post('/login', async (req, res) => {
         res.send(inf)
     }
 })
-//验证token
+//用户验证token
 router.get('/verify', (req, res) => {
     let { token } = req.query
     let result = verify(token)
@@ -146,6 +148,58 @@ router.get('/verify', (req, res) => {
         }
     }
     res.send(inf)
+})
+// 修改用户密码
+router.put('/editpsw', async (req, res) => {
+    let { uid, oldpsw, newpsw } = req.body;
+    let inf = {}
+    try {
+        let sql1 = `select password from user where uid=${uid}`
+        let oldmiwen = await query(sql1)
+        if (oldmiwen.length) {
+            let result = bcryptjs.compareSync(oldpsw, oldmiwen[0].password);
+            if (result) {
+                let newmiwen = bcryptjs.hashSync(newpsw)
+                let str = `password='${newmiwen}'`
+                console.log(str)
+                let sql2 = `update user set ${str} where uid='${uid}'`
+                let p = await query(sql2);
+                if (p.affectedRows) {
+                    inf = {
+                        code: 2000,
+                        flag: true,
+                        message: '修改成功'
+                    }
+                } else {
+                    inf = {
+                        code: 3000,
+                        flag: false,
+                        message: "修改失败"
+                    }
+                }
+            }else{
+                inf = {
+                    code: 3000,
+                    flag: false,
+                    message: "原密码不正确"
+                }
+            }
+        }else{
+            inf = {
+                code: 3000,
+                flag: false,
+                message: "用户不存在"
+            }
+        }
+        res.send(inf)
+    } catch (err) {
+        let inf = {
+            code: err.errno,
+            flag: false,
+            message: "服务器出错"
+        }
+        res.send(inf)
+    }
 })
 
 module.exports = router
