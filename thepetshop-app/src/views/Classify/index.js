@@ -1,9 +1,9 @@
 import React from 'react';
-function Goods(){
+function Classify(){
     return (
         <div>
-            Goods
+            Classify
         </div>
     )
 }
-export default Goods;
+export default Classify;

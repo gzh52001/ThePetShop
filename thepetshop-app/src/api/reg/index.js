@@ -14,14 +14,14 @@ export default {
         // console.log(data);
         return request({
             method: 'post',
-            url:host1+'/user/reg',
+            url:host2+'/user/reg',
             data
         })
     },
     checkuser(username){
          return request({
             method: 'get',
-            url:host1+'/user/checkname',
+            url:host2+'/user/checkname',
             params:{
                 username
             }
