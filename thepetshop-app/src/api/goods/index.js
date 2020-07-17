@@ -1,14 +1,25 @@
-import request from '@/utils/request.js'
-
-const url = "http://192.168.0.105:3099";
+import request from '@/utils/request.js';
+import host from '@/config.js';
 
 export default{
     randomGoods(num) {
         return request({
             method:'get',
-            url:url+'/goods/randomgoods',
+            url:host+'/goods/randomgoods',
             params:{
                 num
+            }
+        })
+    },
+
+    allGoods(tid,page,index){
+        return request({
+            method:'get',
+            url: host + '/goods/allgoods',
+            params:{
+                tid,
+                page,
+                index
             }
         })
     }
