@@ -10,7 +10,7 @@ class UserForm extends Component {
         super();
         this.state = {
             page: 1,      //默认页
-            pageSize: 10,    //一页显示的条数
+            pageSize: 9,    //一页显示的条数
             userList: [],
             totalList: "",
             sort: 0,
@@ -31,7 +31,7 @@ class UserForm extends Component {
                 p.data.data.map(item => {
                     let b = item.time;
                     b = b - 0;
-                    item.time = this.toDate(b)
+                    item.time = this.props.toDate(b)
                 })
                 this.setState({
                     userList: p.data.data,
@@ -51,7 +51,7 @@ class UserForm extends Component {
                 p.data.data.map(item => {
                     let b = item.time;
                     b = b - 0;
-                    item.time = this.toDate(b)
+                    item.time = this.props.toDate(b)
                 })
                 this.setState({
                     userList: p.data.data,
@@ -118,7 +118,7 @@ class UserForm extends Component {
         }
     }
     pageChange = (page, pageSize) => {
-        this.getUserList(page, pageSize)
+        this.getUserList(this.state.sort,page, pageSize)
         this.setState({
             page,
             pageSize
@@ -190,16 +190,6 @@ class UserForm extends Component {
             serchVisible: false
         })
         this.getUserList(this.state.sort,this.state.page, this.state.pageSize)
-    }
-    toDate = (now) => {
-        let a = new Date(now)
-        var year = a.getFullYear();  //取得4位数的年份
-        var month = a.getMonth() + 1;  //取得日期中的月份，其中0表示1月，11表示12月
-        var date = a.getDate();      //返回日期月份中的天数（1到31）
-        var hour = a.getHours();     //返回日期中的小时数（0到23）
-        var minute = a.getMinutes(); //返回日期中的分钟数（0到59）
-        var second = a.getSeconds(); //返回日期中的秒数（0到59）
-        return year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second;
     }
     render() {
         const { Search } = Input;
@@ -307,7 +297,7 @@ class UserForm extends Component {
                         onChange: this.selectRow
                     }}
                     ellipsis={true}
-                    scroll={{ y: "65vh" }}
+                    // scroll={{ y: "69vh" }}
                     onChange={this.onChange} />
                 {
                     this.state.modifyVisible ?

@@ -47,5 +47,14 @@ export default {
             url: `${BAST_API}/goods/getclassify`,
         });
     },
+    getGoodsOrder(uid) {      //获取订单列表
+        return request({
+            method: 'get',
+            url: `${BAST_API}/goods/getorder`,
+            params:{
+                uid
+            }
+        });
+    },
 
 }
