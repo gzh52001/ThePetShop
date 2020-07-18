@@ -17,19 +17,20 @@ class OrderForm extends Component {
             totalList: "",
             changeList: {},
             delSelectID: "",
-            modifyVisible: false
+            modifyVisible: false,
+            uid:2
         }
     }
     componentDidMount() {
-        this.getGoodsList(null,this.state.page, this.state.pageSize)
+        this.getGoodsOrder(this.state.uid)
     }
-    getGoodsList = async (sort,page, num) => {     //获取用户列表
+    getGoodsOrder = async (uid) => {     //获取用户列表
         try {
-            let p = await GoodsListApi.getGoodsList(sort,page, num);
+            let p = await GoodsListApi.getGoodsOrder(uid);
+            console.log(p)
             if (p.data.flag) {
                 this.setState({
-                    goodsList: p.data.data.goodsinfo,
-                    totalList: p.data.data.total
+                    goodsList: p.data.data
                 })
             } else {
                 console.log("获取失败")

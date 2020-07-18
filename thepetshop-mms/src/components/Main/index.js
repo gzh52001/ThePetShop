@@ -153,7 +153,7 @@ class Main extends Component {
                 <Layout style={{ overflow: "hidden" }}>
                     <Header className="header">
                         <div className="logo">
-                            <img src="" alt="" />
+                            <img src={require('../../assets/img/a.jpg')} alt="" />
                             <h2>后台管理系统</h2>
                         </div>
                         <Row className="operation">
@@ -210,7 +210,7 @@ class Main extends Component {
                                 </SubMenu>
                             </Menu>
                         </Sider>
-                        <Layout style={{ minWidth: "1000px", padding: '15px 15px 15px 20px', backgroundColor: "#e0e0e0" }}>
+                        <Layout style={{ minWidth: "1000px", backgroundColor: "rgb(255, 255, 255)" }}>
                             <Content
                                 className="site-layout-background"
                                 style={{

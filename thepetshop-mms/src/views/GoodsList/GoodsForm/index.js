@@ -85,14 +85,14 @@ class GoodsForm extends Component {
     }
     onChange = (pagination,a, sorter, extra) => {     //分页、排序、筛选变化时触发
         if (sorter.order === "ascend" && sorter.field === "gprice") {
-            this.getGoodsList(2,pagination.current,pagination.pageSize);
-            this.setState({
-                sort: 2
-            })
-        } else if (sorter.order === "descend" && sorter.field === "gprice") {
             this.getGoodsList(3,pagination.current,pagination.pageSize);
             this.setState({
                 sort: 3
+            })
+        } else if (sorter.order === "descend" && sorter.field === "gprice") {
+            this.getGoodsList(2,pagination.current,pagination.pageSize);
+            this.setState({
+                sort: 2
             })
         } else if (sorter.order === undefined && sorter.field === "gprice") {
             this.getGoodsList(null,pagination.current,pagination.pageSize);
@@ -111,6 +111,17 @@ class GoodsForm extends Component {
                 sort: 0
             })
         } else if (sorter.order === undefined && sorter.field === "gxiaoliang") {
+            this.getGoodsList(null,pagination.current,pagination.pageSize);
+            this.setState({
+                sort: null
+            })
+        }
+        if(sorter.order === 'ascend' && sorter.field === "gid"){
+            this.getGoodsList(4,pagination.current,pagination.pageSize);
+            this.setState({
+                sort: 4
+            })
+        }else if(sorter.order === 'descend' && sorter.field === "gid"){
             this.getGoodsList(null,pagination.current,pagination.pageSize);
             this.setState({
                 sort: null
@@ -299,7 +310,7 @@ class GoodsForm extends Component {
                         onChange: this.selectRow
                     }}
                     ellipsis={true}
-                    scroll={{ y: "65vh" }}
+                    scroll={{ y: "70vh" }}
                     onChange={this.onChange} />
                 {
                     this.state.modifyVisible ?
