@@ -5,7 +5,7 @@ import './style.scss';
 function Navbar(props) {
     // console.log(props);
     const gotohome = function(){
-        const {history} = props;
+        const {props:{history}} = props;
         // console.log(props);
         history.push('/main/home')
     }

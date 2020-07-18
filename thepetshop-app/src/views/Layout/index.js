@@ -4,6 +4,7 @@ import AppMain from '@/components/AppMain';
 import Login from '@/views/Login';
 import Reg from '@/views/Reg';
 import Search from '@/views/Search';
+import Changeinfo from '@/views/Changeinfo';
 function Layout (){
     return (
         <>
@@ -12,6 +13,7 @@ function Layout (){
                 <Route path='/login' component={Login}/>
                 <Route path='/reg' component={Reg}/>
                 <Route path='/search' component={Search}/>
+                <Route path='/changeinfo' component={Changeinfo}/>
                 <Redirect from="/" to='/main' exact/>
             </Switch>
         </>

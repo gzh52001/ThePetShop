@@ -1,10 +1,10 @@
-import request,{host} from '@/utils/request.js';
+import request from '@/utils/request.js';
 
 export default{
     randomGoods(num) {
         return request({
             method:'get',
-            url:host+'/goods/randomgoods',
+            url:'/goods/randomgoods',
             params:{
                 num
             }
@@ -14,7 +14,7 @@ export default{
     allGoods(tid,page,index){
         return request({
             method:'get',
-            url: host + '/goods/allgoods',
+            url:   '/goods/allgoods',
             params:{
                 tid,
                 page,
@@ -26,7 +26,7 @@ export default{
     getTypes(){
         return request({
             method:'get',
-            url: host + '/goods/getclassify'
+            url:   '/goods/getclassify'
         })
     }
 }

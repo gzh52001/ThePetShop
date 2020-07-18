@@ -1,0 +1,174 @@
+.mine{
+    position: relative;
+    height: 100%;
+    overflow-y: scroll;
+    .mine_top{
+        height: 40px;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        background-color: transparent;
+        span{
+            display: block;
+            float: right;
+            height: 100%;
+            width: 40px;
+            line-height: 40px;
+            text-align:center;
+            .iconfont{
+                font-size:20px;
+                color:#fff;
+            }
+            .icon-shezhi{
+                font-size:26px;
+            }
+        }
+    }
+    .mine_user{
+        height: 290px;
+        background:linear-gradient(to bottom right,#f1524c,#f66b66d7 50%,#f1524c);
+        padding-top:40px ;
+        .user-img-box{
+            height: 100px;
+            .user-img-link{
+                display: block;
+                height: 90px;
+                width: 90px;
+                // overflow: hidden;
+                margin: 0 auto;
+                img{
+                    display: block;
+                    width: 100%;
+                    height: 100%;
+                    border-radius:50%;
+                }
+            }
+            a{
+                display: block;
+                text-align: center;
+                margin: 10px auto 0 ;
+                font-size:20px;
+                color:#fff;
+            }
+        }
+        .user-info-box{
+            height: 60px;
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-around;
+            dl{
+                width: 50px;
+                color: #fff;
+                text-align:center;
+                padding-top:10px;
+                dt{
+                    margin-bottom:10px;
+                    font-size:16px;
+                    text-align:center;
+                }
+                dd{
+                    font-size:13px;
+                }
+            }
+        }
+    }
+    .mine_content{
+        position: absolute;
+        top: 240px;
+        width: 100%;
+        // height: 100%;
+        background-color: #fff;
+        > div{
+            width: 340px;
+            margin:0 auto;
+            padding-top:25px;
+            h4{
+                display: flex;
+                height: 20px;
+                line-height: 20px;
+                justify-content: space-between;
+                padding: 0 5px;
+                p{
+                    font-size:18px;
+                    font-weight: bold;
+                }
+            }
+        }
+        .mine-order{
+            position: relative;
+            .mine-order_content{
+                display: flex;
+                justify-content: space-around;
+                margin-top: 14px;
+                text-align: center;
+                dl{
+                    position: relative;
+                    dt{
+                        margin-bottom:2px;
+                        .iconfont{
+                            font-size:30px;
+                            color: #fe6d7a;
+                        }
+                        span{
+                            display: block;
+                            width: 16px;
+                            height: 16px;
+                            line-height: 16px;
+                            font-size:12px;
+                            color: #fff;
+                            border-radius:50%;
+                            background-color: #f1574f;
+                            position: absolute;
+                            top:-4px;
+                            right: -4px;
+                        }
+                    }
+                    dd{
+                        font-size: 12px;
+                    }
+                } 
+            }
+            .mine-order_link{
+                margin-top: 20px;
+                a{
+                    display: block;
+                    width: 100%;
+                    height: 100%;
+                    img{
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+            }
+        }
+        .mine-tool{
+            padding-top:22px;
+            .mine-tool_content{
+                display: flex;
+                justify-content: space-between;
+                flex-wrap: wrap;
+            }
+            dl{
+                text-align: center;
+                width: 25%;
+                margin: 10px 0;
+                dt{
+                    margin-bottom:4px;
+                    .iconfont{
+                        font-size:26px;
+                        color: #333333;
+                    }
+                }
+                dd{
+                    p{
+                        font-size:12px;
+                    }
+                    span{
+                        font-size:10px;
+                        color:#dc0e0e;
+                    }
+                }
+            }
+        }
+    }
+}

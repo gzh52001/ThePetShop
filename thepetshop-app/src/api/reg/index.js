@@ -1,5 +1,4 @@
 import request from '@/utils/request.js';
-import host from '@/config.js';
 
 export default {
     // 注册
@@ -14,14 +13,14 @@ export default {
         // console.log(data);
         return request({
             method: 'post',
-            url:host+'/user/reg',
+            url:'/user/reg',
             data
         })
     },
     checkuser(username){
          return request({
             method: 'get',
-            url:host+'/user/checkname',
+            url:'/user/checkname',
             params:{
                 username
             }
