@@ -217,7 +217,7 @@ class Home extends Component {
     }
 
     render() {
-
+        console.log(process.env.REACT_APP_SERVICE_URL)
         // 宫格（home的nav跳转圈圈）
         const data = Array.from(new Array(5)).map((_val, i) => ({
             // icon: 'https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png',
