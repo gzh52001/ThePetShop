@@ -71,6 +71,7 @@ router.post('/reg', async (req, res) => {
 //管理员登录
 router.post('/login', async (req, res) => {
     let { username, password, keep } = req.body
+    // console.log(username,password)
     try {
         let sql = `select * from admin where username='${username}'`
         let p = await query(sql)
@@ -83,6 +84,8 @@ router.post('/login', async (req, res) => {
                 let token = ""
                 if (keep) {
                     token = create(password)
+                }else{
+                    token = create(password,60*60*24)
                 }
                 let aid = p[0].aid
                 inf = {
