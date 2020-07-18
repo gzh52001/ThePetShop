@@ -6,7 +6,7 @@ import TabL from './TabL';
 import Mycontext from './classifycontext';
 
 import './tabs.scss';
-function Classify() {
+function Classify(props) {
     const [tid, changeTid] = useState(1);
 
     let changeid = (tid) => {
@@ -15,7 +15,7 @@ function Classify() {
 
     return (
         <div style={{ height: "100%" }}>
-            <Navbar name='商品分类' />
+            <Navbar name='商品分类' props={props} />
             <div className='tabbox'>
                 <Mycontext.Provider value={{tid,changeid}}>
                     <TabR />

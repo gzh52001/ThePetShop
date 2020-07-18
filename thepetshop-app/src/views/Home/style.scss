@@ -87,6 +87,9 @@
     // 限时秒杀
     .home-kill{
         padding: 0 15px;
+        .am-tabs-default-bar-top .am-tabs-default-bar-tab{
+            border-bottom: 0;
+        }
         .am-tabs{
             box-shadow: 0 3px 8px rgba(0,0,0,.2);
             border-bottom-left-radius: 5px;

@@ -159,6 +159,8 @@ class Home extends Component {
     componentDidUpdate(){
         this.topStyle()
     }
+
+    // 懒加载
     topStyle(){
         let home = document.getElementsByClassName('show-wrap')[0]
         let head = document.getElementsByClassName('home-head')[0]
@@ -276,7 +278,7 @@ class Home extends Component {
                 </WingBlank>
                 {/* 圈圈跳转 */}
                 <div className='home-nav'>
-                    <Grid data={data} hasLine={false} columnNum={5} />
+                    <Grid data={data} hasLine={false} columnNum={5} onClick={(data,index)=>{if(index===4){this.props.history.push('/main/classify')}}} />
                 </div>
 
                 {/* 礼包广告 */}

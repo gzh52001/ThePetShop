@@ -2,11 +2,10 @@ import React from 'react';
 import { NavBar, Icon } from 'antd-mobile';
 
 import './style.scss';
+
 function Navbar(props) {
-    // console.log(props);
     const gotohome = function(){
-        const {history} = props;
-        // console.log(props);
+        const {history} = props.props;
         history.push('/main/home')
     }
     return (
