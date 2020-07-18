@@ -142,12 +142,11 @@ class Reg extends Component {
     }
     render() {
         const { username, userpass, userpass2, phone, email, isPassError, isPass2Error,isPhoneError,isEmailError,isUserError } = this.state;
-        const {history} = this.props
         // console.log(username);
         return (
             <div className='loginBox'>
                 {/* 头部导航 */}
-                <Navbar name="注册" history={history}/>
+                <Navbar name="注册" props={this.props}/>
                 {/* 注册标点 */}
                 <List>
                     <InputItem

@@ -81,7 +81,7 @@ class Login extends Component {
                     keep: false,//是否七天
                 });
                 Toast.success('登陆成功',2);
-                this.props.history.push('/home');
+                this.props.history.push('/main/home');
             }else{
                 Toast.fail('登陆失败', 2);
             }
@@ -90,13 +90,12 @@ class Login extends Component {
         }
     }
     render() {
-        const { history } = this.props;
         const { username, userpass, isUserError, isPassError } = this.state;
         // console.log(username);
         return (
             <div className='loginBox'>
                 {/* 头部导航 */}
-                <Navbar name="登录" history={history} />
+                <Navbar name="登录" props={this.props} />
                 {/* 登录注册框 */}
                 <List className='login'>
                     <InputItem

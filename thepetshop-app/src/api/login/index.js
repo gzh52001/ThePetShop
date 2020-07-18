@@ -1,7 +1,7 @@
 import request from '@/utils/request.js';
-import host from '@/config.js';
 
 export default{
+    //登录
     login(username,userpass,keep) {
         let data = {};
         // console.log(typeof keep);
@@ -19,9 +19,18 @@ export default{
         };
         return request({
             method:'post',
-            url:host+'/user/login',
+            url:'/user/login',
             data
         })
+    },
+    //验证token
+    checkToken(token){
+        return request({
+            method:"get",
+            url:"/user/verify",
+            params:{
+                token
+            }
+        })
     }
-    
 }

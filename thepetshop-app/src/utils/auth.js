@@ -7,7 +7,7 @@ export function getToken(){
 }
 //设置token
 export function setToken(token){
-    localStorage.setItem(TOKEN_KEY,JSON.stringify(token));
+    localStorage.setItem(TOKEN_KEY,token);
 }
 
 //获取用户信息

@@ -18,14 +18,14 @@ function TabL() {
     return (
         <div className="Tabl">
             <div className='imgBox'>
-                <img src="http://img-new.boqiicdn.com/Data/Shop/0/0/0/shoppicpath1594970690.jpg?imageslim" />
+                <img src="http://img-new.boqiicdn.com/Data/Shop/0/0/0/shoppicpath1594970690.jpg?imageslim" alt='图片'/>
             </div>
             <ul className='linkBox'>
                 {
                     goodslist.map(item => (
                         <li key={item.gid}>
                             <a>
-                                <img src={item.gimgs} />
+                                <img src={item.gimgs} alt={item.gtitle} />
                                 <p>{item.gtitle}</p>
                             </a>
                         </li>

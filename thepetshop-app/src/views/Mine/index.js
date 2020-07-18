@@ -1,21 +1,281 @@
 import React, { Component } from 'react';
-import { NavBar, Icon } from 'antd-mobile';
+import { Toast } from 'antd-mobile';
+import { Link } from 'react-router-dom';
+import '../../assets/icon/iconfont.css';
+import './mine.scss';
+import { getUser } from '@/utils/auth';
+import { withLogin } from '@/utils/hoc';
 
+@withLogin
 class Mine extends Component {
-    render() {
+    constructor() {
+        super();
+        this.state = {
+            tools: [
+                {
+                    id: 1,
+                    icon: 'icon-gouwuchekong',
+                    title: '购物车',
+                    span: '',
+                    path: '/cart'
+                },
+                {
+                    id: 2,
+                    icon: 'icon-zhanghu2',
+                    title: '账户',
+                    span: '',
+                    path: '/user'
+                },
+                {
+                    id: 3,
+                    icon: 'icon-ziyuan',
+                    title: '红包',
+                    span: '',
+                    path: ''
+                },
+                {
+                    id: 4,
+                    icon: 'icon-duihuan1',
+                    title: '兑换',
+                    span: '',
+                    path: ''
+                },
+                {
+                    id: 5,
+                    icon: 'icon-youhuiquan',
+                    title: '优惠卷',
+                    span: '',
+                    path: ''
+                },
+                {
+                    id: 6,
+                    icon: 'icon-kefu',
+                    title: '帮助与客服',
+                    span: '',
+                    path: ''
+                },
+                {
+                    id: 7,
+                    icon: 'icon-dingdanshijian',
+                    title: '拼团订单',
+                    span: '',
+                    path: ''
+                },
+                {
+                    id: 8,
+                    icon: 'icon-shangdian',
+                    title: '0元开店',
+                    span: '最高返利70%',
+                    path: ''
+                },
+                {
+                    id: 9,
+                    icon: 'icon-fanli',
+                    title: '测评返现',
+                    span: '月入2000元',
+                    path: ''
+                },
+                {
+                    id: 10,
+                    icon: 'icon-gongyi',
+                    title: '公益',
+                    span: '',
+                    path: ''
+                },
+                {
+                    id: 11,
+                    icon: 'icon-yaoqingfanli',
+                    title: '邀请返利',
+                    span: '首单返15%',
+                    path: ''
+                },
+                {
+                    id: 12,
+                    icon: 'icon-shangdian-',
+                    title: '神秘商店',
+                    span: '单单有礼',
+                    path: ''
+                }
+            ],
+            orders: [
+                {
+                    id: 1,
+                    icon: 'icon-fukuan',
+                    title: '订单',
+                    path: '',
+                    count: 0
+                },
+                {
+                    id: 2,
+                    icon: 'icon-daifahuo1',
+                    title: '代发货',
+                    path: '',
+                    count: 1
+                },
+                {
+                    id: 3,
+                    icon: 'icon-daifahuo2',
+                    title: '待收货',
+                    path: '',
+                    count: 0
+                },
+                {
+                    id: 4,
+                    icon: 'icon-daipingjia',
+                    title: '待评价',
+                    path: '',
+                    count: 0
+                },
+                {
+                    id: 5,
+                    icon: 'icon-tuihuoshouhou',
+                    title: '退货退款',
+                    path: '',
+                    count: 0
+                }
+            ],
+            info: [
+                {
+                    id: 1,
+                    count: 0,
+                    title: '关注'
+                },
+                {
+                    id: 2,
+                    count: 0,
+                    title: '粉丝'
+                }, {
+                    id: 3,
+                    count: 0,
+                    title: '收藏'
+                },
+                {
+                    id: 4,
+                    count: 0,
+                    title: '足迹'
+                }
+            ],
+            userimg: '',
+            username: ''
+        }
+    }
+    clickTool(path) {
+        if (path) {
+            this.props.history.push(path);
+            return
+        }
+        Toast.info('该功能开发中', 1);
+    }
+    gotoUserinfo() {
+        this.props.history.push('/changeinfo');
+    }
+    componentDidMount() {
+        let userimg = getUser().userface;
+        let username = getUser().username;
+        this.setState({
+            userimg,
+            username
+        })
+    }
+    render(islogin) {
+        // console.log(islogin);
+        const { tools, orders, userimg, username, info } = this.state;
+        // console.log(userimg);
         return (
-            <div>
-                <NavBar
-                    mode="light"
-                    rightContent={[
-                        <Icon key="0" type="search" style={{ marginRight: '16px' }} />,
-                        <Icon key="1" type="ellipsis" />,
-                    ]}
-                >NavBar</NavBar>
-                Mine
+            <div className='mine'>
+                <div className='mine_top'>
+                    <span><i className='iconfont icon-dkw_xiaoxi' /></span>
+                    <span onClick={this.gotoUserinfo.bind(this)}><i className='iconfont icon-shezhi' /></span>
+                </div>
+                <div className='mine_user'>
+                    <div className='user-img-box'>
+                        <a className='user-img-link'>
+                            {
+                                islogin ?
+                                    <img src={userimg} alt='用户头像' />
+                                    :
+                                    (
+                                        <img src={require('@/assets/img/1.png')} alt='用户头像' />
+                                    )
+                            }
+                        </a>
+                        {
+                            islogin ? <a>{username}</a> : <Link to='/login'>登录 / 注册</Link>
+                        }
+                    </div>
+                    <div className='user-info-box'>
+                        {
+                            info.map(item => (
+                                <dl key={item.id}>
+                                    <dt>{item.count}</dt>
+                                    <dd>{item.title}</dd>
+                                </dl>
+                            ))
+                        }
+                    </div>
+                </div>
+                <div className='mine_content'>
+                    <div className='mine-order'>
+                        <h4>
+                            <p>我的订单</p>
+                        </h4>
+                        <div className='mine-order_content'>
+                            {
+                                orders.map(item => (
+                                    <dl key={item.id}>
+                                        <dt>
+                                            <i className={'iconfont ' + item.icon} />
+                                            {
+                                                item.count === 0 ?
+                                                    null
+                                                    :
+                                                    <span>{item.count}</span>
+                                            }
+
+                                        </dt>
+                                        <dd>
+                                            {item.title}
+                                        </dd>
+                                    </dl>
+                                ))
+                            }
+
+                        </div>
+                        <div className='mine-order_link'>
+                            <a>
+                                <img src='https://api.boqiicdn.com/e7c498a5d97d6568353bd171a107e864.jpg' alt='优惠信息' />
+                            </a>
+                        </div>
+                    </div>
+                    <div className='mine-tool'>
+                        <h4>
+                            <p>我的工具</p>
+                        </h4>
+                        <div className='mine-tool_content'>
+                            {
+                                tools.map(item => (
+                                    <dl key={item.id} onClick={this.clickTool.bind(this, item.path)}>
+                                        <dt><i className={'iconfont ' + item.icon} /></dt>
+                                        <dd>
+                                            <p>{item.title}</p>
+                                            {
+                                                item.span ?
+                                                    <span>{item.span}</span> :
+                                                    null
+                                            }
+                                        </dd>
+                                    </dl>
+                                ))
+                            }
+
+                        </div>
+
+                    </div>
+                </div>
             </div>
         )
     }
 }
+
 
 export default Mine;
