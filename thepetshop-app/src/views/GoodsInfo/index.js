@@ -22,8 +22,20 @@ function GoodsInfo() {
   })
 
   // 弹出盒子
-  const [onBoxshow1,changebtnshow1] = useState(0)
+  const [onBoxshow1,changebtnshow1] = useState(0);
+  const [boxDom,setBoxDom] = useState('');
 
+  function dom1(){
+    return (
+      <div >dom1</div>
+    )
+  }
+  function dom2(){
+    return (
+      <div >dom2</div>
+    )
+  }
+  
 
   return (
     <div className='goodsInfo-wrap'>
@@ -92,7 +104,10 @@ function GoodsInfo() {
 
                   {/* 按钮区 */}
                   <div className='activity-wrap'>
-                    <div className='btn1' onClick={()=>{changebtnshow1(onBoxshow1+1)}}>
+                    <div className='btn1' onClick={()=>{
+                      changebtnshow1(onBoxshow1+1)
+                      setBoxDom(dom1())
+                    }}>
                       <span>请选择规格</span>
                       <i className="iconfont icon-arrow-right-copy" />
                       {/* <div className='btn1-show'>
@@ -101,12 +116,26 @@ function GoodsInfo() {
                       
                       <BtnBox 
                         onBoxshow={!!onBoxshow1}
+                        // onBoxshow={true}
                         title=''
                         // btnboxHeight="0px"
+                        ss={boxDom}
                       >
                       </BtnBox>
                     </div>
                   </div>
+
+
+                  <div className='activity-wrap'>
+                    <div className='btn1' onClick={()=>{
+                      changebtnshow1(onBoxshow1+1)
+                      setBoxDom(dom2())
+                    }}>
+                      <span>请选择规格2</span>
+                      <i className="iconfont icon-arrow-right-copy" />
+                    </div>
+                  </div>
+
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '150px', backgroundColor: '#fff' }}>
                   Content of second tab

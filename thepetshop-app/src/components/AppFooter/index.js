@@ -42,8 +42,8 @@ class AppFooter extends Component {
 
     componentDidMount(){
 
-        const {location:{pathname},history:{listen}} = this.props
-        
+        const {history:{location:{pathname},listen}} = this.props
+        console.log(this.props)
         this.setState({
             selectedTab:pathname
         })

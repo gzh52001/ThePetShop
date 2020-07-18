@@ -124,3 +124,66 @@
         }
     }
 }
+
+.btnBox-wrap{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(0,0,0,.7);
+    transition: .3s;
+}
+.isBox{
+    width: 100%;
+    position: absolute;
+    // height: 360px;
+    bottom: 0;
+    left: 0;
+    z-index: 999;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 -5px 10px rgba(0,0,0,.1);
+    .closeBox{
+        border-radius: 100%;
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        right: 10px;
+        top: 8px;
+        text-align: center;
+        line-height: 50px;
+        transition: .2s;
+        .iconfont{
+            font-size: 40px !important;
+        }
+    }
+    .closeBox:active{
+        background: #dbdbdb69;
+    }
+    
+}
+
+.moveShow{
+    animation: btnShow .5s forwards;
+}
+.moveNot{
+    animation: btnNot .5s forwards;
+}
+
+@keyframes btnShow {
+    0%{
+        bottom: -500px;
+    }
+    100%{
+        bottom: 0;
+    }
+}
+@keyframes btnNot {
+    0%{
+        bottom: 0;
+    }
+    100%{
+        bottom: -500px;
+    }
+}
