@@ -18,8 +18,8 @@ function Classify(props) {
             <Navbar name='商品分类' props={props} />
             <div className='tabbox'>
                 <Mycontext.Provider value={{tid,changeid}}>
-                    <TabR />
-                    <TabL />
+                    <TabR />{/** 左边菜单 */}
+                    <TabL />{/**右边分类 */}
                 </Mycontext.Provider>
             </div>
         </div>

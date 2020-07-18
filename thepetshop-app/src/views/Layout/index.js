@@ -6,7 +6,7 @@ import Reg from '@/views/Reg';
 import Search from '@/views/Search';
 import GoodsInfo from '@/views/GoodsInfo';
 import Changeinfo from '@/views/Changeinfo';
-function Layout (){
+function Layout (){//总路由转跳页面显示到这
     return (
         <>
             <Switch>
