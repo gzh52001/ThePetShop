@@ -2,7 +2,7 @@ import React from 'react';
 import {Flex} from 'antd-mobile';
 import './style.scss';
 import '@/assets/icon/iconfont.css';
-function Loginfoot() {
+function Loginfoot() { //登录注册底部
     return (
         <div className='loginfooter'>
             <p className='foot_title'>使用社交账号</p>

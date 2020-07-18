@@ -2,7 +2,7 @@ import React from 'react';
 import {getToken} from '@/utils/auth';
 import loginApi from '@/api/login';
 
-export function withLogin(InnerComponent){
+export function withLogin(InnerComponent){//高阶组件 登录拦截
     return class OuterComponent extends InnerComponent{
         constructor(){
             super();

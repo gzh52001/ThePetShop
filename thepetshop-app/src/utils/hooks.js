@@ -1,5 +1,5 @@
 import {useState} from 'react';
-export function useStorage(key){
+export function useStorage(key){ //hook 获取localStorage
     let value = localStorage.getItem(key);
     if(value){
         value = JSON.parse(value);

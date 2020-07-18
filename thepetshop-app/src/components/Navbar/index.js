@@ -3,7 +3,7 @@ import { NavBar, Icon } from 'antd-mobile';
 
 import './style.scss';
 
-function Navbar(props) {
+function Navbar(props) {//顶部导航
     const gotohome = function(){
         const {props:{history}} = props;
         // console.log(props);
