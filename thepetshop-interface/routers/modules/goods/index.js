@@ -1,12 +1,8 @@
 const express = require('express')
-const bodyParser = require('body-parser')
 
 const query = require("../../db/mysql")
 
 const router = express.Router()
-
-router.use(bodyParser.json())
-router.use(bodyParser.urlencoded({ extended: false }))
 
 //获取所有商品，传入tid 获取某一分类商品  排序
 router.get('/allgoods', async (req, res) => {
@@ -32,7 +28,9 @@ router.get('/allgoods', async (req, res) => {
             sql = `select gid,gtitle,gimgs,gprice,gxiaoliang from goodsinfo order by gprice LIMIT ${index},${num}`
         } else if (sort == 3) {
             sql = `select gid,gtitle,gimgs,gprice,gxiaoliang from goodsinfo order by gprice desc LIMIT ${index},${num}`
-        } else {
+        } else if(sort == 4){
+            sql = `select gid,gtitle,gimgs,gprice,gxiaoliang from goodsinfo order by gid desc LIMIT ${index},${num}`
+        }else{
             sql = `select gid,gtitle,gimgs,gprice,gxiaoliang from goodsinfo order by gid LIMIT ${index},${num}`
         }
     }
@@ -590,16 +588,17 @@ router.get('/addorder', async (req, res) => {
 //获取订单信息
 router.get('/getorder', async (req, res) => {
     let { uid } = req.query
+    // console.log(uid)
     try {
         let p = await query(`select gid,count,gsize from goodsorder where uid='${uid}'`)
         let str = ''
-        console.log(p)
+        // console.log(p)
         p.forEach(item => {
             str += `${item.gid},`
         })
         str = str.substr(0, str.length - 1)
         if (p.length) {
-            let result = await query(`select gid,gimgs,gtitle,gprice,gsize from goodsinfo where gid in(${str})`)
+            let result = await query(`select gid,gimgs,gtitle,gprice,gsize,gxiaoliang from goodsinfo where gid in(${str})`)
             if (result) {
                 result.forEach(item => {
                     item.gimgs = JSON.parse(item.gimgs).length == 1 ? JSON.parse(item.gimgs)[0] : JSON.parse(item.gimgs)[1]
@@ -611,6 +610,7 @@ router.get('/getorder', async (req, res) => {
                             item1.gimgs = item2.gimgs
                             item1.gtitle = item2.gtitle
                             item1.gprice = item2.gprice
+                            item1.gxiaoliang = item2.gxiaoliang
                         }
                     })
                 })

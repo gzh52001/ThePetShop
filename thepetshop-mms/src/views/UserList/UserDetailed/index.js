@@ -5,7 +5,7 @@ import { LeftOutlined } from '@ant-design/icons';
 
 
 function UserDetailed(props){
-        const {userData} = props;
+        const {userData,toDate} = props;
         return (
             <div className="UserDetailed">
                 <PageHeader
@@ -22,11 +22,11 @@ function UserDetailed(props){
                     <Col span={20}>
                         <Descriptions  layout="vertical" bordered column={4}>
                             <Descriptions.Item label="ID">{userData.uid}</Descriptions.Item>
-                            <Descriptions.Item label="性别">{userData.uid}</Descriptions.Item>
+                            <Descriptions.Item label="性别">{userData.uid%2==0?'男':'女'}</Descriptions.Item>
                             <Descriptions.Item label="手机号码">{userData.phonenum}</Descriptions.Item>
                             <Descriptions.Item label="邮箱">{userData.email}</Descriptions.Item>
-                            <Descriptions.Item label="身份证号码">{userData.uid}</Descriptions.Item>
-                            <Descriptions.Item label="注册日期" span={1}>{userData.uid}</Descriptions.Item>
+                            <Descriptions.Item label="身份证号码">{'440883'+userData.time}</Descriptions.Item>
+                            <Descriptions.Item label="注册日期" span={1}>{toDate(userData.time)}</Descriptions.Item>
                             <Descriptions.Item label="最后在线日期" span={1}>{userData.uid}</Descriptions.Item>
                             <Descriptions.Item label="状态" span={1}>
                                 <Badge status="processing" text="Running" />
@@ -34,8 +34,7 @@ function UserDetailed(props){
                             <Descriptions.Item label="地区" span={2}>{userData.uid}</Descriptions.Item>
                             <Descriptions.Item label="历史订单数量">{userData.uid}</Descriptions.Item>
                             <Descriptions.Item label="总交易金额">{userData.uid}</Descriptions.Item>
-                            <Descriptions.Item label="Config Info">
-                            </Descriptions.Item>
+                            <Descriptions.Item label="描述">林海聪牛逼</Descriptions.Item>
                         </Descriptions>
                     </Col>
                 </Row>

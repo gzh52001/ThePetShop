@@ -5,7 +5,7 @@
 .UserForm {
     position: relative;
     height: 80vh;
-    padding: 15px;
+    padding: 14px 2px 0 2px;
     .formHeader {
         height: 40px;
         .formSelect {
@@ -79,12 +79,11 @@
     }
 }
 .ant-table-pagination-right {
-    position: fixed;
-    bottom: 10px;
+    position: absolute;
+    top: 670px;
     left: 50%;
     transform: translateX(-25%);
 }
-
 .UserDetailed {
     position: relative;
     height: 80vh;
@@ -119,7 +118,4 @@
             font-weight: bold;
         }
     }
-}
-.changeWindows{
-    
 }
