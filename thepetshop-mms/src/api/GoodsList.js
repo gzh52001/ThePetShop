@@ -3,11 +3,12 @@ import request from '@/utils/request';//引入axios对象
 const BAST_API = process.env.REACT_APP_SERVICE_URL;
 
 export default {
-    getGoodsList(page, num) {        //获取商品列表
+    getGoodsList(sort,page, num) {        //获取商品列表
         return request({
             method: 'get',
             url: `${BAST_API}/goods/allgoods`,
             params:{
+                sort,
                 page,
                 num
             }
@@ -22,15 +23,12 @@ export default {
             }
         });
     },
-    searchGoods(value,page,num,sort) {        //搜索商品和销量排序
+    searchGoods(value) {        //搜索商品和销量排序
         return request({
             method: 'get',
             url: `${BAST_API}/goods/searchandsort`,
             params:{
                 value,
-                page,
-                num,
-                sort
             }
         });
     },
@@ -43,7 +41,7 @@ export default {
             }
         });
     },
-    roundGoodsList() {      //获取商品分类名
+    getGoodsTitle() {      //获取商品分类名
         return request({
             method: 'get',
             url: `${BAST_API}/goods/getclassify`,

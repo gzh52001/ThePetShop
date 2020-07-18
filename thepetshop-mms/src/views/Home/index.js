@@ -1,5 +1,9 @@
 import React, { Component } from "react";
 
+import { Card,Avatar  } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
+
+import "@/assets/css/Home.scss"
 class Home extends Component {
     constructor() {
         super();
@@ -9,7 +13,13 @@ class Home extends Component {
     }
     render() {
         return (
-            <div>主页</div>
+            <div className="home">
+                <Card style={{ width: 250 }}>
+                    <Avatar className="adminHeader" size={150} icon={<UserOutlined />} />
+                    <h2 className="adminName">ADMIN</h2>
+                    <p>职位: 后台管理员</p>
+                </Card>
+            </div>
         )
     }
 }

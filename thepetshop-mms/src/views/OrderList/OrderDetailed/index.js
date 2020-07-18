@@ -4,7 +4,7 @@ import { PageHeader, Carousel, Row, Col, Descriptions, Badge } from 'antd';
 import { LeftOutlined } from '@ant-design/icons';
 
 
-function GoodsDetailed(props) {
+function OrderDetailed(props) {
     const { goodsData } = props;
     let fenclass;
     if (goodsData.tid === 1) {
@@ -73,4 +73,4 @@ function GoodsDetailed(props) {
 }
 
 
-export default GoodsDetailed;
+export default OrderDetailed;

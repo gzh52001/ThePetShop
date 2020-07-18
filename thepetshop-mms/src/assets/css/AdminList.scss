@@ -1,0 +1,19 @@
+.site-card-wrapper{
+    padding: 15px;
+    .ant-card-bordered{
+        border: 1px solid #b0b0b0;
+    }
+    .ant-card-body{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .adminHeader{
+        width: 200px;
+        margin: 0 auto;
+    }
+    .adminName{
+        padding-top: 15px;
+        text-align: center;
+    }
+}

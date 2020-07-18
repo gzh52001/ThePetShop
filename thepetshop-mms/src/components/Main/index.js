@@ -13,6 +13,7 @@ import AdminList from '@/views/AdminList'
 import AdminReg from '@/views/AdminList/AdminReg'
 import UserList from '@/views/UserList'
 import GoodsList from '@/views/GoodsList'
+import OrderList from '@/views/OrderList'
 
 class Main extends Component {
     constructor() {
@@ -61,22 +62,42 @@ class Main extends Component {
                 },
                 {
                     tltle: "商品列表",
-                    path: "/user/goodsList",
+                    path: "/goods/goodsList",
                     component: GoodsList,
                 },
                 {
-                    tltle: "活跃用户",
+                    tltle: "添加商品",
                     path: "/user/userList2",
                     component: Home,
                 },
                 {
-                    tltle: "用户列表",
+                    tltle: "修改商品信息",
                     path: "/user/userList3",
                     component: Home,
                 },
                 {
                     tltle: "用户列表",
                     path: "/user/userList4",
+                    component: Home,
+                },
+                {
+                    tltle: "订单列表",
+                    path: "/order/orderList",
+                    component: OrderList,
+                },
+                {
+                    tltle: "未确认订单",
+                    path: "/order/orderList2",
+                    component: Home,
+                },
+                {
+                    tltle: "已完成订单",
+                    path: "/order/orderList3",
+                    component: Home,
+                },
+                {
+                    tltle: "查询用户订单",
+                    path: "/order/orderList4",
                     component: Home,
                 },
             ],
@@ -110,6 +131,7 @@ class Main extends Component {
         const backstageRouter = contentRouter.slice(0, 4);
         const userRouter = contentRouter.slice(4, 8);
         const goodsRouter = contentRouter.slice(8, 12);
+        const orderRouter = contentRouter.slice(12, 16);
         const { defaultPath } = this.state;
         const { SubMenu } = Menu;
         const { Header, Content, Sider } = Layout;
@@ -177,7 +199,11 @@ class Main extends Component {
                                     }
                                 </SubMenu>
                                 <SubMenu key="sub4" icon={<SnippetsOutlined />} title="订单管理">
-
+                                {
+                                        orderRouter.map(item => (
+                                            <Menu.Item key={item.path}>{item.tltle}</Menu.Item>
+                                        ))
+                                    }
                                 </SubMenu>
                                 <SubMenu key="sub5" icon={<BarChartOutlined />} title="统计">
 

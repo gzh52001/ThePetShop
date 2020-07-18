@@ -14,13 +14,13 @@ export default {
             }
         });
     },
-    getUserInf(token) {
+    verifyToken(token) {
         return request({
             method: 'get',
-            url: BAST_API + '/user/verify',
+            url: BAST_API + '/admin/verify',
             params:{
                 token
             }
         });
-    }
+    },
 }

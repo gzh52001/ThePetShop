@@ -1,0 +1,21 @@
+.home{
+    padding: 15px;
+    .ant-card-body{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        >p{
+            text-align: center;
+        }
+    }
+    .adminHeader{
+        width: 200px;
+        margin: 0 auto;
+    }
+    .adminName{
+        padding-top: 15px;
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+    }
+}

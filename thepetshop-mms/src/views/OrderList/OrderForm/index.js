@@ -6,7 +6,7 @@ import "@/assets/css/UserList.scss"
 
 import UserListApi from "@/api/UserList";
 import GoodsListApi from "@/api/GoodsList";
-class GoodsForm extends Component {
+class OrderForm extends Component {
     constructor() {
         super();
         this.state = {
@@ -16,7 +16,6 @@ class GoodsForm extends Component {
             sort: null,
             totalList: "",
             changeList: {},
-            searchData: "gtitle",
             delSelectID: "",
             modifyVisible: false
         }
@@ -37,23 +36,6 @@ class GoodsForm extends Component {
             }
         } catch (error) {
             console.log(error);
-        }
-    }
-    searchGoods = async (value) =>{
-        try {
-            let p = await GoodsListApi.searchGoods(value);
-            if (p.data.flag) {
-                this.setState({
-                    goodsList: p.data.data,
-                    totalList: p.data.total,
-                    serchVisible: true
-                })
-                message.success('查找成功！');
-            } else {
-                console.log("获取失败")
-            }
-        } catch (error) {
-            message.error('查找的内容不存在！');
         }
     }
     delUserList = async (uid) => {     //删除用户
@@ -143,6 +125,7 @@ class GoodsForm extends Component {
         this.delAllUserList(this.state.delSelectID)
     }
     showModal = (data) => {     //显示修改框,传入数据
+        console.log(data)
         this.setState({
             modifyVisible: true,
             changeList: data
@@ -152,7 +135,7 @@ class GoodsForm extends Component {
         this.setState({
             serchVisible: false
         })
-        this.getGoodsList(this.state.sort,this.state.page, this.state.pageSize)
+        this.getUserList(this.state.sort,this.state.page, this.state.pageSize)
     }
     handleOk = values => {  //确定修改
         console.log(values);
@@ -160,19 +143,7 @@ class GoodsForm extends Component {
             modifyVisible: false,
         });
     };
-    selectChange = (value) => {     //搜索选项
-        console.log(value)
-        this.setState({
-            searchData: value
-        })
-    }
-    searchGoodsList = (value) => {       //确定搜索
-        console.log(value)
-        this.setState({
-            serchVisible: false
-        })
-        this.searchGoods(value);
-    }
+
     handleCancel = e => {
         console.log("取消");
         this.setState({
@@ -192,7 +163,7 @@ class GoodsForm extends Component {
         const { Option } = Select;
         const columns = [
             {
-                title: 'ID',
+                title: '订单号',
                 dataIndex: 'gid',
                 width: "125px",
                 align: "center",
@@ -275,7 +246,7 @@ class GoodsForm extends Component {
                         placeholder="请输入关键字"
                         enterButton="查找"
                         size="large"
-                        onSearch={this.searchGoodsList}
+                        onSearch={value => console.log(value)}
                     />
                 </div>
                 <Table
@@ -362,4 +333,4 @@ class GoodsForm extends Component {
     }
 }
 
-export default GoodsForm;
+export default OrderForm;

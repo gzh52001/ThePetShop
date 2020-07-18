@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 
 import Login from '@/components/Login';
-
+import LoginApi from "@/api/Login";
 export function UserData(Goods) {
     class Packing extends Component {
         constructor() {
@@ -41,13 +41,30 @@ export function VerifyLogin(InComponent) {
             this.state.defaultPath = "/home";
             this.state.openKeys = ['sub1']
         }
+        verifyToken = async (token) => {     //获取用户列表
+            try {
+                let p = await LoginApi.verifyToken(token);
+                if (p.data.flag) {
+                    this.setState({
+                        login: true
+                    })
+                } else {
+                    this.setState({
+                        login: false
+                    })
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }
         componentDidMount() {
             let userData = localStorage.getItem("userData");
             const { history } = this.props;
             const { location: { pathname } } = history;
             if (userData) {
+                let { token } = JSON.parse(userData);
+                this.verifyToken(token)
                 this.setState({
-                    login: true,
                     defaultPath: pathname === "/login" || pathname === "/" ? "/home" : pathname
                 })
             } else {
@@ -60,8 +77,11 @@ export function VerifyLogin(InComponent) {
                 case "/user/userList":
                     this.setState({ openKeys: ['sub2'] })
                     break;
-                case "/user/goodsList":
+                case "/goods/goodsList":
                     this.setState({ openKeys: ['sub3'] })
+                    break;
+                case "/order/orderList":
+                    this.setState({ openKeys: ['sub4'] })
                     break;
 
                 default:
