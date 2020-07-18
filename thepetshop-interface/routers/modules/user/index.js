@@ -85,6 +85,8 @@ router.post('/login', async (req, res) => {
                 let token = ""
                 if (keep) {
                     token = create(password)
+                }else{
+                    token = create(password,60*60*24)
                 }
                 let uid = p[0].uid
                 let userface = p[0].userface
@@ -201,5 +203,34 @@ router.put('/editpsw', async (req, res) => {
         res.send(inf)
     }
 })
-
+//修改用户地址
+router.put('/editaddress',async(req,res)=>{
+    let {uid,address} = req.body
+    console.log(uid,address)
+    let inf
+    try{
+        let p = await query(`update user set address='${address}' where uid='${uid}'`)
+        if(p.affectedRows){
+            inf={
+                code:2000,
+                flag:true,
+                message:'修改成功'
+            }
+        }else{
+            inf={
+                code:3000,
+                flag:false,
+                message:'修改失败'
+            }
+        }
+        res.send(inf)
+    }catch(err){
+        inf={
+            code:3000,
+            flag:false,
+            message:'服务器错误'
+        }
+        res.send(inf)
+    }
+})
 module.exports = router

@@ -24,6 +24,7 @@ class Login extends Component {
         try {
             console.log(values.username, values.password)
             let p = await LoginApi.loginIn(values.username, values.password, true);
+            console.log(p)
             if (p.data.flag) {
                 const { checked } = this.state;
                 const { history } = this.props;
