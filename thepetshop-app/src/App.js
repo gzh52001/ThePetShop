@@ -10,6 +10,13 @@ import Layout from '@/views/Layout';
 
 @withRouter
 class App extends Component {
+
+  componentDidMount(){
+    this.props.history.listen((location)=>{
+      this.props.history.location.state=this.props.location.pathname
+    })
+  }
+
   render() {
     return (
       <div className="App">
@@ -18,5 +25,4 @@ class App extends Component {
     );
   }
 }
-// App = withRouter(App)
 export default App;

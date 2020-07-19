@@ -1,5 +1,5 @@
 import React from 'react';
-import {Route,Switch, Redirect} from 'react-router-dom';
+import {Route,Switch, Redirect,withRouter} from 'react-router-dom';
 import AppMain from '@/components/AppMain';
 import Login from '@/views/Login';
 import Reg from '@/views/Reg';
@@ -21,5 +21,4 @@ function Layout (){
         </>
     )
 }
-
 export default Layout;

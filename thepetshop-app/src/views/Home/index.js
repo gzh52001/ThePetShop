@@ -217,7 +217,6 @@ class Home extends Component {
     }
 
     render() {
-
         // 宫格（home的nav跳转圈圈）
         const data = Array.from(new Array(5)).map((_val, i) => ({
             // icon: 'https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png',
@@ -246,7 +245,7 @@ class Home extends Component {
                         请输入搜索关键字
                     </h1>
                     <Link className="goCart" to="/cart">
-                        <i className="iconfont icon-gouwuche"></i>
+                        <i className="iconfont icon-gouwuche" />
                     </Link>
                 </div>
                 {/* 轮播图 */}
@@ -278,7 +277,15 @@ class Home extends Component {
                 </WingBlank>
                 {/* 圈圈跳转 */}
                 <div className='home-nav'>
-                    <Grid data={data} hasLine={false} columnNum={5} onClick={(data,index)=>{if(index===4){this.props.history.push('/main/classify')}}} />
+                    <Grid data={data} hasLine={false} columnNum={5} onClick={(data,index)=>{
+                        
+                        if(index===4){
+                            this.props.history.push('/main/classify')
+                        }else{
+                            this.props.history.push('/goodsInfo')
+                        }
+
+                    }} />
                 </div>
 
                 {/* 礼包广告 */}

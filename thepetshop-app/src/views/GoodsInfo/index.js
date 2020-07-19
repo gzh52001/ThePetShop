@@ -1,8 +1,12 @@
-import React,{useEffect, useState} from 'react';
+import React,{useEffect, useState,useCallback} from 'react';
 import { NavBar, Icon, Tabs, Carousel, WingBlank } from 'antd-mobile';
+import {Link,} from 'react-router-dom';
 import './style.scss'
 import BtnBox from './BtnBox'
-function GoodsInfo() {
+
+
+function GoodsInfo(props) {
+
 
   // 顶部分页
   const tabs = [
@@ -10,26 +14,44 @@ function GoodsInfo() {
     { title: '详情', sub: '2' },
     { title: '评价', sub: '3' },
   ];
-
   // 轮播图
   const [lbImgs, setLbImgs] = useState({
     data: ['https://img2.epetbar.com/common/upload/commonfile/2020/05/010/0101949_734383.jpg', 'https://img2.epetbar.com/common/upload/commonfile/2020/05/010/0101949_734383.jpg', 'https://img2.epetbar.com/common/upload/commonfile/2020/05/010/0101949_734383.jpg'],
   }) 
   const [lbImgHeight, setLbImgHeight] = useState({
     imgHeight:375,
-  }) 
+  })
+  const [isRouter,setisRouter] = useState(props.history.location.state)
+  const [goodsData, setGoodsData] = useState([])
   useEffect(()=>{
+    async function getThisGdata(){
+      try {
+        
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    getThisGdata();
   })
 
   // 弹出盒子
   const [onBoxshow1,changebtnshow1] = useState(0);
   const [boxDom,setBoxDom] = useState('');
 
-  function dom1(){
-    return (
-      <div >dom1</div>
-    )
-  }
+  const [checkBtn,changeCheckBtn] = useState(null);
+
+  const [goodsNum,changeGoodsNum] = useState(1);
+  
+
+  useEffect(()=>{
+    console.log(boxDom);
+    setBoxDom(boxDom)
+  },[boxDom])
+  // function specification(){
+  //   return (
+      
+  //   )
+  // }
   function dom2(){
     return (
       <div >dom2</div>
@@ -43,9 +65,13 @@ function GoodsInfo() {
           <NavBar
             mode="light"
             icon={<Icon type="left" />}
-            onLeftClick={() => console.log('onLeftClick')}
+            onLeftClick={() =>
+                props.history.push(isRouter)
+              }
             rightContent={[
-              <Icon key="0" type="search" />,
+              <Link key='goCart' className="goCart" to="/cart">
+                  <i className="iconfont icon-gouwuche" />
+              </Link>
               // <Icon key="1" type="ellipsis" />,
             ]}
           >
@@ -80,11 +106,11 @@ function GoodsInfo() {
                                 src={val}
                                 alt=""
                                 style={{ width: '100%', verticalAlign: 'top' }}
-                                onLoad={() => {
-                                  // fire window resize event to change height
-                                  window.dispatchEvent(new Event('resize'));
-                                  setLbImgHeight({ imgHeight: 'auto' });
-                                }}
+                                // onLoad={() => {
+                                //   // fire window resize event to change height
+                                //   window.dispatchEvent(new Event('resize'));
+                                //   setLbImgHeight({ imgHeight: 'auto' });
+                                // }}
                               />
                             </a>
                           ))
@@ -104,37 +130,41 @@ function GoodsInfo() {
 
                   {/* 按钮区 */}
                   <div className='activity-wrap'>
-                    <div className='btn1' onClick={()=>{
+                    <div className='btn' onClick={()=>{
                       changebtnshow1(onBoxshow1+1)
-                      setBoxDom(dom1())
+                      setBoxDom('box1')
                     }}>
                       <span>请选择规格</span>
                       <i className="iconfont icon-arrow-right-copy" />
-                      {/* <div className='btn1-show'>
-                        <div className='isBox'></div>
-                      </div> */}
                       
-                      <BtnBox 
-                        onBoxshow={!!onBoxshow1}
-                        // onBoxshow={true}
-                        title=''
-                        // btnboxHeight="0px"
-                        ss={boxDom}
-                      >
-                      </BtnBox>
                     </div>
-                  </div>
 
-
-                  <div className='activity-wrap'>
-                    <div className='btn1' onClick={()=>{
+                    <div className='btn' onClick={()=>{
                       changebtnshow1(onBoxshow1+1)
-                      setBoxDom(dom2())
+                      setBoxDom('box2')
                     }}>
                       <span>请选择规格2</span>
                       <i className="iconfont icon-arrow-right-copy" />
                     </div>
+                  
                   </div>
+                      
+
+                  <h2>{boxDom}</h2>
+                  {/* 弹出盒子 */}
+                  <BtnBox 
+                    onBoxshow={!!onBoxshow1}
+                    // onBoxshow={true}
+                    title=''
+
+                    // btnboxHeight={boxDom.isHeight}
+                    bimBoxStyle={boxDom}
+                    btnboxHeight={'420px'}
+                    // bimBoxStyle={specification()}
+                    // checkBtn={checkBtn}
+                  >
+                  </BtnBox>
+
 
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '150px', backgroundColor: '#fff' }}>
