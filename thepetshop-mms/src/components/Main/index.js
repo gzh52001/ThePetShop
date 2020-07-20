@@ -73,12 +73,12 @@ class Main extends Component {
                     component: OrderList,
                 },
                 {
-                    tltle: "未确认订单",
+                    tltle: "未发货订单",
                     path: "/order/orderList2",
                     component: Home,
                 },
                 {
-                    tltle: "已完成订单",
+                    tltle: "已发货订单",
                     path: "/order/orderList3",
                     component: Home,
                 },

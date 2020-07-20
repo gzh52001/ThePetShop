@@ -288,9 +288,9 @@ router.get('/searchandsort', async (req, res) => {
 })
 
 //添加购物车
-router.get('/addcart', async (req, res) => {
-    let { uid, gid, count, gsize } = req.query
-    console.log(uid, gid, count, gsize)
+router.put('/addcart', async (req, res) => {
+    let { uid, gid, count, gsize } = req.body
+    // console.log(uid, gid, count, gsize)
     let inf
     try {
 
@@ -462,7 +462,7 @@ router.delete('/delcartpart', async (req, res) => {
 //购物车选中
 router.put('/checkcart', async (req, res) => {
     let { uid, gid, gsize, check } = req.body
-    console.log(uid, gid, gsize, check)
+    // console.log(uid, gid, gsize, check)
     if (check == "true") {
         check = 1
     } else {
@@ -531,7 +531,7 @@ router.put('/changecartcount', async (req, res) => {
 })
 
 //添加订单(功能完成，返回信息有问题)
-router.get('/addorder', async (req, res) => {
+router.put('/addorder', async (req, res) => {
     let inf = 'ddd'
     try {
         let p = await query(`select uid,gid,count,gsize from goodscart where ischeck='1'`)

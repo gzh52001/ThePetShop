@@ -42,12 +42,12 @@ export default {
             }
         });
     },
-    delAllUserList(ids) {      //批量删除用户
+    delAllUserList(uids) {      //批量删除用户
         return request({
             method: 'delete',
-            url: `${BAST_API}/admin/delpart`,
+            url: `${BAST_API}/admin/delpartuser`,
             data: {
-                ids
+                uids
             }
         });
     },
