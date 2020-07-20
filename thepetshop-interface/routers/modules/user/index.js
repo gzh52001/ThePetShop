@@ -1,8 +1,8 @@
 const express = require('express')
-
 const query = require("../../db/mysql")
 const { create, verify } = require("../token")
 const bcryptjs = require("bcryptjs");
+const svgCaptcha = require("svg-captcha")
 
 const router = express.Router()
 
@@ -42,7 +42,7 @@ router.post('/reg', async (req, res) => {
     let miwen = bcryptjs.hashSync(password)
     let time = Date.now()
     time = time - 0
-    let userface = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1595014189445&di=c7f719e793b77c081e5a037484158eb8&imgtype=0&src=http%3A%2F%2Fqny.smzdm.com%2F202007%2F03%2F5efe844574cd74989.jpg_d250.jpg'
+    let userface = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1595101392038&di=bdf3a0304aed91d44d5ef019a0344bac&imgtype=0&src=http%3A%2F%2Fy.zdmimg.com%2F202007%2F04%2F5f007d903a9766985.jpg_d250.jpg'
     let myname = Math.floor(Math.random()*2)%2==0?'梅小鸡':'梅没鸡'
     try {
         let sql = `insert into user(myname,username,password,userface,time,phonenum,email) values('${myname}','${username}','${miwen}','${userface}','${time}','${phonenum}','${email}')`
@@ -206,13 +206,13 @@ router.put('/editpsw', async (req, res) => {
         res.send(inf)
     }
 })
-//修改用户地址
-router.put('/editaddress',async(req,res)=>{
-    let {uid,address} = req.body
-    console.log(uid,address)
+//修改用户信息
+router.put('/edituser',async(req,res)=>{
+    let {uid,key,value} = req.body
+    // console.log(uid,key,value)
     let inf
     try{
-        let p = await query(`update user set address='${address}' where uid='${uid}'`)
+        let p = await query(`update user set ${key}='${value}' where uid='${uid}'`)
         if(p.affectedRows){
             inf={
                 code:2000,
@@ -236,34 +236,34 @@ router.put('/editaddress',async(req,res)=>{
         res.send(inf)
     }
 })
-//修改昵称
-router.put('/changeName',async(req,res)=>{
-    let {uid,myname} = req.body
-    console.log(myname)
+//验证码
+router.get('/getcaptcha',async(req,res)=>{
     let inf
-    try{
-        let p = await query(`update user set myname='${myname}' where uid='${uid}'`)
-        if(p.affectedRows){
-            inf={
-                code:2000,
-                flag:true,
-                message:"修改成功"
-            }
-        }else{
-            inf={
-                code:3000,
-                flag:false,
-                message:"修改失败"
-            }
-        }
-        res.send(inf)
-    }catch(err){
-        inf = {
-            code:err.errno,
-            flag:false,
-            message:"服务器错误"
-        }
-        res.send(inf)
+    let color="#"
+    for(let i = 0 ;i < 6 ; i++){
+        color += Math.floor(Math.random()*16).toString(16)
     }
+    const captcha = svgCaptcha.create({noise:5,background:color,size:4})
+    // console.log(captcha)
+    if(typeof captcha == "object"){
+        // req.session.code = captcha.text
+        // console.log(req.session.code)
+        inf = {
+            code:2000,
+            flag:true,
+            message:"获取成功",
+            data:{
+                svg:captcha.data,
+                text:captcha.text
+            }
+        }
+    }else{
+        inf = {
+            code:3000,
+            flag:false,
+            message:"获取失败"
+        }
+    }
+    res.send(inf)
 })
 module.exports = router

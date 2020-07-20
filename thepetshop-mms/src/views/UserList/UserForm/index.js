@@ -82,7 +82,7 @@ class UserForm extends Component {
         try {
             let p = await UserListApi.delAllUserList(arr);
             if (p.data.flag) {
-                this.getUserList(this.state.page, this.state.pageSize)
+                this.getUserList(this.state.sort,this.state.page, this.state.pageSize)
                 message.success('删除成功！');
             } else {
                 message.error('删除失败！未知错误');
