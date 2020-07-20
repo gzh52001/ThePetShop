@@ -10,6 +10,7 @@
     "antd": "^4.4.2",
     "antd-mobile": "^2.3.3",
     "axios": "^0.19.2",
+    "china-location": "^2.1.0",
     "lib-flexible": "^0.3.2",
     "postcss-pxtorem": "^5.1.1",
     "rc-form": "^2.4.11",

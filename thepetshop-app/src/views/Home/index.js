@@ -237,7 +237,7 @@ class Home extends Component {
             <div className="home">
                 {/* 顶部 */}
                 <div className='home-head'>
-                    <Link className="goMine" to="/mine">
+                    <Link className="goMine" to="/main/mine">
                         <i className="iconfont icon-geren11"></i>
                     </Link>
                     <h1 className='home-search' onClick={()=>{this.props.history.push('/search')}}>

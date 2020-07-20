@@ -32,5 +32,29 @@ export default{
                 token
             }
         })
+    },
+    //修改密码
+    editpsw(uid,oldpsw,newpsw){
+        return request({
+            method:'put',
+            url:"/user/editpsw",
+            data:{
+                uid,
+                oldpsw,
+                newpsw
+            }
+        })
+    },
+    //修改用户信息
+    edituser(uid,key,value){
+        return request({
+            method:'put',
+            url:'/user/edituser',
+            data:{
+                uid,
+                key,
+                value
+            }
+        })
     }
 }
