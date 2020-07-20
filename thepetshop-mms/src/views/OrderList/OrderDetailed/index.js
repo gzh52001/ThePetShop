@@ -1,65 +1,47 @@
 import React from "react";
-import { PageHeader, Carousel, Row, Col, Descriptions, Badge } from 'antd';
+import { PageHeader, Carousel, Row, Col, Descriptions } from 'antd';
 
 import { LeftOutlined } from '@ant-design/icons';
 
 
 function OrderDetailed(props) {
-    const { goodsData } = props;
-    let fenclass;
-    if (goodsData.tid === 1) {
-        fenclass = "狗狗主粮"
-    } else if (goodsData.tid === 2) {
-        fenclass = "狗狗零食"
+    const { orderData } = props;
+    const {toDate} = props;
 
-    } else if (goodsData.tid === 3) {
-        fenclass = "狗狗窝垫"
-
-    } else if (goodsData.tid === 4) {
-        fenclass = "狗狗玩具"
-
-    } else if (goodsData.tid === 5) {
-        fenclass = "狗狗清洁"
-    }
-    const { imgs } = props;
     return (
-        <div className="goodsDetailed">
+        
+        <div className="orderDetailed">
             <PageHeader
                 className="site-page-header"
                 backIcon={<LeftOutlined />}
                 onBack={props.fn}
                 title="商品详细信息"
             />
-            <Row className="goodsTab">
-                <Col className="goodsHeader" style={{ width: "273px", height: "273px", backgroundColor: "#e0e0e0" }}>
-                    {
-                        imgs !== "" ?
-                            <Carousel autoplay dots={true}>
-                                {
-                                    imgs.map((item) =>
-                                        <div key={item}>
-                                            <img style={{ width: "273px", height: "273px" }} src={item} alt="" />
-                                        </div>
-                                    )
-                                }
-                            </Carousel> : <></>
-                    }
+            <Row className="orderTab">
+                <Col className="orderHeader" style={{ width: "273px", height: "273px", backgroundColor: "#e0e0e0" }}>
+                    <Carousel autoplay dots={true}>
+                        <img style={{ width: "273px", height: "273px" }} src={orderData.gimgs} alt="" />
+                    </Carousel>
                 </Col>
                 <Col span={18}>
                     <Descriptions
-                        className="goodsCenter"
+                        className="orderCenter"
                         bordered
                         column={4}
                     >
-                        <Descriptions.Item label="ID" span={4}>{goodsData.gid}1</Descriptions.Item>
-                        <Descriptions.Item label="商品名" span={4}>{goodsData.gtitle}</Descriptions.Item>
-                        <Descriptions.Item label="商品描述" span={4}>{goodsData.gdesc}</Descriptions.Item>
-                        <Descriptions.Item label="商铺名" span={4}>{goodsData.gbrandtitle}</Descriptions.Item>
-                        <Descriptions.Item label="价格" span={2}>{goodsData.gprice}</Descriptions.Item>
-                        <Descriptions.Item label="销量" span={2}>{goodsData.gxiaoliang}</Descriptions.Item>
-                        <Descriptions.Item label="销售热度" span={2}>{goodsData.ghot}</Descriptions.Item>
-                        <Descriptions.Item label="库存" span={2}>{goodsData.stock}</Descriptions.Item>
-                        <Descriptions.Item label="商品分类" span={2}>{fenclass}</Descriptions.Item>
+                        <Descriptions.Item label="订单号" span={2}>{orderData.gid}</Descriptions.Item>
+                        <Descriptions.Item label="用户名" span={2}>{orderData.uid}</Descriptions.Item>
+                        <Descriptions.Item label="商品名" span={4}>{orderData.gtitle}</Descriptions.Item>
+                        <Descriptions.Item label="下单时间" span={2}>{toDate(orderData.otime)}</Descriptions.Item>
+                        <Descriptions.Item label="状态" span={2}>1</Descriptions.Item>
+                        <Descriptions.Item label="规格" span={2}>{orderData.gsize}</Descriptions.Item>
+                        <Descriptions.Item label="数量" span={2}>{orderData.count}</Descriptions.Item>
+                        <Descriptions.Item label="单价" span={2}>{orderData.gprice}</Descriptions.Item>
+                        <Descriptions.Item label="总价" span={2}>{(orderData.gprice * orderData.count).toString()}</Descriptions.Item>
+                        <Descriptions.Item label="商品分类" span={2}>{orderData.goodstype}</Descriptions.Item>
+                        <Descriptions.Item label="手机号码" span={2}>{orderData.phonenum}</Descriptions.Item>
+                        <Descriptions.Item label="邮箱" span={2}>{orderData.email}</Descriptions.Item>
+                        <Descriptions.Item label="收货人" span={2}>{orderData.myname}</Descriptions.Item>
                     </Descriptions>
 
                 </Col>

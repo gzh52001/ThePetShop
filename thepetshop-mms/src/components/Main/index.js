@@ -14,6 +14,8 @@ import AdminReg from '@/views/AdminList/AdminReg'
 import UserList from '@/views/UserList'
 import GoodsList from '@/views/GoodsList'
 import OrderList from '@/views/OrderList'
+import AddGoods from "@/views/AddGoods";
+import ModifyGoods from "@/views/ModifyGoods";
 
 class Main extends Component {
     constructor() {
@@ -36,11 +38,6 @@ class Main extends Component {
                     component: AdminReg,
                 },
                 {
-                    tltle: "操作记录",
-                    path: "/backstage/records",
-                    component: Home,
-                },
-                {
                     tltle: "用户列表",
                     path: "/user/userList",
                     component: UserList,
@@ -56,29 +53,19 @@ class Main extends Component {
                     component: Home,
                 },
                 {
-                    tltle: "用户列表",
-                    path: "/user/userList4",
-                    component: Home,
-                },
-                {
                     tltle: "商品列表",
                     path: "/goods/goodsList",
                     component: GoodsList,
                 },
                 {
                     tltle: "添加商品",
-                    path: "/user/userList2",
-                    component: Home,
+                    path: "/goods/addGoods",
+                    component: AddGoods,
                 },
                 {
                     tltle: "修改商品信息",
-                    path: "/user/userList3",
-                    component: Home,
-                },
-                {
-                    tltle: "用户列表",
-                    path: "/user/userList4",
-                    component: Home,
+                    path: "/goods/modifyGoods",
+                    component: ModifyGoods,
                 },
                 {
                     tltle: "订单列表",
@@ -93,11 +80,6 @@ class Main extends Component {
                 {
                     tltle: "已完成订单",
                     path: "/order/orderList3",
-                    component: Home,
-                },
-                {
-                    tltle: "查询用户订单",
-                    path: "/order/orderList4",
                     component: Home,
                 },
             ],
@@ -128,10 +110,10 @@ class Main extends Component {
         let adminName = localStorage.getItem("userData");
         adminName = JSON.parse(adminName);
         const { contentRouter } = this.state;
-        const backstageRouter = contentRouter.slice(0, 4);
-        const userRouter = contentRouter.slice(4, 8);
-        const goodsRouter = contentRouter.slice(8, 12);
-        const orderRouter = contentRouter.slice(12, 16);
+        const backstageRouter = contentRouter.slice(0, 3);
+        const userRouter = contentRouter.slice(3, 6);
+        const goodsRouter = contentRouter.slice(6, 9);
+        const orderRouter = contentRouter.slice(9, 12);
         const { defaultPath } = this.state;
         const { SubMenu } = Menu;
         const { Header, Content, Sider } = Layout;

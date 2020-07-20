@@ -5,7 +5,7 @@ import "@/assets/css/GoodsList.scss"
 import OrderForm from '@/views/OrderList/OrderForm'
 import OrderDetailed from '@/views/OrderList/OrderDetailed'
 
-import GoodsListApi from "@/api/GoodsList";
+import OrderListApi from "@/api/OrderList";
 
 class OrderList extends Component {
     constructor() {
@@ -13,29 +13,27 @@ class OrderList extends Component {
         this.state = {
             DetailedFlag: true,
             loklokID: "",
-            goodsData: [],
+            orderData: [],
             imgs: []
         }
     }
-    loklok = (id) => {
+    loklok = (data) => {
         const { DetailedFlag } = this.state;
         this.setState({
             DetailedFlag: !DetailedFlag,
-            loklokID: id.gid
+            loklokID: data.gid
         })
         if (DetailedFlag) {
-            this.getGoodsDetailed(id.gid);
+             this.getOrderDetailed(data.uid,data.gid,data.otime);
+            console.log(data)
         }
     }
-    getGoodsDetailed = async (gid) => {     //获取商品详情
+    getOrderDetailed = async (uid,gid,otime) => {     //获取商品详情
         try {
-            let p = await GoodsListApi.getGoodsDetailed(gid);
+            let p = await OrderListApi.getOrderDetailed(uid,gid,otime);
             if (p.data.flag) {
-                console.log(p.data.data[0])
-                let a = JSON.parse(p.data.data[0].gimgs);
                 this.setState({
-                    goodsData: p.data.data[0],
-                    imgs: a
+                    orderData: p.data.data[0],
                 })
             } else {
                 console.log("获取失败")
@@ -44,6 +42,23 @@ class OrderList extends Component {
             console.log(error);
         }
     }
+    // getGoodsDetailed = async (gid) => {     //获取商品详情
+    //     try {
+    //         let p = await GoodsListApi.getGoodsDetailed(gid);
+    //         if (p.data.flag) {
+    //             console.log(p.data.data[0])
+    //             let a = JSON.parse(p.data.data[0].gimgs);
+    //             this.setState({
+    //                 goodsData: p.data.data[0],
+    //                 imgs: a
+    //             })
+    //         } else {
+    //             console.log("获取失败")
+    //         }
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
     toDate = (now) => {
         let a = new Date(now)
         var year = a.getFullYear();  //取得4位数的年份
@@ -64,7 +79,7 @@ class OrderList extends Component {
                     <OrderForm data={this.loklok} toDate={this.toDate}></OrderForm>
                 </div>
                 <div style={{ display: this.state.DetailedFlag ? "none" : "block" }}>
-                    <OrderDetailed data={this.state.loklokID} imgs={this.state.imgs} goodsData={this.state.goodsData} fn={this.loklok}></OrderDetailed>
+                    <OrderDetailed data={this.state.loklokID} imgs={this.state.imgs} orderData={this.state.orderData} fn={this.loklok} toDate={this.toDate}></OrderDetailed>
                 </div>
             </>
         )

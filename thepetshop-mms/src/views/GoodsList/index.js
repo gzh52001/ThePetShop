@@ -27,7 +27,7 @@ class GoodsList extends Component {
             this.getGoodsDetailed(id.gid);
         }
     }
-    getGoodsDetailed = async (gid) => {     //获取用户列表
+    getGoodsDetailed = async (gid) => {     //获取商品详情
         try {
             let p = await GoodsListApi.getGoodsDetailed(gid);
             if (p.data.flag) {

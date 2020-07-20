@@ -50,7 +50,7 @@ class GoodsForm extends Component {
                 })
                 message.success('查找成功！');
             } else {
-                console.log("获取失败")
+                message.error('查找的内容不存在！');
             }
         } catch (error) {
             message.error('查找的内容不存在！');

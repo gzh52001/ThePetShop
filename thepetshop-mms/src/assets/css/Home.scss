@@ -1,21 +1,47 @@
-.home{
+.home {
     padding: 15px;
-    .ant-card-body{
+    .ant-card-body {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        >p{
+        > p {
             text-align: center;
         }
     }
-    .adminHeader{
+    .adminHeader {
         width: 200px;
         margin: 0 auto;
     }
-    .adminName{
+    .adminName {
         padding-top: 15px;
         font-size: 20px;
         font-weight: bold;
         text-align: center;
+    }
+}
+.dateBox {
+    .events {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    .events .ant-badge-status {
+        overflow: hidden;
+        white-space: nowrap;
+        width: 100%;
+        text-overflow: ellipsis;
+        font-size: 12px;
+    }
+    .ant-picker-content{
+        height: 500px;
+        overflow: hidden;
+        background-color: pink;
+    }
+    .notes-month {
+        text-align: center;
+        font-size: 28px;
+    }
+    .notes-month section {
+        font-size: 28px;
     }
 }

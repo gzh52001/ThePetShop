@@ -71,13 +71,19 @@ export function VerifyLogin(InComponent) {
                 this.props.history.push("/login");
             }
             switch (pathname) {
-                case "/home" || "/backstage/adminList" || "/backstage/adminReg" || "/backstage/records":
+                case "/home":
                     this.setState({ openKeys: ['sub1'] })
                     break;
                 case "/user/userList":
                     this.setState({ openKeys: ['sub2'] })
                     break;
                 case "/goods/goodsList":
+                    this.setState({ openKeys: ['sub3'] })
+                    break;
+                case "/goods/addGoods":
+                    this.setState({ openKeys: ['sub3'] })
+                    break;
+                case "/goods/modifyGoods":
                     this.setState({ openKeys: ['sub3'] })
                     break;
                 case "/order/orderList":

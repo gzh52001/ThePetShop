@@ -147,7 +147,7 @@ class OrderForm extends Component {
     render() {
         const { Search } = Input;
         const { Option } = Select;
-        const {toDate} = this.props
+        const {toDate} = this.props;
         const columns = [
             {
                 title: '订单号',
@@ -223,7 +223,6 @@ class OrderForm extends Component {
             },
         ];
         const {totalList} = this.state
-        console.log(totalList)
         return (
             <div className="orderForm" >
                 <div className="formHeader">
