@@ -19,8 +19,8 @@ export function withLogin(InnerComponent){//高阶组件 登录拦截
                     this.setState({
                         login:true
                     })
+                    super.componentDidMount();
                 }
-                super.componentDidMount();
             }catch(err){
                 console.log(err);
             }

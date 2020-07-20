@@ -86,7 +86,9 @@
     .am-list-item {
         height: 20px !important;
     }
-
+    .am-checkbox-item{
+        height: 20px !important;
+    }
     .am-list-line {
         height: 20px !important;
     }
@@ -110,6 +112,9 @@
         height      : 10px;
         border-style: solid;
         transform   : rotate(45deg);
+    }
+    .am-checkbox{
+        height: 20px!important;
     }
 }
 

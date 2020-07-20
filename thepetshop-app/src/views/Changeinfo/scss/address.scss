@@ -1,0 +1,38 @@
+.address{
+    height: 100%;
+    .am-list{
+        height: 100%;
+        .am-list-body{
+            height: 100%;
+            border-top-color:transparent ;
+            .am-list-item{
+                width: auto;
+                margin: 0;
+            }
+            .am-list-line{
+                border-bottom: 0;
+            }
+        }
+    }
+    .test{
+        line-height:54px!important;
+        height: 54px!important;
+        position: relative;
+        font-size: 16px;
+    }
+    .test::after{
+        content: '';
+        position: absolute;
+        background-color: #ddd;
+        display: block;
+        z-index: 1;
+        top: auto;
+        right: auto;
+        bottom: 0;
+        left: 0;
+        width: 95% !important;
+        height: 2PX !important;
+        transform-origin: 50% 100%;
+        transform: scaleY(0.5);
+    }
+}

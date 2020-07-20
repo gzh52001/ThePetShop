@@ -1,5 +1,6 @@
 const TOKEN_KEY = 'petshop-app-token';
 const USERINFO_KEY = 'petshop-app-userinfo';
+const ADDRESS_KEY = 'petshop-app-address';
 
 //获取token
 export function getToken(){
@@ -19,6 +20,7 @@ export function getUser(){
 export function setUser(userinfo){
     localStorage.setItem(USERINFO_KEY,JSON.stringify(userinfo));
 }
+
 
 //删除信息
 export function removeInfo(){

@@ -67,19 +67,13 @@ class Login extends Component {
         try{
             let p = await loginApi.login(username,userpass,keep);
             if(p.data.flag){
-                const {token,uid,userface,username} = p.data.data;
+                // console.log(p.data.data);
+                const {token,uid,userface,username,address,email,phonenum,myname} = p.data.data;
                 //设置token
                 if(token){
                     setToken(token);
                 }
-                setUser({uid,userface,username});
-                this.setState({
-                    username: '',//账号
-                    userpass: '',//密码
-                    isUserError: false,//账号是否为空
-                    isPassError: false,//密码是否为空
-                    keep: false,//是否七天
-                });
+                setUser({uid,userface,username,address,email,phonenum,myname});
                 Toast.success('登陆成功',2);
                 this.props.history.push('/main/home');
             }else{

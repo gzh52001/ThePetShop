@@ -29,6 +29,12 @@ class Reg extends Component {
     }
     //验证用户名
     checkUser =async (val)=>{
+        if(!val){
+            this.setState({
+                isUserError:true
+            })
+            return
+        }
         try{
             let p = await regApi.checkuser(val);
             if(!p.data.flag){
@@ -42,7 +48,12 @@ class Reg extends Component {
     }
     //用户名感叹号
     onUserError = () => {
-        Toast.fail('用户已存在', 3);
+        const {username} = this.state;
+        if(username){
+            Toast.fail('用户名已存在', 3);
+        }else{
+            Toast.fail('请输入用户名', 3);
+        }
     }
     //密码
     pass = (val) => {
@@ -205,7 +216,7 @@ class Reg extends Component {
                 </List>
                 {/* 注册按钮 */}
                 {
-                     username&&userpass&&userpass2&&phone&&email?
+                     username&&userpass&&userpass2&&phone&&email&&!isPassError&&!isPass2Error&&!isPhoneError&&!isEmailError&&!isUserError?
                         <Button type="warning" className='loginbtn' style={{ marginBottom: 15, marginTop: 25 }} onClick={this.reg}>注册 </Button>
                         :
                         <Button type="warning" disabled className='loginbtn' style={{ marginBottom: 15, marginTop: 25 }} >注册</Button>

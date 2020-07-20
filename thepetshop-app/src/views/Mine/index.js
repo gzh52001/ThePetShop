@@ -17,14 +17,14 @@ class Mine extends Component {
                     icon: 'icon-gouwuchekong',
                     title: '购物车',
                     span: '',
-                    path: '/cart'
+                    path: '/main/cart'
                 },
                 {
                     id: 2,
                     icon: 'icon-zhanghu2',
                     title: '账户',
                     span: '',
-                    path: '/user'
+                    path: '/changeinfo'
                 },
                 {
                     id: 3,
@@ -156,7 +156,7 @@ class Mine extends Component {
                 }
             ],
             userimg: '',
-            username: ''
+            myname: ''
         }
     }
     clickTool(path) {
@@ -171,15 +171,15 @@ class Mine extends Component {
     }
     componentDidMount() {
         let userimg = getUser().userface;
-        let username = getUser().username;
+        let myname = getUser().myname;
         this.setState({
             userimg,
-            username
+            myname
         })
     }
     render(islogin) {
         // console.log(islogin);
-        const { tools, orders, userimg, username, info } = this.state;
+        const { tools, orders, userimg, myname, info } = this.state;
         // console.log(userimg);
         return (
             <div className='mine'>
@@ -200,7 +200,7 @@ class Mine extends Component {
                             }
                         </a>
                         {
-                            islogin ? <a>{username}</a> : <Link to='/login'>登录 / 注册</Link>
+                            islogin ? <a>{myname}</a> : <Link to='/login'>登录 / 注册</Link>
                         }
                     </div>
                     <div className='user-info-box'>
