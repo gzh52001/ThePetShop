@@ -74,6 +74,7 @@ class Home extends Component {
                 },
     
             ],
+            killIndex:'',
             // 分类展示
             // ["海淘精选", "猫咪主粮", "狗狗主粮", "营养保健", "狗狗零食", "猫咪零食", "日常用品", "医疗护理"]
             classifyTabs: [
@@ -231,6 +232,7 @@ class Home extends Component {
             icon: item.gimgs,
             title: item.gtitle,
             price: item.gprice,
+            gid: item.gid
         }));
         return (
 
@@ -330,7 +332,7 @@ class Home extends Component {
                     //  onClick={_el => console.log(_el)} 
                     itemStyle={{height:'170px' ,padding:'5px 0' }}
                      renderItem={dataItem => (
-                        <div style={{ padding: '5px' }}>
+                        <div style={{ padding: '5px' }} onClick={()=>this.props.history.push(`/goodsInfo/${dataItem.gid}`)}>
                           <img src={dataItem.icon} style={{ width: '75px', height: '75px' }} alt="" />
                           <div style={{ color: '#888', fontSize: '14px', marginTop: '12px' }}>
                             <span className="new-title">{dataItem.title}</span>
@@ -392,7 +394,7 @@ class Home extends Component {
     (<div className="classify-info" >
       {
           tab.classifyData.map((item,index)=>(
-            <div key={index} className='classify-item'>
+            <div key={index} className='classify-item' onClick={()=>this.props.history.push('/goodsInfo/'+item.gid)}>
                 <div className='img-item'>
                     <img src={item.gimgs} />
                 </div>
@@ -442,8 +444,8 @@ class Home extends Component {
     renderContent = (data) =>(
         <div className="kill-wrap" style={{ display: 'flex', alignItems: 'center'}}>
             {
-                data.map(item => (
-                    <div className="kill-item" key={item.gtitle}>
+                data.map((item,index) => (
+                    <div className="kill-item" key={index} onClick={()=>this.props.history.push('/goodsInfo/'+item.gid)}>
                         <div className='img-item'>
                             <img src={item.gimgs}/>
                         </div>
@@ -472,6 +474,12 @@ class Home extends Component {
     }
     // 限时秒杀点击
     killActive = (tab,index)=>{
+        if(this.state.killIndex==index){
+            return
+        }
+        this.setState({
+            killIndex:index
+        })
         let killTime = this.killTime();
         let activeTime = killTime[index].title.props.children[0].props.children;
         killTime.forEach((item,idx)=>{

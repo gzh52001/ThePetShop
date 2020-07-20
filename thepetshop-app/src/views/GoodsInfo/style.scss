@@ -38,6 +38,15 @@
                 .am-tabs-pane-wrap>div{
                     display: block !important;
                 }
+                .gInfo-show1{
+                    padding-bottom: 105px;
+                }
+                .gInfo-show3{
+                    background: #fff;
+                    height: 100%;
+                    padding-top: 20px;
+                    text-align: center;
+                }
             }
         }
     }
@@ -45,6 +54,9 @@
     // 轮播图
     .goodsInfo-banner{
         width: 100%;
+        .slider-list{
+            height: 375px !important;
+        }
         .am-wingblank.am-wingblank-lg{
             margin: 0;
         }
@@ -56,6 +68,7 @@
     // 商品信息
     .goods-blurb{
         padding: 10px;
+        white-space:normal;
         .goods-num{
             padding-bottom: 10px;
             .now{
@@ -73,10 +86,22 @@
                 color:#AAAAAA;
             }
         }
-        .goods-title{
+        .goods-gdesc{
             font-size: 20px;
-            font-weight: 300;
+            font-weight: 600;
+            padding: 5px 0;
+        }
+        .goods-title{
+            font-size: 14px;
+            // font-weight: 300;
+            padding: 5px 0;
+            width: 100%;
             color: #383838;
+            // overflow: hidden;
+            // text-overflow: ellipsis;
+            // display: -webkit-box;
+            // -webkit-line-clamp: 2;
+            // -webkit-box-orient: vertical;
         }
     }
 
@@ -124,6 +149,98 @@
             }
         }
 
+    }
+
+    // 详情
+    .goods-imgs{
+        .shops-wrap{
+            .am-card-header-content{
+                width: 80px;
+                height: 60px;
+                img{
+                    width: 80px;
+                    // height: 100%;
+                }
+            }
+            // .img-item{
+            //     width: 100%;
+            //     height: 60px;
+            //     display: flex;
+            //     justify-content: center;
+            //     img{
+            //         height: 60px;
+            //     }
+            // }
+            // .shops-name{
+            //     text-align: center;
+            // }
+        }
+        .gi-txt{
+            font-size: 14px;
+            width: 100%;
+            text-align: center;
+            padding: 8px 0;
+            color: #aaaaaa;
+        }
+        .img-box{
+            width: 100%;
+            img{
+                width: 100%;
+            }
+        }
+    }
+
+    // 底部
+    .setCart-wrap{
+        width: 100%;
+        height: 60px;
+        background: #fff;
+        position: fixed;
+        bottom: 45px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        box-shadow: 0 0px 20px 5px rgba(0,0,0,.1);
+        .btmIcon{
+            display: flex;
+            div{
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+                margin-right: 18px;
+                .font{
+                    font-size: 12px;
+                }
+                .iconfont{
+                    font-size: 30px;
+                    font-weight: 100;
+                }
+            }
+        }
+        .btmBtn{
+            display: flex;
+            .go-buys,.set-cart{
+                width: 124px;
+                height: 42px;
+                text-align: center;
+                line-height: 44px;
+                span{
+                    display: block;
+                    width: 100%;
+                    height: 100%;
+                    color:#fff;
+                }
+            }
+            .go-buys{
+                background: linear-gradient(to right,#fdda14de,#fdbf14);
+                border-radius: 22px 0 0 22px;
+            }
+            .set-cart{
+                background: linear-gradient(to right, #ff9282, #ff4436);;
+                border-radius: 0 22px 22px 0;
+            }
+        }
     }
 }
 
@@ -213,6 +330,7 @@
         .am-list-item{
             padding: 0;
             margin: 0;
+            width: 100%;
             .am-list-line{
                 border: none;
             }

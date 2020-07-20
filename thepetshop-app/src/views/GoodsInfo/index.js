@@ -1,12 +1,35 @@
-import React,{useEffect, useState,useCallback} from 'react';
-import { NavBar, Icon, Tabs, Carousel, WingBlank } from 'antd-mobile';
+import React,{useEffect, useState,useCallback,useRef} from 'react';
+import { NavBar, Icon, Tabs, Carousel, WingBlank,Toast,Card, WhiteSpace } from 'antd-mobile';
 import {Link,} from 'react-router-dom';
 import './style.scss'
 import BtnBox from './BtnBox'
-
+import GoodsApi from '@/api/goods'
+import {getToken,getUser} from '@/utils/auth';
 
 function GoodsInfo(props) {
+  const token = getToken()//获取token
+  // 此页面样式修改的数据
+  const [domStyle,changeStyle] = useState('');
 
+  // 商品数据
+  const [ginfoData,setgiData] = useState(0);
+  useEffect(()=>{
+    const goodsGid = props.location.pathname.split('/')[2]
+        GoodsApi.getGoodsInfo(goodsGid).then(res=>{
+          if(res.data.flag){
+            // console.log(res.data.data[0].imgdetail)
+            let imgs = JSON.parse(res.data.data[0].imgdetail)
+            // console.log(imgs[0])
+            // imgs = Array.prototype.slice.call(imgs);
+            let data = {
+              ...res.data.data[0],
+              imgdetail:imgs,
+              gimgs:JSON.parse(res.data.data[0].gimgs)
+            }
+            setgiData(data)
+          }
+        })
+  },[props])
 
   // 顶部分页
   const tabs = [
@@ -15,49 +38,68 @@ function GoodsInfo(props) {
     { title: '评价', sub: '3' },
   ];
   // 轮播图
-  const [lbImgs, setLbImgs] = useState({
-    data: ['https://img2.epetbar.com/common/upload/commonfile/2020/05/010/0101949_734383.jpg', 'https://img2.epetbar.com/common/upload/commonfile/2020/05/010/0101949_734383.jpg', 'https://img2.epetbar.com/common/upload/commonfile/2020/05/010/0101949_734383.jpg'],
-  }) 
+  // const [ginfoData,gimgsLbImgs] = useState({
+  //   data: ['https://img2.epetbar.com/common/upload/commonfile/2020/05/010/0101949_734383.jpg', 'https://img2.epetbar.com/common/upload/commonfile/2020/05/010/0101949_734383.jpg', 'https://img2.epetbar.com/common/upload/commonfile/2020/05/010/0101949_734383.jpg'],
+  // }) 
   const [lbImgHeight, setLbImgHeight] = useState({
     imgHeight:375,
   })
   const [isRouter,setisRouter] = useState(props.history.location.state)
-  const [goodsData, setGoodsData] = useState([])
-  useEffect(()=>{
-    async function getThisGdata(){
-      try {
-        
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    getThisGdata();
-  })
 
   // 弹出盒子
   const [onBoxshow1,changebtnshow1] = useState(0);
   const [boxDom,setBoxDom] = useState('');
 
-  const [checkBtn,changeCheckBtn] = useState(null);
-
-  const [goodsNum,changeGoodsNum] = useState(1);
-  
-
-  useEffect(()=>{
-    console.log(boxDom);
-    setBoxDom(boxDom)
-  },[boxDom])
-  // function specification(){
-  //   return (
+  // 加入的商品数据
+  const goodsDatRef = useRef('');
+  const [cartNow,changeNow] = useState(false);//控制购物车跳转
+  // 加入购物车
+  const setCart = useCallback((data)=>{
+    if(data.checkBtn){
+      goodsDatRef.current = data
+    }
+    if(goodsDatRef.current.checkBtn){
+      console.log("ok:",goodsDatRef.current);
+      changeStyle({
+        btnFont:goodsDatRef.current.checkBtn,
+        goodsPrice:goodsDatRef.current.priceDom,
+        goodsNum:goodsDatRef.current.goodsNum
+      });
       
-  //   )
-  // }
-  function dom2(){
-    return (
-      <div >dom2</div>
-    )
+      changeNow(true)
+    }else{
+      changebtnshow1(onBoxshow1+1)
+      setBoxDom('box1')
+      Toast.fail('请选择规格', 1);
+      changeNow(false)
+    }
+  },[onBoxshow1])
+
+  const goCart = async ()=>{
+    let {uid} = getUser()
+    let count = goodsDatRef.current.goodsNum
+    let gsize = null;
+    let gid = ginfoData.gid;
+    let nowprice = goodsDatRef.current.priceDom
+    console.log(nowprice);
+    JSON.parse(ginfoData.gsize).forEach((item,index) => {
+      if(goodsDatRef.current.checkBtn==item){
+        return gsize = index
+      }
+    });
+    console.log("去也",'uid:'+uid,'gid:'+gid,'count:'+count,'gsize:'+gsize);
+    try {
+      let p = await GoodsApi.goSetGoodsCart(uid,gid,count,gsize)
+      if(p.data.flag){
+        Toast.success('加入购物车成功!', 1);
+      }else{
+        Toast.fail('加入购物车失败!!!', 1);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
   }
-  
 
   return (
     <div className='goodsInfo-wrap'>
@@ -70,7 +112,7 @@ function GoodsInfo(props) {
               }
             rightContent={[
               <Link key='goCart' className="goCart" to="/cart">
-                  <i className="iconfont icon-gouwuche" />
+                  <i className="iconfont icon-gouwuche" style={{fontSize:'20px'}} />
               </Link>
               // <Icon key="1" type="ellipsis" />,
             ]}
@@ -83,7 +125,7 @@ function GoodsInfo(props) {
                 // onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
               >
                 {/* 商品页 */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '150px', backgroundColor: '#fff' }}>
+                <div className="gInfo-show1" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '150px', backgroundColor: '#fff' }}>
                   {/* 轮播图 */}
                   <div className='goodsInfo-banner'>
                     <WingBlank>
@@ -96,10 +138,10 @@ function GoodsInfo(props) {
                         // afterChange={index => console.log('slide to', index)}
                       >
                         {
-                          lbImgs.data.map((val,index) => (
+                          ginfoData.gimgs?ginfoData.gimgs.map((val,index) => (
                             <a
                               key={index}
-                              href="http://www.alipay.com"
+                              href="###"
                               style={{ display: 'inline-block', width: '100%', height: `${lbImgHeight.imgHeight}px`,overflow:'hidden' }}
                             >
                               <img
@@ -113,7 +155,7 @@ function GoodsInfo(props) {
                                 // }}
                               />
                             </a>
-                          ))
+                          )):''
                         }
                       </Carousel>
                     </WingBlank>
@@ -121,11 +163,15 @@ function GoodsInfo(props) {
                   {/* 商品信息 */}
                   <div className='goods-blurb'>
                     <div className='goods-num'>
-                      <span className="now">￥22</span>
-                      <del className="old">￥22</del>
-                      <b className="gQty">已售 222</b>
+                      <span className="now">￥{
+                        // goodsDatRef.current?goodsDatRef.current.priceDom:ginfoData.gprice
+                        ginfoData.gprice
+                      }</span>
+                      <del className="old">￥{(ginfoData.gprice * 1.2).toFixed(2)}</del>
+                      <b className="gQty">已售 {ginfoData.gxiaoliang}</b>
                     </div>
-                    <p className="goods-title">ssssssssssss</p>
+                      <h2 className="goods-gdesc">{ginfoData.gtitle}</h2>
+                      <p className="goods-title">{ginfoData.gdesc}</p>
                   </div>
 
                   {/* 按钮区 */}
@@ -134,7 +180,12 @@ function GoodsInfo(props) {
                       changebtnshow1(onBoxshow1+1)
                       setBoxDom('box1')
                     }}>
-                      <span>请选择规格</span>
+                      <span>{
+                        domStyle.btnFont?
+                          '已选择：'+domStyle.btnFont+' 价格：'+goodsDatRef.current.priceDom
+                        :
+                          '请选择规格'
+                      }</span>
                       <i className="iconfont icon-arrow-right-copy" />
                       
                     </div>
@@ -143,23 +194,87 @@ function GoodsInfo(props) {
                       changebtnshow1(onBoxshow1+1)
                       setBoxDom('box2')
                     }}>
-                      <span>请选择规格2</span>
+                      <span>优惠券</span>
                       <i className="iconfont icon-arrow-right-copy" />
                     </div>
                   
                   </div>
-                      
 
-                  <h2>{boxDom}</h2>
+                  {/* 商品详情 */}
+                  <div className='goods-imgs'>
+                    <h2 className="gi-txt">—— 详情 ——</h2>
+                    <div className='shops-wrap'>
+                      <WingBlank size="lg">
+                        <WhiteSpace size="lg" />
+                          <Card>
+                            <Card.Header
+                              // title="This is title"
+                              thumb={ginfoData.gbrandlogo}
+                              extra={<span style={{color:'orange'}}>金牌品牌</span>}
+                            />
+                            <Card.Body>
+                              <div>{ginfoData.gbrandtitle}</div>
+                            </Card.Body>
+                            <Card.Footer content="" extra={<div>好品牌，值得信赖</div>} />
+                          </Card>
+                          <WhiteSpace size="lg" />
+                        </WingBlank>
+                      {/* <div className='img-item'>
+                        <img alt="" src={ginfoData.gbrandlogo} />
+                      </div>
+                      <h2 className="shops-name">{ginfoData.gbrandtitle}</h2> */}
+                    </div>
+                    <div className='img-box'>
+                      {
+                          ginfoData.imgdetail?ginfoData.imgdetail.map(item=>(
+                            <img alt='' key={item} src={item} />
+                          )):''
+                      }
+                    </div>
+                  </div>
+
+                    {/* 底部 */}
+                  <div className='setCart-wrap'>
+                    <div className='btmIcon'>
+                      <div onClick={()=>props.history.push('/main/home')}>
+                        <i className="iconfont icon-home-line" />
+                        <span className="font">主页</span>
+                      </div>
+                      <div>
+                        <i className="iconfont icon-shoucang1" />
+                        <span className="font">收藏</span>
+                      </div>
+                    </div>
+                    <div className='btmBtn'>
+                      <div className='go-buys'>
+                        <span onClick={
+                          cartNow
+                          ?
+                          token?()=>props.history.push('/cart'):()=>Toast.fail('亲，你还未登录哦', 1)
+                          :
+                          setCart
+                        }>立即购买</span>
+                      </div>
+                      <div className='set-cart'>
+                        <span onClick={
+                          cartNow
+                          ?
+                          token?goCart:()=>Toast.fail('亲，你还未登录哦', 1)
+                          :
+                          setCart
+                        }>加入购物车</span>
+                      </div>
+                    </div>
+                    
+                  </div>
+                      
                   {/* 弹出盒子 */}
                   <BtnBox 
                     onBoxshow={!!onBoxshow1}
-                    // onBoxshow={true}
-                    title=''
-
+                    setCart={(e)=>setCart(e)}
                     // btnboxHeight={boxDom.isHeight}
-                    bimBoxStyle={boxDom}
-                    btnboxHeight={'420px'}
+                    btmBoxStyle={boxDom}
+                    gdata={ginfoData}
                     // bimBoxStyle={specification()}
                     // checkBtn={checkBtn}
                   >
@@ -167,12 +282,47 @@ function GoodsInfo(props) {
 
 
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '150px', backgroundColor: '#fff' }}>
-                  Content of second tab
-                              </div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '150px', backgroundColor: '#fff' }}>
-                  Content of third tab
-                              </div>
+                  
+                <div className="gInfo-show2" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '150px', backgroundColor: '#fff' }}>
+                  
+                  
+                  {/* 商品详情 */}
+                  <div className='goods-imgs'>
+                  <div className='shops-wrap'>
+                      <WingBlank size="lg">
+                        <WhiteSpace size="lg" />
+                          <Card>
+                            <Card.Header
+                              // title="This is title"
+                              thumb={ginfoData.gbrandlogo}
+                              extra={<span style={{color:'orange'}}>金牌品牌</span>}
+                            />
+                            <Card.Body>
+                              <div>{ginfoData.gbrandtitle}</div>
+                            </Card.Body>
+                            <Card.Footer content="" extra={<div>好品牌，值得信赖</div>} />
+                          </Card>
+                          <WhiteSpace size="lg" />
+                        </WingBlank>
+                      {/* <div className='img-item'>
+                        <img alt="" src={ginfoData.gbrandlogo} />
+                      </div>
+                      <h2 className="shops-name">{ginfoData.gbrandtitle}</h2> */}
+                    </div>
+                    <div className='img-box'>
+                      {
+                          ginfoData.imgdetail?ginfoData.imgdetail.map(item=>(
+                            <img alt='' key={item} src={item} />
+                          )):''
+                      }
+                    </div>
+                  </div>
+                
+                
+                </div>
+                <div className="gInfo-show3" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '150px', backgroundColor: '#fff' }}>
+                  —— 该功能正在开发中 ——
+                </div>
               </Tabs>
             </div>
           </NavBar>
