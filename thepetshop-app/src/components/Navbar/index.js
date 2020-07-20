@@ -5,9 +5,9 @@ import './style.scss';
 
 function Navbar(props) {//顶部导航
     const gotohome = function(){
-        const {props:{history}} = props;
+        const {props:{history,location:{state}}} = props;
         // console.log(props);
-        history.push('/main/home')
+        history.push(state);
     }
     return (
         <NavBar
