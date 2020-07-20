@@ -157,7 +157,7 @@ class Main extends Component {
                             <h2>后台管理系统</h2>
                         </div>
                         <Row className="operation">
-                            <Col className="col" span={12}>欢迎您：<span>{adminName.username}</span></Col>
+                            <Col className="col" span={12}>欢迎您：<span>{adminName.myname}</span></Col>
                             <Col span={12}>
                                 <Dropdown overlay={menu} placement="bottomCenter">
                                     <Button className="personal" type="link">个人中心<DownCircleOutlined style={{ fontSize: "16px" }} /></Button>

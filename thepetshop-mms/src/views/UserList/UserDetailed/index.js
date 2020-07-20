@@ -5,6 +5,7 @@ import { LeftOutlined } from '@ant-design/icons';
 
 
 function UserDetailed(props){
+        let isState = Math.floor(Math.random()*2)
         const {userData,toDate} = props;
         return (
             <div className="UserDetailed">
@@ -29,7 +30,12 @@ function UserDetailed(props){
                             <Descriptions.Item label="注册日期" span={1}>{toDate(userData.time)}</Descriptions.Item>
                             <Descriptions.Item label="最后在线日期" span={1}>{userData.uid}</Descriptions.Item>
                             <Descriptions.Item label="状态" span={1}>
-                                <Badge status="processing" text="Running" />
+                                {
+                                    isState==0?
+                                    <Badge status="processing" text="在线" />
+                                    :
+                                    <Badge status="error" text="不在线" />
+                                }
                             </Descriptions.Item>
                             <Descriptions.Item label="地区" span={2}>{userData.uid}</Descriptions.Item>
                             <Descriptions.Item label="历史订单数量">{userData.uid}</Descriptions.Item>

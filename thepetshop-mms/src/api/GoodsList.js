@@ -47,14 +47,26 @@ export default {
             url: `${BAST_API}/goods/getclassify`,
         });
     },
-    getGoodsOrder(uid) {      //获取订单列表
+    getGoodsOrder(sort,page,num) {      //获取订单列表
         return request({
             method: 'get',
-            url: `${BAST_API}/goods/getorder`,
+            url: `${BAST_API}/admin/getallorder`,
             params:{
-                uid
+                sort,
+                page,
+                num
             }
         });
     },
+    delgoodsList(uid,otime){
+        return request({
+            method:"delete",
+            url:`${BAST_API}/goods/delorder`,
+            data:{
+                uid,
+                otime
+            }
+        })
+    }
 
 }

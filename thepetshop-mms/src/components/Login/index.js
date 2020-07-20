@@ -21,14 +21,14 @@ class Login extends Component {
         })
     }
     onFinish = async (values) => {
+        const { checked } = this.state;
+        const { history } = this.props;
         try {
             console.log(values.username, values.password)
-            let p = await LoginApi.loginIn(values.username, values.password, true);
+            let p = await LoginApi.loginIn(values.username, values.password, checked);
             console.log(p)
             if (p.data.flag) {
-                const { checked } = this.state;
-                const { history } = this.props;
-                    localStorage.setItem("userData", JSON.stringify({ username: values.username, token: p.data.data.token }))
+                    localStorage.setItem("userData", JSON.stringify({ myname:p.data.data.myname,username: values.username, token: p.data.data.token }))
                 history.go(0);
             } else {
                 console.log("登录失败")

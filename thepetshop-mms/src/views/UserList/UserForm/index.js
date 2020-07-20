@@ -206,19 +206,19 @@ class UserForm extends Component {
             {
                 title: '用户名',
                 dataIndex: 'username',
-                width: "180px",
+                width: "190px",
                 align: "center",
             },
             {
                 title: '手机号码',
                 dataIndex: 'phonenum',
-                width: "180px",
+                width: "210px",
                 align: "center",
             },
             {
                 title: '邮箱',
                 dataIndex: 'email',
-                width: "180px",
+                width: "210px",
                 align: "center",
             },
             {

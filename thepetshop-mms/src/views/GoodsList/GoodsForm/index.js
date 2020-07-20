@@ -235,6 +235,13 @@ class GoodsForm extends Component {
                 width: "120px",
                 align: "center",
                 sorter: () => { },
+                render: (text, record) =>
+                    this.state.goodsList.length >= 1 ? (
+                        <>
+                        
+                           {"￥"+record.gprice}
+                        </>
+                    ) : null,
             },
             {
                 title: '销量',

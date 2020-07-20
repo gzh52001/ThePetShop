@@ -43,11 +43,12 @@ router.post('/reg', async (req, res) => {
     let time = Date.now()
     time = time - 0
     let userface = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1595014189445&di=c7f719e793b77c081e5a037484158eb8&imgtype=0&src=http%3A%2F%2Fqny.smzdm.com%2F202007%2F03%2F5efe844574cd74989.jpg_d250.jpg'
+    let myname = Math.floor(Math.random()*2)%2==0?'梅小鸡':'梅没鸡'
     try {
-        let sql = `insert into user(username,password,userface,time,phonenum,email) values('${username}','${miwen}','${userface}','${time}','${phonenum}','${email}')`
+        let sql = `insert into user(myname,username,password,userface,time,phonenum,email) values('${myname}','${username}','${miwen}','${userface}','${time}','${phonenum}','${email}')`
         let p = await query(sql)
         let inf = {}
-        console.log(p)
+        // console.log(p)
         if (p.affectedRows) {//受影响多少行 >0 就是成功
             inf = {
                 code: 2000,
@@ -93,12 +94,14 @@ router.post('/login', async (req, res) => {
                 let phonenum = p[0].phonenum
                 let email = p[0].email
                 let address = p[0].address
+                let myname = p[0].myname
                 inf = {
                     code: 2000,
                     flag: true,
                     message: "登录成功",
                     data: {
                         uid,
+                        myname,
                         username,
                         userface,
                         phonenum,
@@ -229,6 +232,36 @@ router.put('/editaddress',async(req,res)=>{
             code:3000,
             flag:false,
             message:'服务器错误'
+        }
+        res.send(inf)
+    }
+})
+//修改昵称
+router.put('/changeName',async(req,res)=>{
+    let {uid,myname} = req.body
+    console.log(myname)
+    let inf
+    try{
+        let p = await query(`update user set myname='${myname}' where uid='${uid}'`)
+        if(p.affectedRows){
+            inf={
+                code:2000,
+                flag:true,
+                message:"修改成功"
+            }
+        }else{
+            inf={
+                code:3000,
+                flag:false,
+                message:"修改失败"
+            }
+        }
+        res.send(inf)
+    }catch(err){
+        inf = {
+            code:err.errno,
+            flag:false,
+            message:"服务器错误"
         }
         res.send(inf)
     }
