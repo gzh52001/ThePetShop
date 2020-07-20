@@ -15,7 +15,7 @@ function Layout (){//总路由转跳页面显示到这
                 <Route path='/reg' component={Reg}/>
                 <Route path='/search' component={Search}/>
                 <Route path='/goodsInfo' component={GoodsInfo}/>
-                <Route path='/changeinfo' component={Changeinfo}/>
+                <Route path='/changeinfo/:gid' component={Changeinfo}/>
                 <Redirect from="/" to='/main' exact/>
             </Switch>
         </>
