@@ -28,9 +28,9 @@ router.get('/allgoods', async (req, res) => {
             sql = `select gid,gtitle,gimgs,gprice,gxiaoliang from goodsinfo order by gprice LIMIT ${index},${num}`
         } else if (sort == 3) {
             sql = `select gid,gtitle,gimgs,gprice,gxiaoliang from goodsinfo order by gprice desc LIMIT ${index},${num}`
-        } else if(sort == 4){
+        } else if (sort == 4) {
             sql = `select gid,gtitle,gimgs,gprice,gxiaoliang from goodsinfo order by gid desc LIMIT ${index},${num}`
-        }else{
+        } else {
             sql = `select gid,gtitle,gimgs,gprice,gxiaoliang from goodsinfo order by gid LIMIT ${index},${num}`
         }
     }
@@ -530,49 +530,71 @@ router.put('/changecartcount', async (req, res) => {
     }
 })
 
-//添加订单
+//添加订单(功能完成，返回信息有问题)
 router.get('/addorder', async (req, res) => {
-    let inf="dd"
+    let inf = 'ddd'
     try {
         let p = await query(`select uid,gid,count,gsize from goodscart where ischeck='1'`)
         if (p.length) {
-            p.forEach(async item => {
+            inf = p.map(async item => {
+                let time = Date.now() - 0
                 let { uid, gid, count, gsize } = item
-                let p1 = await query(`select * from goodsorder where uid='${uid}' and gid='${gid}' and gsize='${gsize}'`)
-                if (p1.length) {
-                    count = count - 0 + p1[0].count - 0
-                    let p2 = await query(`update goodsorder set count=${count} where uid='${uid}' and gid='${gid}' and gsize='${gsize}'`)
-                    if (p2.affectedRows) {
-                        inf = {
-                            code: 2000,
-                            flag: true,
-                            message: '添加成功'
-                        }
-                    } else {
-                        inf = {
-                            code: 3000,
-                            flag: false,
-                            message: '添加失败'
-                        }
+                let p = await query(`insert goodsorder(uid,gid,count,gsize,otime) values('${uid}','${gid}','${count}','${gsize}','${time}')`)
+                if (p.affectedRows) {
+                    inf = {
+                        code: 2000,
+                        flag: true,
+                        message: '添加成功'
                     }
                 } else {
-                    let p3 = await query(`insert goodsorder(uid,gid,count,gsize) values('${uid}','${gid}','${count}','${gsize}')`)
-                    if (p3.affectedRows) {
-                        inf = {
-                            code: 2000,
-                            flag: true,
-                            message: '添加成功'
-                        }
-                    } else {
-                        inf = {
-                            code: 3000,
-                            flag: false,
-                            message: '添加失败'
-                        }
+                    inf = {
+                        code: 2000,
+                        flag: true,
+                        message: '添加失败'
                     }
                 }
-                console.log(inf)
+                // let p1 = await query(`select * from goodsorder where uid='${uid}' and gid='${gid}' and gsize='${gsize}'`)
+                // if (p1.length) {
+                //     count = count - 0 + p1[0].count - 0
+                //     let p2 = await query(`update goodsorder set count=${count} where uid='${uid}' and gid='${gid}' and gsize='${gsize}'`)
+                //     if (p2.affectedRows) {
+                //         inf = {
+                //             code: 2000,
+                //             flag: true,
+                //             message: '添加成功'
+                //         }
+                //     } else {
+                //         inf = {
+                //             code: 3000,
+                //             flag: false,
+                //             message: '添加失败'
+                //         }
+                //     }
+                // } else {
+                //     let p3 = await query(`insert goodsorder(uid,gid,count,gsize) values('${uid}','${gid}','${count}','${gsize}')`)
+                //     if (p3.affectedRows) {
+                //         inf = {
+                //             code: 2000,
+                //             flag: true,
+                //             message: '添加成功'
+                //         }
+                //     } else {
+                //         inf = {
+                //             code: 3000,
+                //             flag: false,
+                //             message: '添加失败'
+                //         }
+                //     }
+                // }
+                return inf
             })
+            console.log(inf)
+        } else {
+            inf = {
+                code: 3000,
+                flag: true,
+                message: '添加失败'
+            }
         }
         res.send(inf)
     } catch (err) {
@@ -590,7 +612,7 @@ router.get('/getorder', async (req, res) => {
     let { uid } = req.query
     // console.log(uid)
     try {
-        let p = await query(`select gid,count,gsize from goodsorder where uid='${uid}'`)
+        let p = await query(`select gid,count,gsize,otime from goodsorder where uid='${uid}'`)
         let str = ''
         // console.log(p)
         p.forEach(item => {
@@ -647,31 +669,31 @@ router.get('/getorder', async (req, res) => {
 })
 
 //取消订单
-router.delete('/delorder',async(req,res)=>{
-    let {uid,gid,gsize} = req.body
-    console.log(uid,gid,gsize)
+router.delete('/delorder', async (req, res) => {
+    let { uid , otime } = req.body
+    // console.log(uid,otime)
     let inf
-    try{
-        let p = await query(`delete from goodsorder where uid='${uid}' and gid='${gid}' and gsize='${gsize}'`)
-        if(p.affectedRows){
+    try {
+        let p = await query(`delete from goodsorder where uid='${uid}' and otime='${otime}'`)
+        if (p.affectedRows) {
             inf = {
-                code:2000,
-                flag:true,
-                message:'取消成功'
+                code: 2000,
+                flag: true,
+                message: '取消成功'
             }
-        }else{
+        } else {
             inf = {
-                code:3000,
-                flag:false,
-                message:'取消失败'
+                code: 3000,
+                flag: false,
+                message: '取消失败'
             }
         }
         res.send(inf)
-    }catch(err){
+    } catch (err) {
         inf = {
-            code:err.errno,
-            flag:false,
-            message:'服务器错误'
+            code: err.errno,
+            flag: false,
+            message: '服务器错误'
         }
         res.send(inf)
     }

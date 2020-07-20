@@ -5,7 +5,7 @@
 .UserForm {
     position: relative;
     height: 80vh;
-    padding: 14px 2px 0 2px;
+    padding: 14px 14px 0 10px;
     .formHeader {
         height: 40px;
         .formSelect {
@@ -23,7 +23,7 @@
             }
             .ant-select-selector {
                 width: 100px;
-                height: 33px;
+                height: 32px;
                 border: none;
                 border-right: 1px solid #d9d9d9;
                 border-radius: 0;
@@ -58,24 +58,24 @@
             }
         }
     }
-}
-.ant-table-tbody {
-    .ant-btn-dangerous .ant-btn-primary {
-        width: 50px;
-        height: 25px;
-        padding: 0;
-    }
-    .ant-btn-primary {
-        width: 50px;
-        height: 25px;
-        padding: 0;
-        margin-right: 5px;
-    }
-    .loklok {
-        width: 70px;
-        height: 25px;
-        padding: 0;
-        margin-right: 5px;
+    .ant-table-tbody {
+        .ant-btn-dangerous .ant-btn-primary {
+            width: 50px;
+            height: 25px;
+            padding: 0;
+        }
+        .ant-btn-primary {
+            width: 50px;
+            height: 25px;
+            padding: 0;
+            margin-right: 5px;
+        }
+        .loklok {
+            width: 70px;
+            height: 25px;
+            padding: 0;
+            margin-right: 5px;
+        }
     }
 }
 .ant-table-pagination-right {

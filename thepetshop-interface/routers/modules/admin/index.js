@@ -40,9 +40,10 @@ router.get('/checkName', async (req, res) => {
 router.post('/reg', async (req, res) => {
     let { username, password } = req.body
     let miwen = bcryptjs.hashSync(password)
-    console.log(miwen)
+    // console.log(miwen)
+    let myname = Math.floor(Math.random() * 2) % 2 == 0 ? '梅小鸡' : '梅没鸡'
     try {
-        let sql = `insert into admin(username,password) values('${username}','${miwen}')`
+        let sql = `insert into admin(myname,username,password) values('${myname}','${username}','${miwen}')`
         let p = await query(sql)
         let inf = {}
         if (p.affectedRows) {//受影响多少行 >0 就是成功
@@ -71,12 +72,12 @@ router.post('/reg', async (req, res) => {
 //管理员登录
 router.post('/login', async (req, res) => {
     let { username, password, keep } = req.body
-    // console.log(username,password)
+    console.log(username, password, keep)
     try {
         let sql = `select * from admin where username='${username}'`
         let p = await query(sql)
         let inf = {}
-        console.log(p)
+        // console.log(p)
         if (p.length) {
             let miwen = p[0].password
             let result = bcryptjs.compareSync(password, miwen);
@@ -84,21 +85,23 @@ router.post('/login', async (req, res) => {
                 let token = ""
                 if (keep) {
                     token = create(password)
-                }else{
-                    token = create(password,60*60*24)
+                } else {
+                    token = create(password, 60 * 60 * 24)
                 }
                 let aid = p[0].aid
+                let myname = p[0].myname
                 inf = {
                     code: 2000,
                     flag: true,
                     message: "登录成功",
                     data: {
                         aid,
+                        myname,
                         username,
                         token
                     }
                 }
-            }else{
+            } else {
                 inf = {
                     code: 3000,
                     flag: false,
@@ -144,7 +147,7 @@ router.get('/verify', (req, res) => {
 })
 //修改用户信息
 router.put('/edituser', async (req, res) => {
-    let {uid,msg} = req.body;
+    let { uid, msg } = req.body;
     // console.log(req.body)
     // msg = JSON.parse(msg)
     let str = ''
@@ -213,10 +216,10 @@ router.delete('/deluser', async (req, res) => {
 router.delete('/delpart', async (req, res) => {
     let ids = req.body.ids
     let str = ''
-    ids.forEach(item=>{
-        str += item+','
+    ids.forEach(item => {
+        str += item + ','
     })
-    str = str.substr(0,str.length-1)
+    str = str.substr(0, str.length - 1)
     try {
         let sql = `delete from user where uid in(${str})`
         let p = await query(sql);
@@ -246,16 +249,16 @@ router.delete('/delpart', async (req, res) => {
 })
 //分页排序显示用户列表  分页查询 page：1 页码  num：5
 router.get('/userlist', async (req, res) => {
-    let {sort, page, num } = req.query
+    let { sort, page, num } = req.query
     sort = sort || 0
     page = page || 1
     num = num || 8
     // select * from user limit 0,5  0-起始下标  5-5条数据
     let index = (page - 1) * num
     let sql
-    if(sort == 0){
+    if (sort == 0) {
         sql = `select uid,username,phonenum,email,time from user order by uid limit ${index},${num}`
-    }else if(sort == 1){
+    } else if (sort == 1) {
         sql = `select uid,username,phonenum,email,time from user order by uid desc limit ${index},${num}`
     }
     try {
@@ -268,9 +271,9 @@ router.get('/userlist', async (req, res) => {
                 code: 2000,
                 flag: true,
                 message: "查询成功",
-                total: arr.length-0,
-                page:page-0,
-                num:num-0,
+                total: arr.length - 0,
+                page: page - 0,
+                num: num - 0,
                 data: p
             }
             res.send(inf)
@@ -291,7 +294,7 @@ router.get('/userlist', async (req, res) => {
         res.send(inf)
     }
 })
-//查询用户信息
+//查询用户详细信息
 router.get("/userinfo", async (req, res) => {
     let uid = req.query.uid
     try {
@@ -323,20 +326,20 @@ router.get("/userinfo", async (req, res) => {
     }
 })
 //模糊搜索用户
-router.get("/searchuser",async(req,res)=>{
-    let {type,value} = req.query
+router.get("/searchuser", async (req, res) => {
+    let { type, value } = req.query
     let inf
-    try{
+    try {
         let sql = `select uid,username,phonenum,email,time from user where ${type} like '%${value}%'`
         let p = await query(sql)
-        if(p.length){
+        if (p.length) {
             inf = {
                 code: 2000,
                 flag: true,
                 message: "查询成功",
                 data: p
             }
-        }else{
+        } else {
             inf = {
                 code: 3000,
                 flag: true,
@@ -344,7 +347,7 @@ router.get("/searchuser",async(req,res)=>{
             }
         }
         res.send(inf)
-    }catch(err){
+    } catch (err) {
         inf = {
             code: 3000,
             flag: false,
@@ -353,5 +356,112 @@ router.get("/searchuser",async(req,res)=>{
         res.send(inf)
     }
 })
-
+//修改昵称
+router.put('/changeName', async (req, res) => {
+    let { aid, myname } = req.body
+    console.log(myname)
+    let inf
+    try {
+        let p = await query(`update admin set myname='${myname}' where aid='${aid}'`)
+        if (p.affectedRows) {
+            inf = {
+                code: 2000,
+                flag: true,
+                message: "修改成功"
+            }
+        } else {
+            inf = {
+                code: 3000,
+                flag: false,
+                message: "修改失败"
+            }
+        }
+        res.send(inf)
+    } catch (err) {
+        inf = {
+            code: err.errno,
+            flag: false,
+            message: "服务器错误"
+        }
+        res.send(inf)
+    }
+})
+//获取所有订单列表
+router.get('/getallorder', async (req, res) => {
+    let {sort,page,num} = req.query
+    // console.log(sort,page,num)
+    page = page || 1
+    num = num || 8
+    sort = sort || 1
+    let index =  (page - 1) * num
+    let inf
+    let sql
+    if(sort == 0){
+        sql = `select uid,gid,count,gsize,otime from goodsorder order by otime limit ${index},${num}`
+    }else{
+        sql = `select uid,gid,count,gsize,otime from goodsorder order by otime desc limit ${index},${num}`
+    }
+    try {
+        let p = await query(sql)
+        let str = ''
+        p.forEach(item => {
+            str += `${item.gid},`
+        })
+        str = str.substr(0, str.length - 1)
+        if (p.length) {
+            let result = await query(`select gid,gimgs,gtitle,gprice,gsize,gxiaoliang from goodsinfo where gid in(${str})`)
+            if (result) {
+                result.forEach(item => {
+                    item.gimgs = JSON.parse(item.gimgs).length == 1 ? JSON.parse(item.gimgs)[0] : JSON.parse(item.gimgs)[1]
+                })
+                p.forEach(item1 => {
+                    result.forEach(item2 => {
+                        if (item1.gid == item2.gid) {
+                            item1.gsize = JSON.parse(item2.gsize)[item1.gsize]
+                            item1.gimgs = item2.gimgs
+                            item1.gtitle = item2.gtitle
+                            item1.gprice = item2.gprice
+                            item1.gxiaoliang = item2.gxiaoliang
+                        }
+                    })
+                })
+                let plength = await query(`select uid,gid,count,gsize,otime from goodsorder`)
+                let total = plength.length
+                inf = {
+                    code: 2000,
+                    flag: true,
+                    message: '获取成功',
+                    data: {
+                        total,
+                        p
+                    }
+                }
+            } else {
+                inf = {
+                    code: 3000,
+                    flag: false,
+                    message: '获取失败'
+                }
+            }
+        } else {
+            inf = {
+                code: 3000,
+                flag: false,
+                message: '获取失败'
+            }
+        }
+        res.send(inf)
+    } catch (err) {
+        inf = {
+            code: err.errno,
+            flag: false,
+            message: '服务器错误'
+        }
+        res.send(inf)
+    }
+})
+//批量取消订单
+router.delete('/delpartorder',async(req,res)=>{
+    // 不会了
+})
 module.exports = router

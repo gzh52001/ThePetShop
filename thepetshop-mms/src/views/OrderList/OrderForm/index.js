@@ -1,36 +1,36 @@
 import React, { Component } from "react";
 
-import { Input, Form, Table, Button, Modal, Popconfirm, message,Select } from 'antd';
-import "@/assets/css/UserList.scss"
+import { Input, Form, Table, Button, Modal, Popconfirm, message,Select ,Badge} from 'antd';
+import "@/assets/css/OrderList.scss"
 
 
-import UserListApi from "@/api/UserList";
 import GoodsListApi from "@/api/GoodsList";
 class OrderForm extends Component {
     constructor() {
         super();
         this.state = {
             page: 1,      //默认页
-            pageSize: 10,    //一页显示的条数
+            pageSize: 5,    //一页显示的条数
             goodsList: [],
-            sort: null,
-            totalList: "",
+            sort: "",
+            totalList: 0,
             changeList: {},
             delSelectID: "",
-            modifyVisible: false,
-            uid:2
+            modifyVisible: false
         }
     }
     componentDidMount() {
-        this.getGoodsOrder(this.state.uid)
+        const {page,pageSize} = this.state
+        this.getGoodsOrder(999,page,pageSize)
     }
-    getGoodsOrder = async (uid) => {     //获取用户列表
+    getGoodsOrder = async (sort,page,pageSize) => {     //获取订单列表
         try {
-            let p = await GoodsListApi.getGoodsOrder(uid);
+            let p = await GoodsListApi.getGoodsOrder(sort,page,pageSize);
             console.log(p)
             if (p.data.flag) {
                 this.setState({
-                    goodsList: p.data.data
+                    goodsList: p.data.data.p,
+                    totalList:p.data.data.total
                 })
             } else {
                 console.log("获取失败")
@@ -39,9 +39,9 @@ class OrderForm extends Component {
             console.log(error);
         }
     }
-    delUserList = async (uid) => {     //删除用户
+    delgoodsList = async (uid,otime) => {     //删除订单
         try {
-            let p = await UserListApi.delUserList(uid);
+            let p = await GoodsListApi.delgoodsList(uid,otime);
             if (p.data.flag) {
                 message.success('删除成功！');
             } else {
@@ -51,9 +51,9 @@ class OrderForm extends Component {
             console.log(error);
         }
     }
-    delAllUserList = async (arr) => {     //批量删除用户
+    delAllgoodsList = async (arr) => {     //批量删除订单
         try {
-            let p = await UserListApi.delAllUserList(arr);
+            let p = await GoodsListApi.delAllgoodsList(arr);
             if (p.data.flag) {
                 message.success('删除成功！');
             } else {
@@ -67,63 +67,48 @@ class OrderForm extends Component {
         console.log(`selected ${value}`);
     }
     onChange = (pagination,a, sorter, extra) => {     //分页、排序、筛选变化时触发
-        if (sorter.order === "ascend" && sorter.field === "gprice") {
-            this.getGoodsList(2,pagination.current,pagination.pageSize);
-            this.setState({
-                sort: 2
-            })
-        } else if (sorter.order === "descend" && sorter.field === "gprice") {
-            this.getGoodsList(3,pagination.current,pagination.pageSize);
-            this.setState({
-                sort: 3
-            })
-        } else if (sorter.order === undefined && sorter.field === "gprice") {
-            this.getGoodsList(null,pagination.current,pagination.pageSize);
-            this.setState({
-                sort: null
-            })
-        }
-        if (sorter.order === "ascend" && sorter.field === "gxiaoliang") {
-            this.getGoodsList(1,pagination.current,pagination.pageSize);
-            this.setState({
-                sort: 1
-            })
-        } else if (sorter.order === "descend" && sorter.field === "gxiaoliang") {
-            this.getGoodsList(0,pagination.current,pagination.pageSize);
+        if (sorter.order === "ascend" && sorter.field === "otime") {
+            this.getGoodsOrder(0,pagination.current,pagination.pageSize);
             this.setState({
                 sort: 0
             })
-        } else if (sorter.order === undefined && sorter.field === "gxiaoliang") {
-            this.getGoodsList(null,pagination.current,pagination.pageSize);
+        } else if (sorter.order === undefined && sorter.field === "otime") {
+            this.getGoodsOrder(null,pagination.current,pagination.pageSize);
             this.setState({
                 sort: null
             })
         }
     }
     pageChange = (page, pageSize) => {
-        this.getGoodsList(this.state.sort,page, pageSize)
+        this.getGoodsOrder(this.state.sort,page, pageSize)
     }
     onShowSizeChange = (current, pageSize) => {     //切换页
         this.setState({
             page: current,
             pageSize: pageSize
         })
-        this.getGoodsList(this.state.sort,current, pageSize)
+        this.getGoodsOrder(this.state.sort,current, pageSize)
     }
+
+
+
+
     selectRow = (selectedRowKeys, selectedRows) => {     //多选按钮
         this.setState({
             delSelectID: selectedRowKeys
         })
     }
     handleDelete = (record) => {     //删除某行
-        let newList = this.state.userList.filter(item => item.uid !== record.uid);
+        const {page,pageSize} = this.state
+        let newList = this.state.goodsList.filter(item => item.otime !== record.otime);
         this.setState({
-            userList: newList
+            goodsList: newList
         })
-        this.delUserList(record.uid);
+        this.delgoodsList(record.uid,record.otime);
+        this.getGoodsOrder(999,page,pageSize)
     }
     delSelect = () => {     //批量删除
-        this.delAllUserList(this.state.delSelectID)
+        this.delAllgoodsList(this.state.delSelectID)
     }
     showModal = (data) => {     //显示修改框,传入数据
         console.log(data)
@@ -136,7 +121,7 @@ class OrderForm extends Component {
         this.setState({
             serchVisible: false
         })
-        this.getUserList(this.state.sort,this.state.page, this.state.pageSize)
+        this.getgoodsList(this.state.sort,this.state.page, this.state.pageSize)
     }
     handleOk = values => {  //确定修改
         console.log(values);
@@ -162,19 +147,27 @@ class OrderForm extends Component {
     render() {
         const { Search } = Input;
         const { Option } = Select;
+        const {toDate} = this.props
         const columns = [
             {
                 title: '订单号',
                 dataIndex: 'gid',
-                width: "125px",
+                width: "110px",
                 align: "center",
                 showSorterTooltip: false,
-                sorter: () => { },
+                render: (text, record) =>text+String(record.otime).substring(6,String(record.otime).length-1)
+            },
+            {
+                title: '用户号',
+                dataIndex: 'uid',
+                width: "100px",
+                align: "center",
+                showSorterTooltip: false,
             },
             {
                 title: '商品图片',
                 dataIndex: 'gimgs',
-                width: "170px",
+                width: "130px",
                 align: "center",
                 render: (text, record) =>
 
@@ -187,33 +180,40 @@ class OrderForm extends Component {
             {
                 title: '商品名',
                 dataIndex: 'gtitle',
-                width: "380px",
+                width: "260px",
                 align: "center",
             },
             {
                 title: '价格/￥',
                 dataIndex: 'gprice',
-                width: "120px",
+                width: "110px",
                 align: "center",
-                sorter: () => { },
+                render: (text, record) =>'￥'+text
             },
             {
-                title: '销量',
-                dataIndex: 'gxiaoliang',
+                title: '订单时间',
+                dataIndex: 'otime',
+                align: "center",
+                width: "180px",
+                sortDirections: ['ascend'],
+                sorter: () => { },
+                render:(text,record)=>toDate(text)
+            },
+            {
+                title: '状态',
                 align: "center",
                 width: "120px",
-                sorter: (a, b) => a.age - b.age,
+                render:(text,record)=>Math.floor(Math.random()*2)==0?<Badge status="gold" text="未发货" />:<Badge status="processing" text="已发货" />
             },
             {
                 title: '操作',
                 align: "center",
-                width: "230px",
                 render: (text, record) =>
                     this.state.goodsList.length >= 1 ? (
                         <>
                             <Button className="loklok" onClick={() => this.props.data(record)}>查看详细</Button>
-                            <Popconfirm title="您确定要删除吗?" onConfirm={() => this.handleDelete(record)}>
-                                <Button type="primary" danger>删除</Button>
+                            <Popconfirm title="您确定要取消吗?" onConfirm={() => this.handleDelete(record)}>
+                                <Button type="primary" danger>取消订单</Button>
                             </Popconfirm>
                         </>
                     ) : null,
@@ -222,13 +222,15 @@ class OrderForm extends Component {
                 width: "0",
             },
         ];
+        const {totalList} = this.state
+        console.log(totalList)
         return (
-            <div className="goodsForm" >
+            <div className="orderForm" >
                 <div className="formHeader">
 
-                    <Popconfirm title="您确定要删除吗?" onConfirm={this.delSelect}>
+                    <Popconfirm title="您确定要取消吗?" onConfirm={this.delSelect} disabled={this.state.delSelectID.length <= 0}>
                         <Button type="primary" danger disabled={this.state.delSelectID.length <= 0}>
-                            删除选中
+                            取消订单
                         </Button>
                     </Popconfirm>
                     {
@@ -250,8 +252,9 @@ class OrderForm extends Component {
                         onSearch={value => console.log(value)}
                     />
                 </div>
+                {console.log(this.state.totalList)}
                 <Table
-                    rowKey="gid"
+                    rowKey="otime"
                     style={{ height: "100%" }}
                     bordered
                     columns={columns}
@@ -271,64 +274,9 @@ class OrderForm extends Component {
                         onChange: this.selectRow
                     }}
                     ellipsis={true}
-                    scroll={{ y: "65vh" }}
+                    scroll={{ y: "70vh" }}
                     onChange={this.onChange} />
-                {
-                    this.state.modifyVisible ?
-                        <Modal
-                            title="修改用户信息"
-                            visible={this.state.modifyVisible}
-                            footer={null}
-                            onOk={this.handleOk}
-                            onCancel={this.handleCancel}
-                        >
-                            <Form
-                                name="basic"
-                                initialValues={{ remember: true }}
-                                onFinish={this.handleOk}
-                                onFinishFailed={this.onFinishFailed}
-                            >
-                                <Form.Item
-                                    label="id"
-                                    name="uid"
-                                    initialValue={this.state.changeList.uid}
-                                    rules={[{ required: true, message: 'Please input your username!' }]}
-                                >
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item
-                                    label="用户名"
-                                    name="username"
-                                    initialValue={this.state.changeList.username}
-                                    rules={[{ required: true, message: 'Please input your username!' }]}
-                                >
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item
-                                    label="手机号码"
-                                    name="phone"
-                                    initialValue={this.state.changeList.phonenum}
-                                    rules={[{ required: true, message: 'Please input your username!' }]}
-                                >
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item
-                                    label="邮箱"
-                                    name="Email"
-                                    initialValue={this.state.changeList.email}
-                                    rules={[{ required: true, message: 'Please input your username!' }]}
-                                >
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item>
-                                    <Button type="primary" htmlType="submit">确认修改</Button>
-                                    <Button type="primary" ghost onClick={this.handleCancel}>取消</Button>
-                                </Form.Item>
-                            </Form>
-                        </Modal>
-                        : <></>
-                }
-
+              
             </div >
         )
     }

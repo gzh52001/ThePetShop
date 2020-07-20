@@ -59,26 +59,21 @@
             }
         }
     }
-}
-.ant-table-tbody {
-    .ant-btn-dangerous .ant-btn-primary {
-        width: 50px;
-        height: 25px;
-        padding: 0;
-    }
-    .ant-btn-primary {
-        width: 50px;
-        height: 25px;
-        padding: 0;
-        margin-right: 5px;
-    }
-    .loklok {
-        width: 70px;
-        height: 25px;
-        padding: 0;
-        margin-right: 5px;
+    .ant-table-tbody {
+        .ant-btn-dangerous{
+            width: 70px;
+            height: 25px;
+            padding: 0;
+        }
+        .loklok {
+            width: 70px;
+            height: 25px;
+            padding: 0;
+            margin-right: 5px;
+        }
     }
 }
+
 .ant-table-pagination-right {
     position: fixed;
     bottom: 10px;
