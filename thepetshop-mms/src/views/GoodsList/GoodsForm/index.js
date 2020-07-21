@@ -18,13 +18,15 @@ class GoodsForm extends Component {
             changeList: {},
             searchData: "gtitle",
             delSelectID: "",
-            modifyVisible: false
+            serchVisible: false,
+            searchText: "",
+            searchMessage: true
         }
     }
     componentDidMount() {
         this.getGoodsList(null,this.state.page, this.state.pageSize)
     }
-    getGoodsList = async (sort,page, num) => {     //获取用户列表
+    getGoodsList = async (sort,page, num) => {     //获取商品列表
         try {
             let p = await GoodsListApi.getGoodsList(sort,page, num);
             if (p.data.flag) {
@@ -39,16 +41,21 @@ class GoodsForm extends Component {
             console.log(error);
         }
     }
-    searchGoods = async (value) =>{
+    searchAllGoods = async (type,value,page,num) =>{    //搜索商品
         try {
-            let p = await GoodsListApi.searchGoods(value);
+            let p = await GoodsListApi.searchAllGoods(type,value,page,num);
             if (p.data.flag) {
                 this.setState({
-                    goodsList: p.data.data,
-                    totalList: p.data.total,
+                    goodsList: p.data.data.p2,
+                    totalList: p.data.data.total,
                     serchVisible: true
                 })
-                message.success('查找成功！');
+                if(this.state.searchMessage){
+                    message.success('查找成功！');
+                    this.setState({
+                        searchMessage: false
+                    })
+                }
             } else {
                 message.error('查找的内容不存在！');
             }
@@ -56,9 +63,9 @@ class GoodsForm extends Component {
             message.error('查找的内容不存在！');
         }
     }
-    delUserList = async (uid) => {     //删除用户
+    delGoodsList = async (gid) => {     //删除商品
         try {
-            let p = await UserListApi.delUserList(uid);
+            let p = await GoodsListApi.delGoodsList(gid);
             if (p.data.flag) {
                 message.success('删除成功！');
             } else {
@@ -68,12 +75,14 @@ class GoodsForm extends Component {
             console.log(error);
         }
     }
-    delAllUserList = async (arr) => {     //批量删除用户
+    delAllGoodsList = async (arr) => {     //批量删除商品
         try {
-            let p = await UserListApi.delAllUserList(arr);
+            let p = await GoodsListApi.delAllGoodsList(arr);
             if (p.data.flag) {
+                this.getGoodsList(this.state.sort,this.state.page, this.state.pageSize)
                 message.success('删除成功！');
             } else {
+                console.log(p.data)
                 message.error('删除失败！未知错误');
             }
         } catch (error) {
@@ -129,13 +138,27 @@ class GoodsForm extends Component {
         }
     }
     pageChange = (page, pageSize) => {
-        this.getGoodsList(this.state.sort,page, pageSize)
+        if(!this.state.serchVisible){
+            this.getGoodsList(this.state.sort,page, pageSize)
+            this.setState({
+                page,
+                pageSize
+            })
+        }else{
+            this.searchAllGoods(this.state.searchData,this.state.searchText,page, pageSize)
+            this.setState({
+                page,
+                pageSize
+            })
+            console.log(this.state.serchVisible)
+        }
     }
     onShowSizeChange = (current, pageSize) => {     //切换页
         this.setState({
             page: current,
             pageSize: pageSize
         })
+        console.log("?????")
         this.getGoodsList(this.state.sort,current, pageSize)
     }
     selectRow = (selectedRowKeys, selectedRows) => {     //多选按钮
@@ -144,24 +167,18 @@ class GoodsForm extends Component {
         })
     }
     handleDelete = (record) => {     //删除某行
-        let newList = this.state.userList.filter(item => item.uid !== record.uid);
+        let newList = this.state.goodsList.filter(item => item.gid !== record.gid);
         this.setState({
-            userList: newList
+            goodsList: newList
         })
-        this.delUserList(record.uid);
+        this.delGoodsList(record.gid);
     }
     delSelect = () => {     //批量删除
-        this.delAllUserList(this.state.delSelectID)
+        this.delAllGoodsList(this.state.delSelectID)
     }
-    showModal = (data) => {     //显示修改框,传入数据
-        this.setState({
-            modifyVisible: true,
-            changeList: data
-        });
-    };
     searchV=()=>{
         this.setState({
-            serchVisible: false
+            serchVisible: false,
         })
         this.getGoodsList(this.state.sort,this.state.page, this.state.pageSize)
     }
@@ -178,11 +195,14 @@ class GoodsForm extends Component {
         })
     }
     searchGoodsList = (value) => {       //确定搜索
-        console.log(value)
         this.setState({
-            serchVisible: false
+            searchText: value,
+            serchVisible: false,
+            page: 1,
+            pageSize: 10,
+            searchMessage: true
         })
-        this.searchGoods(value);
+        this.searchAllGoods(this.state.searchData,value,1,10);
     }
     handleCancel = e => {
         console.log("取消");
@@ -279,7 +299,7 @@ class GoodsForm extends Component {
                     </Popconfirm>
                     {
                         this.state.serchVisible ?
-                            <Button type="primary" onClick={this.searchV}>
+                            <Button type="primary" style={{marginLeft: "10px"}} onClick={this.searchV}>
                                 返回列表
                             </Button>
                             : <></>
@@ -304,7 +324,7 @@ class GoodsForm extends Component {
                     dataSource={this.state.goodsList}
                     pagination={{
                         pageSize: this.state.pageSize,
-                        defaultCurrent: 1,
+                        defaultCurrent: 2,
                         size: "small",
                         total: this.state.totalList,
                         onShowSizeChange: this.onShowSizeChange,
@@ -319,62 +339,6 @@ class GoodsForm extends Component {
                     ellipsis={true}
                     scroll={{ y: "70vh" }}
                     onChange={this.onChange} />
-                {
-                    this.state.modifyVisible ?
-                        <Modal
-                            title="修改用户信息"
-                            visible={this.state.modifyVisible}
-                            footer={null}
-                            onOk={this.handleOk}
-                            onCancel={this.handleCancel}
-                        >
-                            <Form
-                                name="basic"
-                                initialValues={{ remember: true }}
-                                onFinish={this.handleOk}
-                                onFinishFailed={this.onFinishFailed}
-                            >
-                                <Form.Item
-                                    label="id"
-                                    name="uid"
-                                    initialValue={this.state.changeList.uid}
-                                    rules={[{ required: true, message: 'Please input your username!' }]}
-                                >
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item
-                                    label="用户名"
-                                    name="username"
-                                    initialValue={this.state.changeList.username}
-                                    rules={[{ required: true, message: 'Please input your username!' }]}
-                                >
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item
-                                    label="手机号码"
-                                    name="phone"
-                                    initialValue={this.state.changeList.phonenum}
-                                    rules={[{ required: true, message: 'Please input your username!' }]}
-                                >
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item
-                                    label="邮箱"
-                                    name="Email"
-                                    initialValue={this.state.changeList.email}
-                                    rules={[{ required: true, message: 'Please input your username!' }]}
-                                >
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item>
-                                    <Button type="primary" htmlType="submit">确认修改</Button>
-                                    <Button type="primary" ghost onClick={this.handleCancel}>取消</Button>
-                                </Form.Item>
-                            </Form>
-                        </Modal>
-                        : <></>
-                }
-
             </div >
         )
     }

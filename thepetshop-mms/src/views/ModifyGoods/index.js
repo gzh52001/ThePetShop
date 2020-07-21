@@ -7,7 +7,8 @@ import {
     Button,
     Upload,
     Modal,
-    message
+    message,
+    Tabs
 } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
@@ -93,6 +94,7 @@ class ModifyGoods extends Component {
             </div>
         );
         const { Search } = Input;
+        const { TabPane } = Tabs;
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
@@ -162,7 +164,7 @@ class ModifyGoods extends Component {
                     this.state.goodsDetailed === true ?
                         <>
                             <Button type="primary"
-                                style={{ position: "absolute",top: "5px",left: "30px"}}
+                                style={{ position: "absolute", top: "5px", left: "30px",zIndex: 999 }}
                                 onClick={() => this.setState({
                                     goodsDetailed: false,
                                     goodsData: {},
@@ -262,10 +264,12 @@ class ModifyGoods extends Component {
                                     label="商品价格"
                                     hasFeedback
                                     rules={[
-                                        { required: true,
-                                             message: '请输入商品价格！' },
                                         {
-                                            message:'商品价格只能输入数字！',
+                                            required: true,
+                                            message: '请输入商品价格！'
+                                        },
+                                        {
+                                            message: '商品价格只能输入数字！',
                                             pattern: /^[0-9]+$/
                                         }
                                     ]}
@@ -291,7 +295,7 @@ class ModifyGoods extends Component {
                                     hasFeedback
                                     rules={[{ required: true, message: '请输入库存！' },
                                     {
-                                        message:'库存只能输入数字！',
+                                        message: '库存只能输入数字！',
                                         pattern: /^[0-9]+$/
                                     }]}
                                 >
@@ -334,8 +338,17 @@ class ModifyGoods extends Component {
                         </>
                         :
                         <>
-                            <Search className="searchInput" placeholder="请输入商品ID" onSearch={value => this.searchGoods(value)} enterButton />
-                            <p style={{position: "absolute" ,left: "50%",transform: "translateX(-50%)", top: "150px"}}>通过ID查找要修改的商品信息</p>
+                            <Tabs defaultActiveKey="1" centered>
+                                <TabPane tab="精确搜索" key="1">
+                                    <Search className="searchInput" placeholder="请输入商品ID" onSearch={value => this.searchGoods(value)} enterButton />
+                                    <p style={{ position: "absolute", left: "50%", transform: "translateX(-50%)", top: "150px" }}>通过ID查找要修改的商品信息</p>
+                                </TabPane>
+                                <TabPane tab="模糊搜索" key="2">
+                                <Search className="searchInput" placeholder="请输入关键字" onSearch={value => this.searchGoods(value)} enterButton />
+                                    <p style={{ position: "absolute", left: "50%", transform: "translateX(-50%)", top: "150px" }}>通过关键字查找需要修改的商品信息</p>
+                                </TabPane>
+                            </Tabs>
+
                         </>
                 }
             </div>

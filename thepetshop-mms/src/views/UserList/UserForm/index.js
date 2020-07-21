@@ -256,7 +256,7 @@ class UserForm extends Component {
                     </Popconfirm>
                     {
                         this.state.serchVisible ?
-                            <Button type="primary" onClick={this.searchV}>
+                            <Button type="primary" style={{marginLeft: "10px"}} onClick={this.searchV}>
                                 返回列表
                             </Button>
                             : <></>

@@ -58,6 +58,36 @@ export default {
             }
         });
     },
+    delGoodsList(gid){     //删除商品
+        return request({
+            method: 'delete',
+            url: `${BAST_API}/admin/delgoods`,
+            data:{
+                gid
+            }
+        });
+    },
+    delAllGoodsList(gids){      //删除选中商品
+        return request({
+            method: 'delete',
+            url: `${BAST_API}/admin/delpartgoods`,
+            data:{
+                gids
+            }
+        });
+    },
+    searchAllGoods(type,value,page,num){
+        return request({
+            method: 'get',
+            url: `${BAST_API}/admin/searchgoods`,
+            params:{
+                type,
+                value,
+                page,
+                num
+            }
+        });
+    },
     delgoodsList(uid,otime){
         return request({
             method:"delete",
