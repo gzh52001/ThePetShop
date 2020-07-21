@@ -281,6 +281,7 @@ class UserForm extends Component {
                     pagination={{
                         pageSize: this.state.pageSize,
                         defaultCurrent: 1,
+                        size: "small",
                         total: this.state.totalList,
                         onShowSizeChange: this.onShowSizeChange,
                         onChange: this.pageChange,

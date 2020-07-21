@@ -47,17 +47,6 @@ export default {
             url: `${BAST_API}/goods/getclassify`,
         });
     },
-    getGoodsOrder(sort,page,num) {      //获取订单列表
-        return request({
-            method: 'get',
-            url: `${BAST_API}/admin/getallorder`,
-            params:{
-                sort,
-                page,
-                num
-            }
-        });
-    },
     delGoodsList(gid){     //删除商品
         return request({
             method: 'delete',
