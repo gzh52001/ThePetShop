@@ -8,7 +8,11 @@ import {
     Upload,
     Modal,
     message,
-    Tabs
+    Tabs,
+    Row,
+    Col,
+    List,
+    Avatar
 } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
@@ -26,6 +30,8 @@ class ModifyGoods extends Component {
             previewImage: '',
             previewTitle: '',
             fileList: [],
+            searchText: "gtitle",
+            searchGoodsList: []
         }
     }
     getGoodsDetailed = async (gid) => {     //获取商品详情
@@ -56,6 +62,25 @@ class ModifyGoods extends Component {
             console.log(error);
         }
     }
+    searchAllGoods = async (type, value, page, num) => {    //模糊搜索商品
+        try {
+            let p = await GoodsListApi.searchAllGoods(type, value, page, num);
+            if (p.data.flag) {
+                this.setState({
+                    searchGoodsList: p.data.data.p2
+                })
+                console.log(p.data.data.p2)
+            } else {
+                message.error('查找的内容不存在！');
+            }
+        } catch (error) {
+            message.error('查找的内容不存在！');
+        }
+    }
+    searchAllGoodsList = (value) => {
+
+        this.searchAllGoods(this.state.searchText, value, 1, 10)
+    }
     searchGoods = (value) => {
         this.getGoodsDetailed(value);
     }
@@ -83,6 +108,11 @@ class ModifyGoods extends Component {
     onFinish = (values) => {
         console.log('Received values of form: ', values);
     };
+    searchText = (value) => {
+        this.setState({
+            searchText: value
+        })
+    }
     render() {
         const { goodsData } = this.state;
         const { Option } = Select;
@@ -93,6 +123,7 @@ class ModifyGoods extends Component {
                 <div className="ant-upload-text">上传图片</div>
             </div>
         );
+        const {searchGoodsList} = this.state;
         const { Search } = Input;
         const { TabPane } = Tabs;
         const formItemLayout = {
@@ -164,7 +195,7 @@ class ModifyGoods extends Component {
                     this.state.goodsDetailed === true ?
                         <>
                             <Button type="primary"
-                                style={{ position: "absolute", top: "5px", left: "30px",zIndex: 999 }}
+                                style={{ position: "absolute", top: "5px", left: "30px", zIndex: 999 }}
                                 onClick={() => this.setState({
                                     goodsDetailed: false,
                                     goodsData: {},
@@ -344,11 +375,35 @@ class ModifyGoods extends Component {
                                     <p style={{ position: "absolute", left: "50%", transform: "translateX(-50%)", top: "150px" }}>通过ID查找要修改的商品信息</p>
                                 </TabPane>
                                 <TabPane tab="模糊搜索" key="2">
-                                <Search className="searchInput" placeholder="请输入关键字" onSearch={value => this.searchGoods(value)} enterButton />
+                                    <Row className="searchInputBox">
+                                        <Col style={{ position: "relative" }}>
+                                            <Select defaultValue="商品名" className="searchText" onChange={this.searchText}>
+                                                <Option value="gtitle">商品名</Option>
+                                                <Option value="gprice">价格</Option>
+                                                <Option value="gxiaoliang">销量</Option>
+                                            </Select>
+                                            <Search className="searchInput2" placeholder="请输入关键字" onSearch={value => this.searchAllGoodsList(value)} enterButton />
+                                        </Col>
+                                    </Row>
+                                    <Row className="searchShowBox">
+                                        <List
+                                            style={{ width: "100%" }}
+                                            itemLayout="horizontal"
+                                            dataSource={searchGoodsList}
+                                            renderItem={item => (
+                                                <List.Item style={{paddingLeft:"10px"}}>
+                                                    <List.Item.Meta
+                                                        avatar={<Avatar size={50} shape="square" src={item.gimgs} />}
+                                                        title={<a href="https://ant.design">{item.gtitle}</a>}
+                                                        description={"￥" + item.gprice + `销量：${item.gxiaoliang}`}
+                                                    />
+                                                </List.Item>
+                                            )}
+                                        />
+                                    </Row>
                                     <p style={{ position: "absolute", left: "50%", transform: "translateX(-50%)", top: "150px" }}>通过关键字查找需要修改的商品信息</p>
                                 </TabPane>
                             </Tabs>
-
                         </>
                 }
             </div>

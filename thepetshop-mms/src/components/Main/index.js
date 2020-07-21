@@ -7,6 +7,8 @@ import { DownCircleOutlined } from '@ant-design/icons';
 import { Layout, Menu, Row, Col, Dropdown, Button } from 'antd';
 import { HomeOutlined, TeamOutlined, ShopOutlined, BarChartOutlined, SnippetsOutlined } from '@ant-design/icons';
 
+import LoginApi from "@/api/Login";
+
 import "@/assets/css/Main.scss"
 import Home from '@/views/Home'
 import AdminList from '@/views/AdminList'
@@ -16,7 +18,6 @@ import GoodsList from '@/views/GoodsList'
 import OrderList from '@/views/OrderList'
 import AddGoods from "@/views/AddGoods";
 import ModifyGoods from "@/views/ModifyGoods";
-
 class Main extends Component {
     constructor() {
         super();
@@ -85,6 +86,14 @@ class Main extends Component {
             ],
 
         }
+    }
+    checkAdmin = () => {
+        let userData = localStorage.getItem("userData");
+        let { grade } = JSON.parse(userData);
+        if(grade===1){
+            return true
+        }
+        return false
     }
     goPath = ({ item, key, keyPath, domEvent }) => {
         const { history } = this.props;
@@ -160,9 +169,14 @@ class Main extends Component {
                                 onClick={this.goPath}
                             >
                                 <SubMenu key="sub1" icon={<HomeOutlined />} title="后台管理">
-                                    {
+                                    {this.checkAdmin() ?
                                         backstageRouter.map(item => (
                                             <Menu.Item key={item.path}>{item.tltle}</Menu.Item>
+                                        )) :
+                                        backstageRouter.map(item => (
+                                            item.path === "/backstage/adminReg" ?
+                                                <React.Fragment key="10086"></React.Fragment> :
+                                                <Menu.Item key={item.path}>{item.tltle}</Menu.Item>
                                         ))
                                     }
                                 </SubMenu>
@@ -181,7 +195,7 @@ class Main extends Component {
                                     }
                                 </SubMenu>
                                 <SubMenu key="sub4" icon={<SnippetsOutlined />} title="订单管理">
-                                {
+                                    {
                                         orderRouter.map(item => (
                                             <Menu.Item key={item.path}>{item.tltle}</Menu.Item>
                                         ))

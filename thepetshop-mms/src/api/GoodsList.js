@@ -76,6 +76,22 @@ export default {
             }
         });
     },
+    addGoods(gtitle,gdesc,gbrandtitle,tid,gprice,gsize,stock,gimgs){      //添加商品
+        return request({
+            method: 'put',
+            url: `${BAST_API}/admin/addgoods`,
+            data:{
+                gtitle,
+                gdesc,
+                gbrandtitle,
+                tid,
+                gprice,
+                gsize,
+                stock,
+                gimgs
+            }
+        });
+    },
     searchAllGoods(type,value,page,num){
         return request({
             method: 'get',

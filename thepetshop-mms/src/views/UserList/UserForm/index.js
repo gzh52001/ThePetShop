@@ -109,9 +109,7 @@ class UserForm extends Component {
     }
     onChange = (pagination, a, sorter, extra) => {     //分页、排序、筛选变化时触发
         console.log(pagination) 
-        if (sorter.order === "ascend" && sorter.field === "uid") {
-            this.getUserList(0,pagination.current,pagination.pageSize);
-        } else if (sorter.order === "descend" && sorter.field === "uid") {
+        if (sorter.order === "descend" && sorter.field === "uid") {
             this.getUserList(1,pagination.current,pagination.pageSize);
         } else if (sorter.order === undefined && sorter.field === "uid") {
             this.getUserList(0,pagination.current,pagination.pageSize);
@@ -144,27 +142,23 @@ class UserForm extends Component {
         this.delAllUserList(this.state.delSelectID)
     }
     showModal = (data) => {     //显示修改框,传入数据
-        console.log(data)
         this.setState({
             modifyVisible: true,
             changeList: data
         });
     };
     selectChange = (value) => {     //搜索选项
-        console.log(value)
         this.setState({
             searchData: value
         })
     }
     searchUserList = (value) => {       //确定搜索
-        console.log(value)
         this.setState({
             serchVisible: false
         })
         this.searchUser(this.state.searchData, value);
     }
     handleOk = values => {  //确定修改
-        console.log(values.uid);
         this.changeUserList(values.uid, values)
         this.setState({
             modifyVisible: false,
@@ -201,6 +195,7 @@ class UserForm extends Component {
                 width: "125px",
                 align: "center",
                 showSorterTooltip: false,
+                sortDirections: ['descend'],
                 sorter: () => {  },
             },
             {

@@ -12,10 +12,12 @@ import {
     Button,
     AutoComplete,
     Upload,
-    Modal
+    Modal,
+    message
 } from 'antd';
 import { QuestionCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
+import GoodsListApi from "@/api/GoodsList";
 class AddGoods extends Component {
     constructor() {
         super();
@@ -26,6 +28,18 @@ class AddGoods extends Component {
             fileList: [
 
             ],
+        }
+    }
+    addGoods = async (gtitle,gdesc,gbrandtitle,tid,gprice,gsize,stock,gimgs) => {     //删除商品
+        try {
+            let p = await GoodsListApi.addGoods(gtitle,gdesc,gbrandtitle,tid,gprice,gsize,stock,gimgs);
+            if (p.data.flag) {
+                message.success('删除成功！');
+            } else {
+                message.error('删除失败！未知错误');
+            }
+        } catch (error) {
+            console.log(error);
         }
     }
     handleCancel = () => this.setState({ previewVisible: false });
@@ -50,7 +64,8 @@ class AddGoods extends Component {
         console.log(`selected ${value}`);
     }
     onFinish = (values) => {
-        console.log('Received values of form: ', values);
+        this.addGoods(values.gtitle,values.gdesc,values.gbrandtitle,null,values.gprice,values.gsize,values.stock,null)
+        console.log('Received values of form: ');
     };
     render() {
         const { Option } = Select;
@@ -58,7 +73,7 @@ class AddGoods extends Component {
         const uploadButton = (
             <div>
                 <PlusOutlined />
-                <div className="ant-upload-text">Upload</div>
+                <div className="ant-upload-text">上传图片</div>
             </div>
         );
         const formItemLayout = {
@@ -199,7 +214,7 @@ class AddGoods extends Component {
                 </Form.Item>
                 <Form.Item
                     name="gimgs"
-                    label="商品详情图片"
+                    label="商品图片"
                     rules={[{ required: true, message: 'Please input website!' }]}
                 >
                     <div className="clearfix">
@@ -227,7 +242,7 @@ class AddGoods extends Component {
                 <Form.Item {...tailFormItemLayout}>
                     <Button type="primary" htmlType="submit">
                         添加
-              </Button>
+                    </Button>
                 </Form.Item>
             </Form></div>
         )

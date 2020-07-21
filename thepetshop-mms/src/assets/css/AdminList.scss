@@ -17,3 +17,22 @@
         text-align: center;
     }
 }
+.adminReg{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    .regBox{
+        position: absolute;
+        width: 400px;
+        left: 50%;
+        transform: translateX(-80%);
+        top: 100px;
+        .captchaImg{
+            svg{
+                width: 100px;
+                height: 32px;
+            }
+        }
+    }
+
+}

@@ -5,8 +5,8 @@ import { UserOutlined } from '@ant-design/icons';
 
 import "@/assets/css/Home.scss"
 class Home extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
 
         }
@@ -14,7 +14,8 @@ class Home extends Component {
     render() {
         const { myname } = JSON.parse(localStorage.getItem("userData"));
         return (
-            <div className="home">
+            <div className="home" >
+                
                 <Card style={{ width: 250 }}>
                     <Avatar className="adminHeader" size={150} icon={<UserOutlined />} />
                     <h2 className="adminName">{myname}</h2>

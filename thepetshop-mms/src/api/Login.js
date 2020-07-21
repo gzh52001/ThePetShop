@@ -14,6 +14,16 @@ export default {
             }
         });
     },
+    adminReg(username, password) {
+        return request({
+            method: 'post',
+            url:  `${BAST_API}/admin/reg`,
+            data: {
+                username,
+                password,
+            }
+        });
+    },
     verifyToken(token) {
         return request({
             method: 'get',
@@ -21,6 +31,21 @@ export default {
             params:{
                 token
             }
+        });
+    },
+    checkUserName(username){
+        return request({
+            method: 'get',
+            url: BAST_API + '/admin/checkname',
+            params:{
+                username
+            }
+        });
+    },
+    getCaptcha() {
+        return request({
+            method: 'get',
+            url: BAST_API + '/user/getcaptcha',
         });
     },
 }

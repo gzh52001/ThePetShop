@@ -4,7 +4,6 @@ import { Input, Form, Table, Button, Modal, Popconfirm, message,Select } from 'a
 import "@/assets/css/UserList.scss"
 
 
-import UserListApi from "@/api/UserList";
 import GoodsListApi from "@/api/GoodsList";
 class GoodsForm extends Component {
     constructor() {
@@ -125,12 +124,12 @@ class GoodsForm extends Component {
                 sort: null
             })
         }
-        if(sorter.order === 'ascend' && sorter.field === "gid"){
+        if(sorter.order === 'descend' && sorter.field === "gid"){
             this.getGoodsList(4,pagination.current,pagination.pageSize);
             this.setState({
                 sort: 4
             })
-        }else if(sorter.order === 'descend' && sorter.field === "gid"){
+        }else if(sorter.order === undefined && sorter.field === "gid"){
             this.getGoodsList(null,pagination.current,pagination.pageSize);
             this.setState({
                 sort: null
@@ -150,16 +149,22 @@ class GoodsForm extends Component {
                 page,
                 pageSize
             })
-            console.log(this.state.serchVisible)
         }
     }
     onShowSizeChange = (current, pageSize) => {     //切换页
-        this.setState({
-            page: current,
-            pageSize: pageSize
-        })
-        console.log("?????")
-        this.getGoodsList(this.state.sort,current, pageSize)
+        if(!this.state.serchVisible){
+            this.getGoodsList(this.state.sort,current, pageSize)
+            this.setState({
+                page: current,
+                pageSize: pageSize
+            })
+        }else{
+            this.searchAllGoods(this.state.searchData,this.state.searchText,current, pageSize)
+            this.setState({
+                page: current,
+                pageSize: pageSize
+            })
+        }
     }
     selectRow = (selectedRowKeys, selectedRows) => {     //多选按钮
         this.setState({
@@ -180,7 +185,8 @@ class GoodsForm extends Component {
         this.setState({
             serchVisible: false,
         })
-        this.getGoodsList(this.state.sort,this.state.page, this.state.pageSize)
+        console.log(this.state.page)
+        this.getGoodsList(this.state.sort,1, this.state.pageSize)
     }
     handleOk = values => {  //确定修改
         console.log(values);
@@ -227,6 +233,7 @@ class GoodsForm extends Component {
                 dataIndex: 'gid',
                 width: "125px",
                 align: "center",
+                sortDirections: ['descend'],
                 showSorterTooltip: false,
                 sorter: () => { },
             },
@@ -254,6 +261,7 @@ class GoodsForm extends Component {
                 dataIndex: 'gprice',
                 width: "120px",
                 align: "center",
+                showSorterTooltip: false,
                 sorter: () => { },
                 render: (text, record) =>
                     this.state.goodsList.length >= 1 ? (
@@ -268,6 +276,7 @@ class GoodsForm extends Component {
                 dataIndex: 'gxiaoliang',
                 align: "center",
                 width: "120px",
+                showSorterTooltip: false,
                 sorter: (a, b) => a.age - b.age,
             },
             {
@@ -307,6 +316,7 @@ class GoodsForm extends Component {
                     <Select className="selectChange" defaultValue="商品名" style={{ width: 100 }} onChange={this.selectChange}>
                         <Option value="gtitle">商品名</Option>
                         <Option value="gid">ID</Option>
+                        <Option value="gprice">价格</Option>
                     </Select>
                     <Search
                         className="formSearch"
@@ -323,6 +333,7 @@ class GoodsForm extends Component {
                     columns={columns}
                     dataSource={this.state.goodsList}
                     pagination={{
+                        current: this.state.page,
                         pageSize: this.state.pageSize,
                         defaultCurrent: 1,
                         size: "small",

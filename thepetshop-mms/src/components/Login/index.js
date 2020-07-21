@@ -24,11 +24,10 @@ class Login extends Component {
         const { checked } = this.state;
         const { history } = this.props;
         try {
-            console.log(values.username, values.password)
             let p = await LoginApi.loginIn(values.username, values.password, checked);
-            console.log(p)
             if (p.data.flag) {
-                    localStorage.setItem("userData", JSON.stringify({ myname:p.data.data.myname,username: values.username, token: p.data.data.token }))
+                console.log(p.data.data)
+                localStorage.setItem("userData", JSON.stringify({ grade:p.data.data.grade, myname: p.data.data.myname, username: values.username, token: p.data.data.token }))
                 history.go(0);
             } else {
                 console.log("登录失败")
