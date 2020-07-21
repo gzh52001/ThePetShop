@@ -167,7 +167,11 @@ class Mine extends Component {
         Toast.info('该功能开发中', 1);
     }
     gotoUserinfo() {
-        this.props.history.push('/changeinfo');
+        if(getUser()){
+            this.props.history.push('/changeinfo');
+            return;
+        }
+        Toast.fail('请先登录!!',2)
     }
     componentDidMount() {
         let userimg = getUser().userface;
