@@ -16,6 +16,8 @@ import GoodsList from '@/views/GoodsList'
 import OrderList from '@/views/OrderList'
 import AddGoods from "@/views/AddGoods";
 import ModifyGoods from "@/views/ModifyGoods";
+import NoSendOrder from "@/views/NoSendOrder";
+import SendOrder from "@/views/SendOrder";
 
 class Main extends Component {
     constructor() {
@@ -74,13 +76,13 @@ class Main extends Component {
                 },
                 {
                     tltle: "未发货订单",
-                    path: "/order/orderList2",
-                    component: Home,
+                    path: "/order/noSendOrder",
+                    component: NoSendOrder,
                 },
                 {
                     tltle: "已发货订单",
-                    path: "/order/orderList3",
-                    component: Home,
+                    path: "/order/sendOrder",
+                    component: SendOrder,
                 },
             ],
 

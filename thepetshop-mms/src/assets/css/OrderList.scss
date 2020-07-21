@@ -60,16 +60,19 @@
         }
     }
     .ant-table-tbody {
-        .ant-btn-dangerous{
-            width: 70px;
+        .ant-btn-primary {
             height: 25px;
-            padding: 0;
+            padding: 0 4px;
+            margin-right: 4px;
+        }
+        .ant-btn-dangerous{
+            height: 25px;
+            padding: 0 4px;
         }
         .loklok {
-            width: 70px;
             height: 25px;
-            padding: 0;
-            margin-right: 5px;
+            padding: 0 4px;
+            margin-right: 4px;
         }
     }
 }

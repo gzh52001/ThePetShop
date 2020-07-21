@@ -8,9 +8,9 @@ const router = express.Router()
 
 //管理员验证用户名
 router.get('/checkName', async (req, res) => {
-    let { name } = req.query
+    let { username } = req.query
     try {
-        let sql = `SELECT * FROM admin WHERE USERNAME='${name}'`
+        let sql = `SELECT * FROM admin WHERE USERNAME='${username}'`
         let p = await query(sql)
         let inf = {};
         if (p.length) {
@@ -496,16 +496,16 @@ router.get("/searchgoods", async (req, res) => {
         res.send(inf)
     }
 })
-//添加商品
+//添加商品(**************************88888)
 router.put("/addgoods",async(req,res)=>{
     let {gtitle,gdesc,gbrandtitle,tid,gprice,gsize,stock,gimgs} = req.body
-    gimgs = gimgs || ['https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=4226027127,4128085106&fm=26&gp=0.jpg',
-    'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2081481430,3027122704&fm=26&gp=0.jpg']
+    gimgs = gimgs || "['https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=4226027127,4128085106&fm=26&gp=0.jpg','https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2081481430,3027122704&fm=26&gp=0.jpg']"
+    console.log(gtitle,gdesc,gbrandtitle,tid,gprice,gsize,stock,gimgs)
     let inf
     try{
-        let sql = `insert into goodsinfo(gtitle,gdesc,gbrandtitle,tid,gprice,gsize,stock,gimgs) 
-        values('${gtitle}','${gdesc}','${gbrandtitle}','${tid}','${gprice}','${gsize}','${stock}','${gimgs}')`
+        let sql = `insert goodsinfo(gtitle,gdesc,gbrandtitle,tid,gprice,gsize,stock,gimgs) values('${gtitle}','${gdesc}','${gbrandtitle}','${tid}','${gprice}','${gsize}','${stock}','${gimgs}')`
         let p = await query(sql)
+        console.log(p)
         if(p.affectedRows){
             inf = {
                 code:2000,
@@ -519,6 +519,7 @@ router.put("/addgoods",async(req,res)=>{
                 message:"添加失败"
             }
         }
+        res.send(inf)
     }catch(err){
         inf = {
             code:err.errno,
@@ -562,8 +563,8 @@ router.put("/editgoods",async(req,res)=>{
 })
 //获取所有订单列表
 router.get('/getallorder', async (req, res) => {
-    let { sort, page, num } = req.query
-    // console.log(sort,page,num)
+    let { sort, page, num ,isDeliver} = req.query
+    console.log(sort,page,num,isDeliver)
     page = page || 1
     num = num || 8
     sort = sort || 1
@@ -571,11 +572,24 @@ router.get('/getallorder', async (req, res) => {
     let inf
     let sql
     if (sort == 0) {
-        sql = `select uid,gid,count,gsize,otime,deliver from goodsorder order by otime limit ${index},${num}`
+        if(isDeliver == 0){
+            sql = `select uid,gid,count,gsize,otime,deliver from goodsorder where deliver='0' order by otime limit ${index},${num}`
+        }else if(isDeliver == 1){
+            sql = `select uid,gid,count,gsize,otime,deliver from goodsorder where deliver='1' order by otime limit ${index},${num}`
+        }else{
+            sql = `select uid,gid,count,gsize,otime,deliver from goodsorder order by otime limit ${index},${num}`
+        }
     } else {
-        sql = `select uid,gid,count,gsize,otime,deliver from goodsorder order by otime desc limit ${index},${num}`
+        if(isDeliver == 0){
+            sql = `select uid,gid,count,gsize,otime,deliver from goodsorder where deliver='0' order by otime desc limit ${index},${num}`
+        }else if(isDeliver == 1){
+            sql = `select uid,gid,count,gsize,otime,deliver from goodsorder where deliver='1' order by otime desc limit ${index},${num}`
+        }else{
+            sql = `select uid,gid,count,gsize,otime,deliver from goodsorder order by otime desc limit ${index},${num}`
+        }
     }
     try {
+        console.log(sql)
         let p = await query(sql)
         let str = ''
         p.forEach(item => {
@@ -708,7 +722,7 @@ router.get('/getorderinfo', async (req, res) => {
 router.delete('/delpartorder', async (req, res) => {
     let {otime} = req.body
     let str = ""
-    JSON.parse(otime).forEach(item=>{
+    otime.forEach(item=>{
         str += item+','
     })
     str = str.substr(0,str.length-1)
@@ -792,7 +806,36 @@ router.get("/searchuser", async (req, res) => {
         res.send(inf)
     } catch (err) {
         inf = {
-            code: 3000,
+            code: err.errno,
+            flag: false,
+            message: "服务器错误"
+        }
+        res.send(inf)
+    }
+})
+//发货
+router.post('/delivergoods',async(req,res)=>{
+    let {uid,gid,otime} = req.body
+    let inf
+    try{
+        let p = await query(`update goodsorder set deliver='1' where uid='${uid}' and gid='${gid}' and otime='${otime}'`)
+        if(p.affectedRows){
+            inf = {
+                code: 2000,
+                flag: true,
+                message: "发货成功"
+            }
+        }else{
+            inf = {
+                code: 3000,
+                flag: false,
+                message: "发货失败"
+            }
+        }
+        res.send(inf)
+    }catch(err){
+        inf = {
+            code: err.errno,
             flag: false,
             message: "服务器错误"
         }

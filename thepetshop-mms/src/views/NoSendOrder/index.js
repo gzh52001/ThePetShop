@@ -2,8 +2,8 @@ import React, { Component } from "react";
 // import { Route, Redirect, Switch } from 'react-router-dom';
 
 import "@/assets/css/GoodsList.scss"
-import OrderForm from '@/views/OrderList/OrderForm'
-import OrderDetailed from '@/views/OrderList/OrderDetailed'
+import OrderForm from '@/views/NoSendOrder/OrderForm'
+import OrderDetailed from '@/views/NoSendOrder/OrderDetailed'
 
 import OrderListApi from "@/api/OrderList";
 
@@ -31,7 +31,6 @@ class OrderList extends Component {
     getOrderDetailed = async (uid,gid,otime) => {     //获取商品详情
         try {
             let p = await OrderListApi.getOrderDetailed(uid,gid,otime);
-            // console.log(p)
             if (p.data.flag) {
                 this.setState({
                     orderData: p.data.data[0],
@@ -43,23 +42,6 @@ class OrderList extends Component {
             console.log(error);
         }
     }
-    // getGoodsDetailed = async (gid) => {     //获取商品详情
-    //     try {
-    //         let p = await GoodsListApi.getGoodsDetailed(gid);
-    //         if (p.data.flag) {
-    //             console.log(p.data.data[0])
-    //             let a = JSON.parse(p.data.data[0].gimgs);
-    //             this.setState({
-    //                 goodsData: p.data.data[0],
-    //                 imgs: a
-    //             })
-    //         } else {
-    //             console.log("获取失败")
-    //         }
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
     toDate = (now) => {
         let a = new Date(now)
         var year = a.getFullYear();  //取得4位数的年份

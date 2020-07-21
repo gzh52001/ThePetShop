@@ -2,8 +2,8 @@ import React, { Component } from "react";
 // import { Route, Redirect, Switch } from 'react-router-dom';
 
 import "@/assets/css/GoodsList.scss"
-import OrderForm from '@/views/OrderList/OrderForm'
-import OrderDetailed from '@/views/OrderList/OrderDetailed'
+import OrderForm from '@/views/SendOrder/OrderForm'
+import OrderDetailed from '@/views/SendOrder/OrderDetailed'
 
 import OrderListApi from "@/api/OrderList";
 
@@ -31,7 +31,6 @@ class OrderList extends Component {
     getOrderDetailed = async (uid,gid,otime) => {     //获取商品详情
         try {
             let p = await OrderListApi.getOrderDetailed(uid,gid,otime);
-            // console.log(p)
             if (p.data.flag) {
                 this.setState({
                     orderData: p.data.data[0],

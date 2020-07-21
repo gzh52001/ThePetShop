@@ -293,7 +293,6 @@ router.put('/addcart', async (req, res) => {
     // console.log(uid, gid, count, gsize)
     let inf
     try {
-
         let p1 = await query(`select * from goodscart where uid='${uid}' and gid='${gid}' and gsize='${gsize}'`)
         if (p1.length) {
             count = count - 0 + p1[0].count - 0
@@ -463,7 +462,7 @@ router.delete('/delcartpart', async (req, res) => {
 router.put('/checkcart', async (req, res) => {
     let { uid, gid, gsize, check } = req.body
     // console.log(uid, gid, gsize, check)
-    if (check == "true") {
+    if (check) {
         check = 1
     } else {
         check = 0
@@ -492,6 +491,34 @@ router.put('/checkcart', async (req, res) => {
             code: err.errno,
             flag: false,
             message: '服务器错误'
+        }
+        res.send(inf)
+    }
+})
+
+//购物车全选
+router.put('/checkcartall',async(req,res)=>{
+    try{
+       let p = await query(`update goodscart set ischeck='1'`) 
+       if(p.affectedRows){
+           inf= {
+               code:2000,
+               flag:true,
+               message:"选中成功"
+           }
+       }else{
+        inf= {
+            code:3000,
+            flag:false,
+            message:"选中失败"
+        }
+       }
+       res.send(inf)
+    }catch(err){
+        inf= {
+            code:err.errno,
+            flag:false,
+            message:"服务器错误"
         }
         res.send(inf)
     }
@@ -528,6 +555,36 @@ router.put('/changecartcount', async (req, res) => {
         }
         res.send(inf)
     }
+})
+
+//购物车某商品库存
+router.get('/getsomestock',async(req,res)=>{
+    let {gid} = req.query
+    try{
+        let p = await query(`select stock from goodsinfo where gid='${gid}'`) 
+        if(p.length){
+            inf= {
+                code:2000,
+                flag:true,
+                message:"获取成功",
+                data:p[0]
+            }
+        }else{
+         inf= {
+             code:3000,
+             flag:false,
+             message:"获取失败"
+         }
+        }
+        res.send(inf)
+     }catch(err){
+         inf= {
+             code:err.errno,
+             flag:false,
+             message:"服务器错误"
+         }
+         res.send(inf)
+     }
 })
 
 //添加订单(功能完成，返回信息有问题)

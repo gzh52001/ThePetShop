@@ -11,22 +11,24 @@ class OrderForm extends Component {
         super();
         this.state = {
             page: 1,      //默认页
-            pageSize: 5,    //一页显示的条数
+            pageSize: 10,    //一页显示的条数
             goodsList: [],
             sort: "",
             totalList: 0,
             changeList: {},
             delSelectID: [],
-            modifyVisible: false
+            modifyVisible: false,
+            isdeliver:0
         }
     }
     componentDidMount() {
-        const {page,pageSize} = this.state
-        this.getGoodsOrder(999,page,pageSize)
+        const {page,pageSize,isdeliver} = this.state
+        console.log(isdeliver)
+        this.getGoodsOrder(999,page,pageSize,isdeliver)
     }
-    getGoodsOrder = async (sort,page,pageSize) => {     //获取订单列表
+    getGoodsOrder = async (sort,page,pageSize,isdeliver) => {     //获取订单列表
         try {
-            let p = await OrderListApi.getGoodsOrder(sort,page,pageSize);
+            let p = await OrderListApi.getGoodsOrder(sort,page,pageSize,isdeliver);
             // console.log(p)
             if (p.data.flag) {
                 this.setState({
@@ -54,11 +56,11 @@ class OrderForm extends Component {
     }
     delPartOrder = async (arr) => {     //批量删除订单
         // console.log(arr)
-        const {sort,page,pageSize} = this.state
+        const {sort,page,pageSize,isdeliver} = this.state
         try {
             let p = await OrderListApi.delPartOrder(arr);
             if (p.data.flag) {
-                this.getGoodsOrder(sort,page,pageSize)
+                this.getGoodsOrder(sort,page,pageSize,isdeliver)
                 message.success('取消成功！');
             } else {
                 message.error('取消失败！未知错误');
@@ -85,27 +87,30 @@ class OrderForm extends Component {
         console.log(`selected ${value}`);
     }
     onChange = (pagination,a, sorter, extra) => {     //分页、排序、筛选变化时触发
+        const {isdeliver} = this.state
         if (sorter.order === "ascend" && sorter.field === "otime") {
-            this.getGoodsOrder(0,pagination.current,pagination.pageSize);
+            this.getGoodsOrder(0,pagination.current,pagination.pageSize,isdeliver);
             this.setState({
                 sort: 0
             })
         } else if (sorter.order === undefined && sorter.field === "otime") {
-            this.getGoodsOrder(null,pagination.current,pagination.pageSize);
+            this.getGoodsOrder(null,pagination.current,pagination.pageSize,isdeliver);
             this.setState({
                 sort: null
             })
         }
     }
     pageChange = (page, pageSize) => {
-        this.getGoodsOrder(this.state.sort,page, pageSize)
+        const {isdeliver} = this.state
+        this.getGoodsOrder(this.state.sort,page, pageSize,isdeliver)
     }
     onShowSizeChange = (current, pageSize) => {     //切换页
+        const {isdeliver} = this.state
         this.setState({
             page: current,
             pageSize: pageSize
         })
-        this.getGoodsOrder(this.state.sort,current, pageSize)
+        this.getGoodsOrder(this.state.sort,current, pageSize,isdeliver)
     }
 
 
@@ -121,13 +126,13 @@ class OrderForm extends Component {
         })
     }
     handleDelete = (record) => {     //删除某行
-        const {page,pageSize} = this.state
+        const {page,pageSize,isdeliver} = this.state
         let newList = this.state.goodsList.filter(item => item.otime !== record.otime);
         this.setState({
             goodsList: newList
         })
         this.delgoodsList(record.uid,record.otime);
-        this.getGoodsOrder(999,page,pageSize)
+        this.getGoodsOrder(999,page,pageSize,isdeliver)
     }
     delSelect = () => {     //批量删除
         const {delSelectID} = this.state
@@ -135,7 +140,7 @@ class OrderForm extends Component {
         this.delPartOrder(delSelectID)
     }
     showModal = (data) => {     //显示修改框,传入数据
-        // console.log(data)
+        console.log(data)
         this.setState({
             modifyVisible: true,
             changeList: data
@@ -145,17 +150,17 @@ class OrderForm extends Component {
         this.setState({
             serchVisible: false
         })
-        this.getGoodsOrder(this.state.sort,this.state.page, this.state.pageSize)
+        this.getGoodsOrder(this.state.sort,this.state.page, this.state.pageSize,this.state.isdeliver)
     }
     handleOk = values => {  //确定修改
-        // console.log(values);
+        console.log(values);
         this.setState({
             modifyVisible: false,
         });
     };
 
     handleCancel = e => {
-        // console.log("取消");
+        console.log("取消");
         this.setState({
             modifyVisible: false,
             changeList: ""
@@ -168,18 +173,13 @@ class OrderForm extends Component {
     onFinishFailed = errorInfo => {
         console.log("修改");
     };
-    sendGoods = (record) =>{
+    sendGoods = (record) =>{   //发货
         const {goodsList} = this.state
         this.deliverGoods(record.uid,record.gid,record.otime)
-        goodsList.forEach(item=>{
-            if(item.uid == record.uid && item.gid == record.gid && item.otime == record.otime){
-                item.deliver = 1
-            }
-        })
+        let newList = goodsList.filter(item => item.otime !== record.otime);
         this.setState({
-            goodsList
+            goodsList: newList
         })
-        // this.getGoodsOrder(this.state.sort,this.state.page, this.state.pageSize)
     }
     render() {
         const { Search } = Input;
