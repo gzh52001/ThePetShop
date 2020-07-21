@@ -324,7 +324,7 @@ class GoodsForm extends Component {
                     dataSource={this.state.goodsList}
                     pagination={{
                         pageSize: this.state.pageSize,
-                        defaultCurrent: 2,
+                        defaultCurrent: 1,
                         size: "small",
                         total: this.state.totalList,
                         onShowSizeChange: this.onShowSizeChange,
