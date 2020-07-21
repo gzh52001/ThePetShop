@@ -58,7 +58,7 @@ class Address extends Component {
         }catch(err){
             console.log(err);
         }
-        console.log(myAddress);
+        // console.log(myAddress);
     }
     //详细地址
     changeAddress = (val) => {
