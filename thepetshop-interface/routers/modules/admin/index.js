@@ -499,6 +499,8 @@ router.get("/searchgoods", async (req, res) => {
 //添加商品(**************************88888)
 router.put("/addgoods",async(req,res)=>{
     let {gtitle,gdesc,gbrandtitle,tid,gprice,gsize,stock,gimgs} = req.body
+    tid = 1
+    gsize = JSON.stringify(gsize)
     gimgs = gimgs || "['https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=4226027127,4128085106&fm=26&gp=0.jpg','https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2081481430,3027122704&fm=26&gp=0.jpg']"
     console.log(gtitle,gdesc,gbrandtitle,tid,gprice,gsize,stock,gimgs)
     let inf
@@ -519,6 +521,7 @@ router.put("/addgoods",async(req,res)=>{
                 message:"添加失败"
             }
         }
+        console.log(inf)
         res.send(inf)
     }catch(err){
         inf = {

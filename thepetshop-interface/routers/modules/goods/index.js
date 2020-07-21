@@ -498,8 +498,10 @@ router.put('/checkcart', async (req, res) => {
 
 //购物车全选
 router.put('/checkcartall',async(req,res)=>{
+    let {uid,check} = req.body
+    // console.log(uid,check)
     try{
-       let p = await query(`update goodscart set ischeck='1'`) 
+       let p = await query(`update goodscart set ischeck='${check}' where uid='${uid}'`) 
        if(p.affectedRows){
            inf= {
                code:2000,
@@ -587,70 +589,42 @@ router.get('/getsomestock',async(req,res)=>{
      }
 })
 
-//添加订单(功能完成，返回信息有问题)
+//添加订单
 router.put('/addorder', async (req, res) => {
+    let {uid} = req.body
     let inf = 'ddd'
     let deliver = 0
+    let check = true
     try {
-        let p = await query(`select uid,gid,count,gsize from goodscart where ischeck='1'`)
+        let p = await query(`select gid,count,gsize from goodscart where ischeck='1' and uid='${uid}'`)
         if (p.length) {
-            inf = p.map(async item => {
+            p.forEach(async item => {
                 let time = Date.now() - 0
-                let { uid, gid, count, gsize } = item
+                let { gid, count, gsize } = item
                 let p = await query(`insert goodsorder(uid,gid,count,gsize,otime,deliver) values('${uid}','${gid}','${count}','${gsize}','${time}','${deliver}')`)
                 if (p.affectedRows) {
-                    inf = {
-                        code: 2000,
-                        flag: true,
-                        message: '添加成功'
-                    }
+                    check = true
                 } else {
-                    inf = {
-                        code: 2000,
-                        flag: true,
-                        message: '添加失败'
-                    }
+                    check = false
                 }
-                // let p1 = await query(`select * from goodsorder where uid='${uid}' and gid='${gid}' and gsize='${gsize}'`)
-                // if (p1.length) {
-                //     count = count - 0 + p1[0].count - 0
-                //     let p2 = await query(`update goodsorder set count=${count} where uid='${uid}' and gid='${gid}' and gsize='${gsize}'`)
-                //     if (p2.affectedRows) {
-                //         inf = {
-                //             code: 2000,
-                //             flag: true,
-                //             message: '添加成功'
-                //         }
-                //     } else {
-                //         inf = {
-                //             code: 3000,
-                //             flag: false,
-                //             message: '添加失败'
-                //         }
-                //     }
-                // } else {
-                //     let p3 = await query(`insert goodsorder(uid,gid,count,gsize) values('${uid}','${gid}','${count}','${gsize}')`)
-                //     if (p3.affectedRows) {
-                //         inf = {
-                //             code: 2000,
-                //             flag: true,
-                //             message: '添加成功'
-                //         }
-                //     } else {
-                //         inf = {
-                //             code: 3000,
-                //             flag: false,
-                //             message: '添加失败'
-                //         }
-                //     }
-                // }
-                return inf
             })
-            console.log(inf)
+            if(check){
+                inf = {
+                    code: 2000,
+                    flag: true,
+                    message: '添加成功'
+                }
+            }else{
+                inf = {
+                    code: 3000,
+                    flag: false,
+                    message: '添加失败'
+                }
+            }
         } else {
             inf = {
                 code: 3000,
-                flag: true,
+                flag: false,
                 message: '添加失败'
             }
         }

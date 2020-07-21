@@ -54,11 +54,9 @@ class OrderForm extends Component {
     }
     delPartOrder = async (arr) => {     //批量删除订单
         // console.log(arr)
-        const {sort,page,pageSize} = this.state
         try {
             let p = await OrderListApi.delPartOrder(arr);
             if (p.data.flag) {
-                this.getGoodsOrder(sort,page,pageSize)
                 message.success('取消成功！');
             } else {
                 message.error('取消失败！未知错误');
@@ -130,8 +128,19 @@ class OrderForm extends Component {
         this.getGoodsOrder(999,page,pageSize)
     }
     delSelect = () => {     //批量删除
-        const {delSelectID} = this.state
+        const {goodsList,delSelectID} = this.state
         // console.log(this.state.delSelectID)
+        let newList = Object.assign([],goodsList)
+        goodsList.forEach((item1,index)=>{
+            delSelectID.forEach(item2=>{
+                if(item1.otime == item2){
+                    newList.splice(index,1)
+                }
+            })
+        })
+        this.setState({
+            goodsList:newList
+        })
         this.delPartOrder(delSelectID)
     }
     showModal = (data) => {     //显示修改框,传入数据
