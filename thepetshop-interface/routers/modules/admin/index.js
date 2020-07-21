@@ -427,7 +427,7 @@ router.delete('/delpartgoods', async (req, res) => {
     })
     str = str.substr(0, str.length - 1)
     try {
-        let sql = `delete from goodsinfo where uid in(${str})`
+        let sql = `delete from goodsinfo where gid in(${str})`
         let p = await query(sql);
         let inf = {}
         if (p.affectedRows) {
@@ -453,19 +453,31 @@ router.delete('/delpartgoods', async (req, res) => {
         res.send(inf)
     }
 })
-//模糊搜索商品 不限字段名
+//模糊搜索商品 不限字段名 换页
 router.get("/searchgoods", async (req, res) => {
-    let { type, value } = req.query
+    let { type,value,page,num} = req.query
+    page = page || 1 
+    num = num || 8
+    index = (page-1)*num
     let inf
     try {
-        let sql = `select gid,gimgs,gtitle,gprice,gxiaoliang from goodsinfo where ${type} like '%${value}%'`
-        let p = await query(sql)
-        if (p.length) {
+        let sql1 = `select gid,gimgs,gtitle,gprice,gxiaoliang from goodsinfo where ${type} like '%${value}%'`
+        let p1 = await query(sql1)
+        let sql2 = `select gid,gimgs,gtitle,gprice,gxiaoliang from goodsinfo where ${type} like '%${value}%' limit ${index},${num}`
+        let p2 = await query(sql2)
+        if (p2.length) {
+            let total = p1.length
+            p2.forEach(item => {
+                item.gimgs = JSON.parse(item.gimgs).length == 1 ? JSON.parse(item.gimgs)[0] : JSON.parse(item.gimgs)[1]
+            })
             inf = {
                 code: 2000,
                 flag: true,
                 message: "查询成功",
-                data: p
+                data: {
+                    total,
+                    p2   
+                }
             }
         } else {
             inf = {
@@ -484,6 +496,70 @@ router.get("/searchgoods", async (req, res) => {
         res.send(inf)
     }
 })
+//添加商品
+router.put("/addgoods",async(req,res)=>{
+    let {gtitle,gdesc,gbrandtitle,tid,gprice,gsize,stock,gimgs} = req.body
+    gimgs = gimgs || ['https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=4226027127,4128085106&fm=26&gp=0.jpg',
+    'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2081481430,3027122704&fm=26&gp=0.jpg']
+    let inf
+    try{
+        let sql = `insert into goodsinfo(gtitle,gdesc,gbrandtitle,tid,gprice,gsize,stock,gimgs) 
+        values('${gtitle}','${gdesc}','${gbrandtitle}','${tid}','${gprice}','${gsize}','${stock}','${gimgs}')`
+        let p = await query(sql)
+        if(p.affectedRows){
+            inf = {
+                code:2000,
+                flag:true,
+                message:"添加成功"
+            }
+        }else{
+            inf = {
+                code:3000,
+                flag:false,
+                message:"添加失败"
+            }
+        }
+    }catch(err){
+        inf = {
+            code:err.errno,
+            flag:false,
+            message:"服务器错误"
+        }
+        res.send(inf)
+    }
+
+})
+//修改商品信息
+router.put("/editgoods",async(req,res)=>{
+    let {gid,gtitle,gdesc,gbrandtitle,tid,gprice,gsize,stock,gimgs} = req.body
+    gimgs = gimgs || ['https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=4226027127,4128085106&fm=26&gp=0.jpg',
+    'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2081481430,3027122704&fm=26&gp=0.jpg']
+    let inf
+    try{
+        let sql = `update goodsinfo set gtitle='${gtitle}',gdesc='${gdesc}',gbrandtitle='${gbrandtitle}',tid='${tid}',gprice='${gprice}',gsize='${gsize}',stock='${stock}',gimgs='${gimgs}' where gid='${gid}'`
+        let p = await query(sql)
+        if(p.affectedRows){
+            inf = {
+                code:2000,
+                flag:true,
+                message:"修改成功"
+            }
+        }else{
+            inf = {
+                code:3000,
+                flag:false,
+                message:"修改失败"
+            }
+        }
+    }catch(err){
+        inf = {
+            code:err.errno,
+            flag:false,
+            message:"服务器错误"
+        }
+        res.send(inf)
+    }
+})
 //获取所有订单列表
 router.get('/getallorder', async (req, res) => {
     let { sort, page, num } = req.query
@@ -495,9 +571,9 @@ router.get('/getallorder', async (req, res) => {
     let inf
     let sql
     if (sort == 0) {
-        sql = `select uid,gid,count,gsize,otime from goodsorder order by otime limit ${index},${num}`
+        sql = `select uid,gid,count,gsize,otime,deliver from goodsorder order by otime limit ${index},${num}`
     } else {
-        sql = `select uid,gid,count,gsize,otime from goodsorder order by otime desc limit ${index},${num}`
+        sql = `select uid,gid,count,gsize,otime,deliver from goodsorder order by otime desc limit ${index},${num}`
     }
     try {
         let p = await query(sql)

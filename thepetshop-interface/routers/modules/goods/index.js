@@ -533,13 +533,14 @@ router.put('/changecartcount', async (req, res) => {
 //添加订单(功能完成，返回信息有问题)
 router.put('/addorder', async (req, res) => {
     let inf = 'ddd'
+    let deliver = 0
     try {
         let p = await query(`select uid,gid,count,gsize from goodscart where ischeck='1'`)
         if (p.length) {
             inf = p.map(async item => {
                 let time = Date.now() - 0
                 let { uid, gid, count, gsize } = item
-                let p = await query(`insert goodsorder(uid,gid,count,gsize,otime) values('${uid}','${gid}','${count}','${gsize}','${time}')`)
+                let p = await query(`insert goodsorder(uid,gid,count,gsize,otime,deliver) values('${uid}','${gid}','${count}','${gsize}','${time}','${deliver}')`)
                 if (p.affectedRows) {
                     inf = {
                         code: 2000,
@@ -612,7 +613,7 @@ router.get('/getorder', async (req, res) => {
     let { uid } = req.query
     // console.log(uid)
     try {
-        let p = await query(`select gid,count,gsize,otime from goodsorder where uid='${uid}'`)
+        let p = await query(`select gid,count,gsize,otime,deliver from goodsorder where uid='${uid}'`)
         let str = ''
         // console.log(p)
         p.forEach(item => {
