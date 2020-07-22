@@ -14,7 +14,6 @@ function MyOrder (props){
             let {uid} = getUser();
             GoodsApi.getMyOrder(uid).then(res=>{
                 if(res.data.flag){
-                    console.log(res.data.data);
                     // let nowtime = res.data.data[0].otime
                     // let d = new Date()
                     // d.setTime(nowtime)

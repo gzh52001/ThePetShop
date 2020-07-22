@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Carousel, WingBlank, Grid, Tabs, WhiteSpace ,Toast} from 'antd-mobile';
+import GoTop from '@/components/GoTop'
 import GoodsApi from '@/api/goods';
 
 
 import './style.scss'
-import TextArea from 'antd/lib/input/TextArea';
 
 class Home extends Component {
     constructor() {
@@ -239,6 +239,11 @@ class Home extends Component {
         return (
 
             <div className="home">
+                <div onClick={()=>{
+                    document.getElementsByClassName('show-wrap')[0].scrollTop = 0
+                }}>
+                    <GoTop />
+                </div>
                 {/* 顶部 */}
                 <div className='home-head'>
                     <Link className="goMine" to="/main/mine">

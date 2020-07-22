@@ -1,7 +1,9 @@
 .search{
-
     // 顶部
     .search-input{
+        position: fixed;
+        top: 0px;
+        z-index: 99;
         .am-navbar-left, .am-navbar-title, .am-navbar-right{
             flex:none;
         }
@@ -26,6 +28,11 @@
 
     // 排序盒子
     .sort-goods{
+        position: fixed;
+        top: 45px;
+        width: 100%;
+        background: #fff;
+        z-index: 99;
         .am-segment{
             border-radius: 0;
             border-top: 1px solid #dedede;
@@ -47,9 +54,9 @@
     .search-show{
         position: absolute;
         width: 100%;
-        top: 0;
-        padding-top: 83px;
-        z-index: -1;
+        top: 83px;
+        // padding-top: 83px;
+        z-index: 9;
         .goods-item{
             width: 95%;
             height: 140px;
@@ -131,6 +138,7 @@
         .search-title{
             width: 100%;
             position: absolute;
+            
             ul{
                 width: 100%;
                 background: #efeff4;
