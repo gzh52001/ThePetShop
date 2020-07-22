@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Toast } from 'antd-mobile';
+import { Toast,Badge } from 'antd-mobile';
 import { Link } from 'react-router-dom';
 import '../../assets/icon/iconfont.css';
 import './mine.scss';
@@ -250,10 +250,10 @@ class Mine extends Component {
                                         <dt>
                                             <i className={'iconfont ' + item.icon} />
                                             {
-                                                item.count === 0 ?
-                                                    null
-                                                    :
-                                                    <span>{item.count}</span>
+                                                // item.count === 0 ?
+                                                //     null
+                                                //     :
+                                                    <Badge text={item.count} overflowCount={99} />
                                             }
 
                                         </dt>
