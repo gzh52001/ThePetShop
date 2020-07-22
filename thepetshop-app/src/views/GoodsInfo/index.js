@@ -18,7 +18,7 @@ function GoodsInfo(props) {
         GoodsApi.getGoodsInfo(goodsGid).then(res=>{
           if(res.data.flag){
             // console.log(res.data.data[0].imgdetail)
-            let imgs = JSON.parse(res.data.data[0].imgdetail)
+            let imgs = res.data.data[0].imgdetail?[]:JSON.parse(res.data.data[0].imgdetail)
             // console.log(imgs[0])
             // imgs = Array.prototype.slice.call(imgs);
             let data = {
@@ -118,7 +118,7 @@ function GoodsInfo(props) {
                 props.history.push(isRouter)
               }
             rightContent={[
-              <Link key='goCart' className="goCart" to="/cart">
+              <Link key='goCart' className="goCart" to="/main/cart">
                   <i className="iconfont icon-gouwuche" style={{fontSize:'20px'}} />
               </Link>
               // <Icon key="1" type="ellipsis" />,
@@ -257,7 +257,7 @@ function GoodsInfo(props) {
                         <span onClick={
                           cartNow
                           ?
-                          token?()=>props.history.push('/cart'):()=>Toast.fail('亲，你还未登录哦', 1)
+                          token?()=>props.history.push('/main/cart'):()=>Toast.fail('亲，你还未登录哦', 1)
                           :
                           setCart
                         }>立即购买</span>

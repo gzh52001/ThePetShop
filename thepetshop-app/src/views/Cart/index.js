@@ -47,7 +47,8 @@ class Cart extends Component {
             num: 1,
             isnum: false,
             isdel: false,
-            isAllcheck: false
+            isAllcheck: false,
+            path:''
         }
     }
     //显示修改数量
@@ -193,6 +194,16 @@ class Cart extends Component {
 
     }
     async componentDidMount() {
+        const {location:{pathname,state}} = this.props;
+        if(state){
+            let con =state.split('/')
+            if(pathname=='/main/cart'&&con[1]=='goodsInfo'){
+                let path = state
+                this.setState({
+                    path
+                })
+            }
+        }
         const { getgoodlist } = this.props;
         this.setState({
             userinfo: getUser()
@@ -223,13 +234,21 @@ class Cart extends Component {
             console.log(err);
         }
     }
+
+    goto = (gid)=>{
+        this.props.history.push('/goodsInfo/'+gid)
+    }
+
     render(login) {
-        const { isnum, isdel, userinfo: { address, uid }, isAllcheck } = this.state;
+        const { isnum, isdel, userinfo: { address, uid }, isAllcheck ,path } = this.state;
         // console.log(this.props);
-        const { goods, changenum, totalPrice, totalGoods } = this.props;
+        const { goods, changenum, totalPrice, totalGoods , history } = this.props;
         // console.log(totalGoods);
         return (
             <div className='cart'>
+                <div className='topBack' onClick={()=>history.push(path)} style={path?{}:{display:'none'}}>
+                    <i className="iconfont icon-jiantou-copy"></i>
+                </div>
                 {/* 购物车顶部 */}
                 <NavBar
                     className='cart-top'
@@ -256,7 +275,7 @@ class Cart extends Component {
                                                     <dl key={item.gid}>
                                                         <dd>
                                                             <CheckboxItem checked={item.ischeck} onChange={this.check.bind(this, item.gid, item.gsize)} />
-                                                            <img src={item.gimgs}></img>
+                                                            <img onClick={this.goto.bind(null,item.gid)} src={item.gimgs}></img>
                                                         </dd>
                                                         <dt>
                                                             <h4>{item.gtitle}</h4>

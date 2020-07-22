@@ -1,6 +1,7 @@
 import React,{useState,useEffect,useCallback} from 'react';
 import { NavBar, Icon,SearchBar, SegmentedControl,Toast } from 'antd-mobile';
-import './style.scss'
+import './style.scss';
+import GoTop from '@/components/GoTop'
 
 import SearchApi from '@/api/goods/search'
 
@@ -19,7 +20,7 @@ function Search(props){
         autoFocusInst.focus();
     },[gShow])
     useEffect(()=>{
-        if(searchData){
+        if(searchData[0]){
             lazyShow()
         }
     },[searchData])
@@ -65,15 +66,20 @@ function Search(props){
         num:2,
         classifyFD:null
     })
+    const [gotopshow,setgtshow] = useState(false)
     // 懒加载
     const lazyShow = ()=>{
-        let boxDom = document.getElementById('root')
         let domHeight = document.querySelector('.search-show').offsetHeight
         let istops = 0
         let domScrollTop ;
         window.onscroll = async()=>{
             domScrollTop = document.documentElement.scrollTop;
             istops = domScrollTop + window.innerHeight;
+            if(domScrollTop>600){
+                setgtshow(true)
+            }else{
+                setgtshow(false)
+            }
             if(istops>=domHeight){
                 if(lazyData.classifyFD==null){
                     SearchApi.searchGoods(value,lazyData.num).then(res=>{
@@ -143,6 +149,11 @@ function Search(props){
             {/* 搜索后内容 */}
             {
                 gShow?<>
+                    <div onClick={()=>{
+                        document.documentElement.scrollTop=0
+                    }} style={gotopshow?{}:{display:'none'}} >
+                        <GoTop />
+                    </div>
                     <div className='sort-goods'>
                         <SegmentedControl
                             selectedIndex={sortNum} 
