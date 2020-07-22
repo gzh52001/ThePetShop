@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import "@/assets/css/Login.scss"
 
-import { Card, Form, Input, Button, Checkbox } from 'antd';
+import { Card, Form, Input, Button, Checkbox,message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 import LoginApi from "@/api/Login";
@@ -26,11 +26,12 @@ class Login extends Component {
         try {
             let p = await LoginApi.loginIn(values.username, values.password, checked);
             if (p.data.flag) {
-                console.log(p.data.data)
+                message.success('登录成功！');
                 localStorage.setItem("userData", JSON.stringify({ grade:p.data.data.grade, myname: p.data.data.myname, username: values.username, token: p.data.data.token }))
                 history.go(0);
             } else {
                 console.log("登录失败")
+                message.error('登录失败');
             }
         } catch (error) {
             console.log(error);

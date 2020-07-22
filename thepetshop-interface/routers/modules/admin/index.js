@@ -3,7 +3,6 @@ const express = require('express')
 const query = require("../../db/mysql")
 const { create, verify } = require("../token")
 const bcryptjs = require("bcryptjs");
-const { createConnection } = require('mysql');
 
 const router = express.Router()
 

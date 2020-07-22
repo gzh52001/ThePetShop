@@ -341,7 +341,7 @@ router.put('/addcart', async (req, res) => {
 router.get('/getcart', async (req, res) => {
     let { uid } = req.query
     try {
-        let p = await query(`select gid,count,gsize,ischeck from goodscart where uid='${uid}'`)
+        let p = await query(`select gid,count,gsize,ischeck,cid from goodscart where uid='${uid}'`)
         let str = ''
         // console.log(p)
         p.forEach(item => {
@@ -460,7 +460,7 @@ router.delete('/delcartpart', async (req, res) => {
 
 //购物车选中
 router.put('/checkcart', async (req, res) => {
-    let { uid, gid, gsize, check } = req.body
+    let { cid, check } = req.body
     // console.log(uid, gid, gsize, check)
     if (check) {
         check = 1
@@ -469,9 +469,9 @@ router.put('/checkcart', async (req, res) => {
     }
     let inf
     try {
-        let result = await query(`select gsize from goodsinfo where gid='${gid}'`)
-        gsize = JSON.parse(result[0].gsize).indexOf(gsize)
-        let p = await query(`update goodscart set ischeck='${check}' where uid='${uid}' and gid='${gid}' and gsize='${gsize}'`)
+        // let result = await query(`select gsize from goodsinfo where gid='${gid}'`)
+        // gsize = JSON.parse(result[0].gsize).indexOf(gsize)
+        let p = await query(`update goodscart set ischeck='${check}' where cid='${cid}'`)
         if (p.affectedRows) {
             inf = {
                 code: 2000,
