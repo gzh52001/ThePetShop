@@ -144,20 +144,7 @@ function GoodsInfo(props) {
               }
             rightContent={[
               <Link key='goCart' className="goCart" to="/main/cart">
-<<<<<<< HEAD
-                {
-                  token?
-                    cartnums?
-                    <Badge dot>
-                      <i className="iconfont icon-gouwuche" style={{fontSize:'20px'}} />
-                    </Badge>
-                    :
-                    <i className="iconfont icon-gouwuche" style={{fontSize:'20px'}} />
-                  :
-=======
->>>>>>> jianmin
                   <i className="iconfont icon-gouwuche" style={{fontSize:'20px'}} />
-                }
               </Link>
               // <Icon key="1" type="ellipsis" />,
             ]}
