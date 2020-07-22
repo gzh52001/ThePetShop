@@ -3,8 +3,12 @@ import { NavBar, Icon, Tabs, Carousel, WingBlank,Toast,Card, WhiteSpace } from '
 import {Link,} from 'react-router-dom';
 import './style.scss'
 import BtnBox from './BtnBox'
-import GoodsApi from '@/api/goods'
+import {  Badge } from 'antd-mobile';
+import GoodsApi from '@/api/goods';
+import CartApi from '@/api/shoppingcart'
 import {getToken,getUser} from '@/utils/auth';
+import Allaction from '@/store/actions/cartAction';
+import store from '@/store';
 
 function GoodsInfo(props) {
   const token = getToken()//获取token
@@ -18,7 +22,7 @@ function GoodsInfo(props) {
         GoodsApi.getGoodsInfo(goodsGid).then(res=>{
           if(res.data.flag){
             // console.log(res.data.data[0].imgdetail)
-            let imgs = JSON.parse(res.data.data[0].imgdetail)
+            let imgs = res.data.data[0].imgdetail?[]:JSON.parse(res.data.data[0].imgdetail)
             // console.log(imgs[0])
             // imgs = Array.prototype.slice.call(imgs);
             let data = {
@@ -31,6 +35,29 @@ function GoodsInfo(props) {
         })
   },[props])
 
+  const [cartnums,setcarNums] = useState(0)
+  useEffect(()=>{
+    if(token){
+      let {uid} = getUser()
+      CartApi.getcart(uid).then(res=>{
+        if(res.data.flag){
+          setcarNums(res.data.data.length)
+        }
+      })
+    }
+  },[])
+
+  // 收藏
+  const [wishlist,setWishlist] = useState(false);
+  const changeWish = useCallback(()=>{
+    if(!wishlist){
+      Toast.success('收藏成功!', 1);
+    }else{
+      Toast.fail('取消收藏!', 1);
+    }
+    setWishlist(!wishlist)
+  },[wishlist])
+
   // 顶部分页
   const tabs = [
     { title: '商品', sub: '1' },
@@ -38,8 +65,6 @@ function GoodsInfo(props) {
     { title: '评价', sub: '3' },
   ];
   // 轮播图
-  // const [ginfoData,gimgsLbImgs] = useState({
-  //   data: ['https://img2.epetbar.com/common/upload/commonfile/2020/05/010/0101949_734383.jpg', 'https://img2.epetbar.com/common/upload/commonfile/2020/05/010/0101949_734383.jpg', 'https://img2.epetbar.com/common/upload/commonfile/2020/05/010/0101949_734383.jpg'],
   // }) 
   const [lbImgHeight, setLbImgHeight] = useState({
     imgHeight:375,
@@ -59,7 +84,7 @@ function GoodsInfo(props) {
       goodsDatRef.current = data
     }
     if(goodsDatRef.current.checkBtn){
-      console.log("ok:",goodsDatRef.current);
+      // console.log("ok:",goodsDatRef.current);
       changeStyle({
         btnFont:goodsDatRef.current.checkBtn,
         goodsPrice:goodsDatRef.current.priceDom,
@@ -79,19 +104,27 @@ function GoodsInfo(props) {
     let {uid} = getUser()
     let count = goodsDatRef.current.goodsNum
     let gsize = null;
-    let gid = ginfoData.gid;
-    let nowprice = goodsDatRef.current.priceDom
-    console.log(nowprice);
+    let {gid,gtitle,gimgs,gprice} = ginfoData;
+    // console.log(gimgs[1]);
+    if(gimgs.length>1){
+      gimgs = gimgs[1];
+    }else{
+      gimgs = gimgs[0];
+    }
+    // console.log(gimgs);
+    // console.log(ginfoData);
+    // let nowprice = goodsDatRef.current.priceDom
     JSON.parse(ginfoData.gsize).forEach((item,index) => {
       if(goodsDatRef.current.checkBtn==item){
-        return gsize = index
+        return gsize = index  //规格
       }
     });
-    console.log("去也",'uid:'+uid,'gid:'+gid,'count:'+count,'gsize:'+gsize);
+    // console.log("去也",'uid:'+uid,'gid:'+gid,'count:'+count,'gsize:'+gsize);
     try {
       let p = await GoodsApi.goSetGoodsCart(uid,gid,count,gsize)
       if(p.data.flag){
         Toast.success('加入购物车成功!', 1);
+        store.dispatch(Allaction.add2cart({gid,gtitle,gimgs,gprice,ischeck:0,count,gsize}))
       }else{
         Toast.fail('加入购物车失败!!!', 1);
       }
@@ -100,7 +133,6 @@ function GoodsInfo(props) {
     }
 
   }
-
   return (
     <div className='goodsInfo-wrap'>
         <div className='goodsInfo-head'>
@@ -108,11 +140,21 @@ function GoodsInfo(props) {
             mode="light"
             icon={<Icon type="left" />}
             onLeftClick={() =>
-                props.history.push(isRouter)
+                props.history.push(isRouter?isRouter:'/')
               }
             rightContent={[
-              <Link key='goCart' className="goCart" to="/cart">
+              <Link key='goCart' className="goCart" to="/main/cart">
+                {
+                  token?
+                    cartnums?
+                    <Badge dot>
+                      <i className="iconfont icon-gouwuche" style={{fontSize:'20px'}} />
+                    </Badge>
+                    :
+                    <i className="iconfont icon-gouwuche" style={{fontSize:'20px'}} />
+                  :
                   <i className="iconfont icon-gouwuche" style={{fontSize:'20px'}} />
+                }
               </Link>
               // <Icon key="1" type="ellipsis" />,
             ]}
@@ -240,8 +282,8 @@ function GoodsInfo(props) {
                         <i className="iconfont icon-home-line" />
                         <span className="font">主页</span>
                       </div>
-                      <div>
-                        <i className="iconfont icon-shoucang1" />
+                      <div onClick={changeWish}>
+                        <i className={wishlist?'wishlistShow iconfont icon-shoucang2':'iconfont icon-shoucang1'} />
                         <span className="font">收藏</span>
                       </div>
                     </div>
@@ -250,7 +292,7 @@ function GoodsInfo(props) {
                         <span onClick={
                           cartNow
                           ?
-                          token?()=>props.history.push('/cart'):()=>Toast.fail('亲，你还未登录哦', 1)
+                          token?()=>props.history.push('/main/cart'):()=>Toast.fail('亲，你还未登录哦', 1)
                           :
                           setCart
                         }>立即购买</span>

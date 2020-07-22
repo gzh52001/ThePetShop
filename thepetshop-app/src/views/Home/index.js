@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Carousel, WingBlank, Grid, Tabs, WhiteSpace } from 'antd-mobile';
+import { Carousel, WingBlank, Grid, Tabs, WhiteSpace ,Toast} from 'antd-mobile';
+import GoTop from '@/components/GoTop'
 import GoodsApi from '@/api/goods';
 
 
 import './style.scss'
-import TextArea from 'antd/lib/input/TextArea';
 
 class Home extends Component {
     constructor() {
@@ -196,7 +196,7 @@ class Home extends Component {
                 istop.style.cssText = `position:sticky`;
             }
             // console.log(home.scrollTop);
-            if(istops>=domHeight){
+            if(istops>=domHeight&&istops>=1800){
                 if(classifyFD==null){
                     GoodsApi.allGoods(classifyIdx,classifyPage+1,8).then(res=>{
                         if(res.data.flag){
@@ -210,6 +210,8 @@ class Home extends Component {
                                 classifyPage:classifyPage+1,
                                 classifyFD:null
                             })
+                        }else{
+                            Toast.offline('已经到底了 !!!', 1);
                         }
                     });
                 }
@@ -237,6 +239,11 @@ class Home extends Component {
         return (
 
             <div className="home">
+                <div onClick={()=>{
+                    document.getElementsByClassName('show-wrap')[0].scrollTop = 0
+                }}>
+                    <GoTop />
+                </div>
                 {/* 顶部 */}
                 <div className='home-head'>
                     <Link className="goMine" to="/main/mine">
@@ -246,7 +253,7 @@ class Home extends Component {
                         <i className="iconfont icon-sousuo1"></i>
                         请输入搜索关键字
                     </h1>
-                    <Link className="goCart" to="/cart">
+                    <Link className="goCart" to="/main/cart">
                         <i className="iconfont icon-gouwuche" />
                     </Link>
                 </div>
@@ -260,7 +267,7 @@ class Home extends Component {
                         {this.state.data.map(val => (
                             <a
                                 key={val}
-                                href="http://www.alipay.com"
+                                href=""
                                 style={{ display: 'inline-block', width: '100%', height: this.state.imgHeight }}
                             >
                                 <img
@@ -282,7 +289,7 @@ class Home extends Component {
                     <Grid data={data} hasLine={false} columnNum={5} onClick={(data,index)=>{
                         
                         if(index===4){
-                            this.props.history.push('/main/classify')
+                            this.props.history.push('/main/classify/141')
                         }else{
                             this.props.history.push('/goodsInfo')
                         }
@@ -291,7 +298,7 @@ class Home extends Component {
                 </div>
 
                 {/* 礼包广告 */}
-                <div className="home-discounts">
+                <div className="home-discounts" onClick={()=>this.props.history.push('/goodsInfo/141')}>
                     <img src={require('../../assets/img/libao.gif')} />
                 </div>
 
@@ -441,8 +448,8 @@ class Home extends Component {
     
     // 限时秒杀
     // 渲染页面
-    renderContent = (data) =>(
-        <div className="kill-wrap" style={{ display: 'flex', alignItems: 'center'}}>
+    renderContent = (data) =>{
+        return(<div className="kill-wrap" style={{ display: 'flex', alignItems: 'center'}}>
             {
                 data.map((item,index) => (
                     <div className="kill-item" key={index} onClick={()=>this.props.history.push('/goodsInfo/'+item.gid)}>
@@ -458,7 +465,7 @@ class Home extends Component {
                 ))
             }
         </div>
-    );
+    )};
     // 获取限时秒杀数据
     async killData(){
         try {

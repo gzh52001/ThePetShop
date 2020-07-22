@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
-import { Toast } from 'antd-mobile';
+import { Toast,Badge } from 'antd-mobile';
+import {connect} from 'react-redux';
 import { Link } from 'react-router-dom';
 import '../../assets/icon/iconfont.css';
 import './mine.scss';
-import { getUser } from '@/utils/auth';
+import { getUser,getToken } from '@/utils/auth';
 import { withLogin } from '@/utils/hoc';
-
+import GoodsApi from '@/api/goods'
+@connect(({user:{userinfo}})=>({
+    userinfo
+}))
 @withLogin
 class Mine extends Component {
     constructor() {
@@ -102,21 +106,21 @@ class Mine extends Component {
                     id: 1,
                     icon: 'icon-fukuan',
                     title: '订单',
-                    path: '',
+                    path: '/MyOrder',
                     count: 0
                 },
                 {
                     id: 2,
                     icon: 'icon-daifahuo1',
                     title: '代发货',
-                    path: '',
-                    count: 1
+                    path: '/dfhOrder?dfh',
+                    count: 0
                 },
                 {
                     id: 3,
                     icon: 'icon-daifahuo2',
                     title: '待收货',
-                    path: '',
+                    path: '/dfhOrder?dsh',
                     count: 0
                 },
                 {
@@ -156,13 +160,18 @@ class Mine extends Component {
                 }
             ],
             userimg: '',
-            myname: ''
+            myname: '',
         }
     }
     clickTool(path) {
-        if (path) {
+        const {userinfo} = this.props;
+        // console.log(JSON.stringify(userinfo)==='{}');
+        if(JSON.stringify(userinfo)!=='{}' && path){
             this.props.history.push(path);
-            return
+            return;
+        }else if(JSON.stringify(userinfo)==='{}' && path){
+            Toast.fail('请先登录',2);
+            return;
         }
         Toast.info('该功能开发中', 1);
     }
@@ -174,6 +183,45 @@ class Mine extends Component {
         Toast.fail('请先登录!!',2)
     }
     componentDidMount() {
+        let token = getToken();
+        const { orders } = this.state
+        if(token){
+            let {uid} = getUser();
+            GoodsApi.getMyOrder(uid,0).then(res=>{
+                // console.log(res.data);
+                if(res.data.flag){
+                    let num = 0;
+                    res.data.data.forEach(item => {
+                        if(item.deliver===0){
+                            num++
+                        }
+                    });
+                    orders[1].count = num
+                    this.setState({
+                        ...this.state,
+                        orders:[...orders]
+                    })
+                }
+            })
+            GoodsApi.getMyOrder(uid,1).then(res=>{
+                // console.log(res.data);
+                if(res.data.flag){
+                    let num = 0;
+                    res.data.data.forEach(item => {
+                        // console.log( res.data);
+                        if(item.deliver===1){
+                            num++
+                        }
+                    });
+                    orders[2].count = num
+                    this.setState({
+                        ...this.state,
+                        orders:[...orders]
+                    })
+                    // console.log(this.state.orders);
+                }
+            })
+        }
         let userimg = getUser().userface;
         let myname = getUser().myname;
         this.setState({
@@ -199,7 +247,7 @@ class Mine extends Component {
                                     <img src={userimg} alt='用户头像' />
                                     :
                                     (
-                                        <img src={require('@/assets/img/1.png')} alt='用户头像' />
+                                        <img src={require('@/assets/img/lgf4.png')} alt='用户头像' />
                                     )
                             }
                         </a>
@@ -226,14 +274,14 @@ class Mine extends Component {
                         <div className='mine-order_content'>
                             {
                                 orders.map(item => (
-                                    <dl key={item.id}>
+                                    <dl key={item.id} onClick={()=>this.props.history.push(item.path)}>
                                         <dt>
                                             <i className={'iconfont ' + item.icon} />
                                             {
-                                                item.count === 0 ?
-                                                    null
-                                                    :
-                                                    <span>{item.count}</span>
+                                                // item.count === 0 ?
+                                                //     null
+                                                //     :
+                                                    <Badge text={item.count} overflowCount={99} />
                                             }
 
                                         </dt>
