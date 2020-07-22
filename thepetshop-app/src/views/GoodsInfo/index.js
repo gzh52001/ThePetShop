@@ -31,6 +31,17 @@ function GoodsInfo(props) {
         })
   },[props])
 
+  // 收藏
+  const [wishlist,setWishlist] = useState(false);
+  const changeWish = useCallback(()=>{
+    if(!wishlist){
+      Toast.success('收藏成功!', 1);
+    }else{
+      Toast.fail('取消收藏!', 1);
+    }
+    setWishlist(!wishlist)
+  },[wishlist])
+
   // 顶部分页
   const tabs = [
     { title: '商品', sub: '1' },
@@ -38,8 +49,6 @@ function GoodsInfo(props) {
     { title: '评价', sub: '3' },
   ];
   // 轮播图
-  // const [ginfoData,gimgsLbImgs] = useState({
-  //   data: ['https://img2.epetbar.com/common/upload/commonfile/2020/05/010/0101949_734383.jpg', 'https://img2.epetbar.com/common/upload/commonfile/2020/05/010/0101949_734383.jpg', 'https://img2.epetbar.com/common/upload/commonfile/2020/05/010/0101949_734383.jpg'],
   // }) 
   const [lbImgHeight, setLbImgHeight] = useState({
     imgHeight:375,
@@ -81,7 +90,6 @@ function GoodsInfo(props) {
     let gsize = null;
     let gid = ginfoData.gid;
     let nowprice = goodsDatRef.current.priceDom
-    console.log(nowprice);
     JSON.parse(ginfoData.gsize).forEach((item,index) => {
       if(goodsDatRef.current.checkBtn==item){
         return gsize = index
@@ -100,7 +108,6 @@ function GoodsInfo(props) {
     }
 
   }
-
   return (
     <div className='goodsInfo-wrap'>
         <div className='goodsInfo-head'>
@@ -240,8 +247,8 @@ function GoodsInfo(props) {
                         <i className="iconfont icon-home-line" />
                         <span className="font">主页</span>
                       </div>
-                      <div>
-                        <i className="iconfont icon-shoucang1" />
+                      <div onClick={changeWish}>
+                        <i className={wishlist?'wishlistShow iconfont icon-shoucang2':'iconfont icon-shoucang1'} />
                         <span className="font">收藏</span>
                       </div>
                     </div>

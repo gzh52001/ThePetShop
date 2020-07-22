@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Carousel, WingBlank, Grid, Tabs, WhiteSpace } from 'antd-mobile';
+import { Carousel, WingBlank, Grid, Tabs, WhiteSpace ,Toast} from 'antd-mobile';
 import GoodsApi from '@/api/goods';
 
 
@@ -210,6 +210,8 @@ class Home extends Component {
                                 classifyPage:classifyPage+1,
                                 classifyFD:null
                             })
+                        }else{
+                            Toast.offline('已经到底了 !!!', 3);
                         }
                     });
                 }
@@ -282,7 +284,7 @@ class Home extends Component {
                     <Grid data={data} hasLine={false} columnNum={5} onClick={(data,index)=>{
                         
                         if(index===4){
-                            this.props.history.push('/main/classify')
+                            this.props.history.push('/main/classify/141')
                         }else{
                             this.props.history.push('/goodsInfo')
                         }
@@ -291,7 +293,7 @@ class Home extends Component {
                 </div>
 
                 {/* 礼包广告 */}
-                <div className="home-discounts">
+                <div className="home-discounts" onClick={()=>this.props.history.push('/goodsInfo/141')}>
                     <img src={require('../../assets/img/libao.gif')} />
                 </div>
 
@@ -441,8 +443,8 @@ class Home extends Component {
     
     // 限时秒杀
     // 渲染页面
-    renderContent = (data) =>(
-        <div className="kill-wrap" style={{ display: 'flex', alignItems: 'center'}}>
+    renderContent = (data) =>{
+        return(<div className="kill-wrap" style={{ display: 'flex', alignItems: 'center'}}>
             {
                 data.map((item,index) => (
                     <div className="kill-item" key={index} onClick={()=>this.props.history.push('/goodsInfo/'+item.gid)}>
@@ -458,7 +460,7 @@ class Home extends Component {
                 ))
             }
         </div>
-    );
+    )};
     // 获取限时秒杀数据
     async killData(){
         try {

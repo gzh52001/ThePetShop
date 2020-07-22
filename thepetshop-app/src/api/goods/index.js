@@ -44,13 +44,24 @@ export default{
     // 加入购物车
     goSetGoodsCart(uid,gid,count,gsize){
         return request({
-            method:"get",
+            method:"put",
             url:'/goods/addcart',
-            params:{
+            data:{
                 uid,
                 gid,
                 count,
                 gsize
+            }
+        })
+    },
+
+    // 获取订单
+    getMyOrder(uid){
+        return request({
+            method:'get',
+            url:'/goods/getorder',
+            params:{
+                uid
             }
         })
     }

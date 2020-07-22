@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import Mycontext from './classifycontext';
 import goodsApi from '@/api/goods';
 function TabL() {
-    let { tid } = useContext(Mycontext);
+    let { tid,props } = useContext(Mycontext);
     let [goodslist, changelist] = useState([]);
     // console.log(tid);
     useEffect(() => {
@@ -23,7 +23,7 @@ function TabL() {
             <ul className='linkBox'>
                 {
                     goodslist.map(item => (
-                        <li key={item.gid}>
+                        <li key={item.gid} onClick={()=>props.history.push('/goodsInfo/'+item.gid)}>
                             <a>
                                 <img src={item.gimgs} alt={item.gtitle} />
                                 <p>{item.gtitle}</p>
