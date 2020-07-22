@@ -5,6 +5,8 @@ import '@/assets/icon/iconfont.css';
 import './scss/changeinfo.scss';
 import { getUser, setUser, removeInfo } from '@/utils/auth';
 import loginApi from '@/api/login';
+import {delUser} from '@/store/actions/user';
+import store from '@/store';
 function Changeinfo(props) {//修改个人资料
     let [useinfo, changeinfo] = useState({});
     useEffect(() => {
@@ -79,6 +81,7 @@ function Changeinfo(props) {//修改个人资料
                 onPress: () => {
                     removeInfo();
                     Toast.success('退出成功',2);
+                    store.dispatch(delUser())
                     props.history.push('/main/home');
                 }
             },

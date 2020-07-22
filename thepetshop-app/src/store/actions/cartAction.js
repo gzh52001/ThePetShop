@@ -4,6 +4,8 @@ export const CAHNGE_NUM = 'change_num';
 export const CAHNGE_CHECK = 'change_check';
 export const ALL_CHECK = 'all_check';
 export const DEL_GOODS = 'del_goods';
+export const ADD_TO_CART = 'add_to_cart';
+export const CLEAR_CART = 'clear_cart';
 
 // 获取购物车商品
 export function add(goods){
@@ -45,11 +47,25 @@ export function delGoods(goods){
         goods
     }
 }
+//加入购物车
+export function add2cart(good){
+    return {
+        type:ADD_TO_CART,
+        good
+    }
+}
+//清空
+export function clearcart(){
+    return {
+        type:CLEAR_CART
+    }
+}
 
 export default{
     add,
     changenum,
     ischeck,
     allCheck,
-    delGoods
+    delGoods,
+    add2cart
 }

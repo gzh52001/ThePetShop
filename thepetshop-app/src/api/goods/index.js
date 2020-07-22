@@ -56,12 +56,13 @@ export default{
     },
 
     // 获取订单
-    getMyOrder(uid){
+    getMyOrder(uid,isDeliver){
         return request({
             method:'get',
             url:'/goods/getorder',
             params:{
-                uid
+                uid,
+                isDeliver
             }
         })
     }

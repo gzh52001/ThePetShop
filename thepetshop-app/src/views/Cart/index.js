@@ -13,11 +13,9 @@ const AgreeItem = Checkbox.AgreeItem;
 @connect(({ cart: { goods } }) => ({
     goods: goods,
     totalPrice: goods.filter(item => item.ischeck === 1).reduce((prev, item) => prev + item.gprice * item.count, 0),
-    totalGoods: goods.length
+    totalGoods: goods.length,
+    isAllcheck:goods.every(item=>item.ischeck)// 设置全选是否是选中状态
 }), dispatch => ({
-    getgoodlist(goods) {//获取购物车商品
-        dispatch(Allaction.add(goods))
-    },
     changenum(gid, uid, gsize, count) {//改变商品数量
         // console.log(gid, uid,gsize,count);
         dispatch({
@@ -46,9 +44,7 @@ class Cart extends Component {
             userinfo: {},
             num: 1,
             isnum: false,
-            isdel: false,
-            isAllcheck: false,
-            path:''
+            isdel: false
         }
     }
     //显示修改数量
@@ -171,7 +167,7 @@ class Cart extends Component {
                     let p = await cartApi.addorder(uid);
                     if (p.data.flag) {
                         // console.log(gids);
-                        Toast.success('添加成功', 2);
+                        Toast.success('结算成功', 2);
                         let p = await cartApi.delgood();
                         if (p.data.flag) {
                             delgoods(gids);
@@ -181,7 +177,7 @@ class Cart extends Component {
                             console.log('删除失败');
                         }
                     } else {
-                        Toast.fail('添加失败', 2)
+                        Toast.fail('结算失败', 2)
                     }
                 }else{
                     Toast.fail('请先去填写自己的收货地址',2)
@@ -194,45 +190,9 @@ class Cart extends Component {
 
     }
     async componentDidMount() {
-        const {location:{pathname,state}} = this.props;
-        if(state){
-            let con =state.split('/')
-            if(pathname=='/main/cart'&&con[1]=='goodsInfo'){
-                let path = state
-                this.setState({
-                    path
-                })
-            }
-        }
-        const { getgoodlist } = this.props;
         this.setState({
             userinfo: getUser()
         })
-        const uid = getUser().uid;
-        // console.log(uid);
-        try {
-            let p = await cartApi.getcart(uid);
-            // console.log(p.data);
-            if (p.data.flag) {
-                // 向redux 存入 购物车商品
-                getgoodlist(p.data.data);
-                // 设置全选是否是选中状态
-                let istrue = true;
-                p.data.data.forEach(item => {
-                    if (!item.ischeck) {
-                        istrue = false;
-                        return
-                    }
-                })
-                this.setState({
-                    isAllcheck: istrue
-                })
-            } else {
-                getgoodlist([]);
-            }
-        } catch (err) {
-            console.log(err);
-        }
     }
 
     goto = (gid)=>{
@@ -240,9 +200,9 @@ class Cart extends Component {
     }
 
     render(login) {
-        const { isnum, isdel, userinfo: { address, uid }, isAllcheck ,path } = this.state;
+        const { isnum, isdel, userinfo: { address, uid } } = this.state;
         // console.log(this.props);
-        const { goods, changenum, totalPrice, totalGoods , history } = this.props;
+        const { goods, changenum, totalPrice, totalGoods,isAllcheck } = this.props;
         // console.log(totalGoods);
         return (
             <div className='cart'>

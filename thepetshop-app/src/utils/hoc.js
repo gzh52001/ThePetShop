@@ -6,6 +6,9 @@ export function withLogin(InnerComponent){//高阶组件 登录拦截
     return class OuterComponent extends InnerComponent{
         constructor(){
             super();
+            if(!this.state){
+                this.state = {}
+            }
             this.state.login = false;
         }
         async componentDidMount(){
