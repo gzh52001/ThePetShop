@@ -3,6 +3,7 @@ const express = require('express')
 const query = require("../../db/mysql")
 const { create, verify } = require("../token")
 const bcryptjs = require("bcryptjs");
+const { createConnection } = require('mysql');
 
 const router = express.Router()
 
@@ -499,15 +500,22 @@ router.get("/searchgoods", async (req, res) => {
 //添加商品(**************************88888)
 router.put("/addgoods",async(req,res)=>{
     let {gtitle,gdesc,gbrandtitle,tid,gprice,gsize,stock,gimgs} = req.body
-    tid = 1
+    console.log(tid)
+    gprice = gprice-0
+    stock = stock-0
     gsize = JSON.stringify(gsize)
-    gimgs = gimgs || "['https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=4226027127,4128085106&fm=26&gp=0.jpg','https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2081481430,3027122704&fm=26&gp=0.jpg']"
+    gimgs = gimgs==null?JSON.stringify(["https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=4226027127,4128085106&fm=26&gp=0.jpg","https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2081481430,3027122704&fm=26&gp=0.jpg"]):JSON.stringify(gimgs)
+    let gxiaoliang = 18686
+    let ghot = 8868
+    let imgdetail = JSON.stringify(["meiqihuaJB"])
+    let gbrandlogo = "https://img2.epetbar.com/nowater/brand_logo/2016-12/22/16/0374086627308463217860adfea301c8.jpg@!water"
     console.log(gtitle,gdesc,gbrandtitle,tid,gprice,gsize,stock,gimgs)
     let inf
     try{
-        let sql = `insert goodsinfo(gtitle,gdesc,gbrandtitle,tid,gprice,gsize,stock,gimgs) values('${gtitle}','${gdesc}','${gbrandtitle}','${tid}','${gprice}','${gsize}','${stock}','${gimgs}')`
+        let sql = `insert into goodsinfo(gtitle,gdesc,gbrandtitle,tid,gprice,stock,gsize,gimgs,gxiaoliang,ghot,imgdetail,gbrandlogo)
+         values('${gtitle}','${gdesc}','${gbrandtitle}','${tid}','${gprice}','${stock}','${gsize}','${gimgs}','${gxiaoliang}','${ghot}','${imgdetail}','${gbrandlogo}')`
+         console.log(sql)
         let p = await query(sql)
-        console.log(p)
         if(p.affectedRows){
             inf = {
                 code:2000,
@@ -536,9 +544,11 @@ router.put("/addgoods",async(req,res)=>{
 //修改商品信息
 router.put("/editgoods",async(req,res)=>{
     let {gid,gtitle,gdesc,gbrandtitle,tid,gprice,gsize,stock,gimgs} = req.body
-    gimgs = gimgs || ['https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=4226027127,4128085106&fm=26&gp=0.jpg',
-    'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2081481430,3027122704&fm=26&gp=0.jpg']
+    gsize = JSON.stringify(gsize)
+    gimgs = JSON.stringify(gimgs)
+    gimgs = gimgs || "['https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=4226027127,4128085106&fm=26&gp=0.jpg','https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2081481430,3027122704&fm=26&gp=0.jpg']"
     let inf
+    console.log(gid,gtitle,gdesc,gbrandtitle,tid,gprice,gsize,stock,gimgs)
     try{
         let sql = `update goodsinfo set gtitle='${gtitle}',gdesc='${gdesc}',gbrandtitle='${gbrandtitle}',tid='${tid}',gprice='${gprice}',gsize='${gsize}',stock='${stock}',gimgs='${gimgs}' where gid='${gid}'`
         let p = await query(sql)
@@ -555,6 +565,7 @@ router.put("/editgoods",async(req,res)=>{
                 message:"修改失败"
             }
         }
+        res.send(inf)
     }catch(err){
         inf = {
             code:err.errno,
@@ -785,25 +796,84 @@ router.get("/getadmin",async(req,res)=>{
         res.send(inf)
     }
 })
-//模糊搜索订单信息(未完成)
-router.get("/searchuser", async (req, res) => {
-    let { type, value } = req.query
+//模糊搜索订单信息
+router.get("/searchorder", async (req, res) => {
+    let { type, value,sort, page, num ,isDeliver} = req.query
+    console.log(type,value,sort,page,num,isDeliver)
+    page = page || 1
+    num = num || 8
+    sort = sort || 1
+    let index = (page - 1) * num
+    if(type == 'gid' && value.length > 3){
+        value = value.substr(0,3)
+    }
     let inf
+    let sql
+    if (sort == 0) {
+        if(isDeliver == 0){
+            sql = `select uid,gid,count,gsize,otime,deliver from goodsorder where deliver='0' and ${type} like '%${value}%' order by otime limit ${index},${num}`
+        }else if(isDeliver == 1){
+            sql = `select uid,gid,count,gsize,otime,deliver from goodsorder where deliver='1' and ${type} like '%${value}%' order by otime limit ${index},${num}`
+        }else{
+            sql = `select uid,gid,count,gsize,otime,deliver from goodsorder where ${type} like '%${value}%' order by otime limit ${index},${num}`
+        }
+    } else {
+        if(isDeliver == 0){
+            sql = `select uid,gid,count,gsize,otime,deliver from goodsorder where deliver='0' and ${type} like '%${value}%' order by otime desc limit ${index},${num}`
+        }else if(isDeliver == 1){
+            sql = `select uid,gid,count,gsize,otime,deliver from goodsorder where deliver='1' and ${type} like '%${value}%' order by otime desc limit ${index},${num}`
+        }else{
+            sql = `select uid,gid,count,gsize,otime,deliver from goodsorder where ${type} like '%${value}%' order by otime desc limit ${index},${num}`
+        }
+    }
     try {
-        let sql = `select uid,gid,otime from goodsorder where ${type} like '%${value}%'`
+        console.log(sql)
         let p = await query(sql)
+        let str = ''
+        p.forEach(item => {
+            str += `${item.gid},`
+        })
+        str = str.substr(0, str.length - 1)
         if (p.length) {
-            inf = {
-                code: 2000,
-                flag: true,
-                message: "查询成功",
-                data: p
+            let result = await query(`select gid,gimgs,gtitle,gprice,gsize,gxiaoliang from goodsinfo where gid in(${str})`)
+            if (result) {
+                result.forEach(item => {
+                    item.gimgs = JSON.parse(item.gimgs).length == 1 ? JSON.parse(item.gimgs)[0] : JSON.parse(item.gimgs)[1]
+                })
+                p.forEach(item1 => {
+                    result.forEach(item2 => {
+                        if (item1.gid == item2.gid) {
+                            item1.gsize = JSON.parse(item2.gsize)[item1.gsize]
+                            item1.gimgs = item2.gimgs
+                            item1.gtitle = item2.gtitle
+                            item1.gprice = item2.gprice
+                            item1.gxiaoliang = item2.gxiaoliang
+                        }
+                    })
+                })
+                let plength = await query(`select uid,gid,count,gsize,otime from goodsorder`)
+                let total = plength.length
+                inf = {
+                    code: 2000,
+                    flag: true,
+                    message: '获取成功',
+                    data: {
+                        total,
+                        p
+                    }
+                }
+            } else {
+                inf = {
+                    code: 3000,
+                    flag: false,
+                    message: '获取失败'
+                }
             }
         } else {
             inf = {
                 code: 3000,
-                flag: true,
-                message: "查询失败"
+                flag: false,
+                message: '获取失败'
             }
         }
         res.send(inf)
@@ -811,7 +881,7 @@ router.get("/searchuser", async (req, res) => {
         inf = {
             code: err.errno,
             flag: false,
-            message: "服务器错误"
+            message: '服务器错误'
         }
         res.send(inf)
     }
