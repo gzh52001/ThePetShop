@@ -6,6 +6,8 @@ import './style.scss';
 import Loginfoot from '@/components/Loginfoot';
 import loginApi from '@/api/login';
 import {setToken,setUser} from '@/utils/auth';
+import {addUser} from '@/store/actions/user';
+import store from '@/store';
 class Login extends Component {
     constructor() {
         super();
@@ -74,6 +76,7 @@ class Login extends Component {
                     setToken(token);
                 }
                 setUser({uid,userface,username,address,email,phonenum,myname});
+                store.dispatch(addUser({uid,userface,username,address,email,phonenum,myname}))
                 Toast.success('登陆成功',2);
                 setTimeout(()=>this.props.history.push('/main/home'),1000)
             }else{

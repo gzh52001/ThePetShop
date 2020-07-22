@@ -7,6 +7,8 @@ import {  Badge } from 'antd-mobile';
 import GoodsApi from '@/api/goods';
 import CartApi from '@/api/shoppingcart'
 import {getToken,getUser} from '@/utils/auth';
+import Allaction from '@/store/actions/cartAction';
+import store from '@/store';
 
 function GoodsInfo(props) {
   const token = getToken()//获取token
@@ -82,7 +84,7 @@ function GoodsInfo(props) {
       goodsDatRef.current = data
     }
     if(goodsDatRef.current.checkBtn){
-      console.log("ok:",goodsDatRef.current);
+      // console.log("ok:",goodsDatRef.current);
       changeStyle({
         btnFont:goodsDatRef.current.checkBtn,
         goodsPrice:goodsDatRef.current.priceDom,
@@ -99,24 +101,30 @@ function GoodsInfo(props) {
   },[onBoxshow1])
 
   const goCart = async ()=>{
-    let {uid} = getUser() //uid
-    let count = goodsDatRef.current.goodsNum //数量
-    let gsize = null; 
-    let gid = ginfoData.gid; //gid
-    let nowprice = goodsDatRef.current.priceDom; //当前规格金额
-    let imgs = ginfoData.gimgs
-    let title = ginfoData.gtitle
-
+    let {uid} = getUser()
+    let count = goodsDatRef.current.goodsNum
+    let gsize = null;
+    let {gid,gtitle,gimgs,gprice} = ginfoData;
+    // console.log(gimgs[1]);
+    if(gimgs.length>1){
+      gimgs = gimgs[1];
+    }else{
+      gimgs = gimgs[0];
+    }
+    // console.log(gimgs);
+    // console.log(ginfoData);
+    // let nowprice = goodsDatRef.current.priceDom
     JSON.parse(ginfoData.gsize).forEach((item,index) => {
       if(goodsDatRef.current.checkBtn==item){
         return gsize = index  //规格
       }
     });
-    console.log("去也",'uid:'+uid,'gid:'+gid,'count:'+count,'gsize:'+gsize,'gprice:'+nowprice,'gimgs:'+imgs,'gtitle:'+title);
+    // console.log("去也",'uid:'+uid,'gid:'+gid,'count:'+count,'gsize:'+gsize);
     try {
       let p = await GoodsApi.goSetGoodsCart(uid,gid,count,gsize)
       if(p.data.flag){
         Toast.success('加入购物车成功!', 1);
+        store.dispatch(Allaction.add2cart({gid,gtitle,gimgs,gprice,ischeck:0,count,gsize}))
       }else{
         Toast.fail('加入购物车失败!!!', 1);
       }
@@ -136,6 +144,7 @@ function GoodsInfo(props) {
               }
             rightContent={[
               <Link key='goCart' className="goCart" to="/main/cart">
+<<<<<<< HEAD
                 {
                   token?
                     cartnums?
@@ -145,6 +154,8 @@ function GoodsInfo(props) {
                     :
                     <i className="iconfont icon-gouwuche" style={{fontSize:'20px'}} />
                   :
+=======
+>>>>>>> jianmin
                   <i className="iconfont icon-gouwuche" style={{fontSize:'20px'}} />
                 }
               </Link>

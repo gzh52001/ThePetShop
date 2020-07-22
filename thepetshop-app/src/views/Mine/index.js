@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import { Toast,Badge } from 'antd-mobile';
+import {connect} from 'react-redux';
 import { Link } from 'react-router-dom';
 import '../../assets/icon/iconfont.css';
 import './mine.scss';
 import { getUser,getToken } from '@/utils/auth';
 import { withLogin } from '@/utils/hoc';
 import GoodsApi from '@/api/goods'
+@connect(({user:{userinfo}})=>({
+    userinfo
+}))
 @withLogin
 class Mine extends Component {
     constructor() {
@@ -109,14 +113,14 @@ class Mine extends Component {
                     id: 2,
                     icon: 'icon-daifahuo1',
                     title: '代发货',
-                    path: '/dfhOrder',
-                    count: 1
+                    path: '/dfhOrder?dfh',
+                    count: 0
                 },
                 {
                     id: 3,
                     icon: 'icon-daifahuo2',
                     title: '待收货',
-                    path: '',
+                    path: '/dfhOrder?dsh',
                     count: 0
                 },
                 {
@@ -160,9 +164,14 @@ class Mine extends Component {
         }
     }
     clickTool(path) {
-        if (path) {
+        const {userinfo} = this.props;
+        // console.log(JSON.stringify(userinfo)==='{}');
+        if(JSON.stringify(userinfo)!=='{}' && path){
             this.props.history.push(path);
-            return
+            return;
+        }else if(JSON.stringify(userinfo)==='{}' && path){
+            Toast.fail('请先登录',2);
+            return;
         }
         Toast.info('该功能开发中', 1);
     }
@@ -178,11 +187,12 @@ class Mine extends Component {
         const { orders } = this.state
         if(token){
             let {uid} = getUser();
-            GoodsApi.getMyOrder(uid).then(res=>{
+            GoodsApi.getMyOrder(uid,0).then(res=>{
+                // console.log(res.data);
                 if(res.data.flag){
                     let num = 0;
                     res.data.data.forEach(item => {
-                        if(item.deliver==0){
+                        if(item.deliver===0){
                             num++
                         }
                     });
@@ -191,6 +201,24 @@ class Mine extends Component {
                         ...this.state,
                         orders:[...orders]
                     })
+                }
+            })
+            GoodsApi.getMyOrder(uid,1).then(res=>{
+                // console.log(res.data);
+                if(res.data.flag){
+                    let num = 0;
+                    res.data.data.forEach(item => {
+                        // console.log( res.data);
+                        if(item.deliver===1){
+                            num++
+                        }
+                    });
+                    orders[2].count = num
+                    this.setState({
+                        ...this.state,
+                        orders:[...orders]
+                    })
+                    // console.log(this.state.orders);
                 }
             })
         }
