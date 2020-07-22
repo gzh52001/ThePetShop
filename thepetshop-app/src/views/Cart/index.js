@@ -202,13 +202,13 @@ class Cart extends Component {
     render(login) {
         const { isnum, isdel, userinfo: { address, uid } } = this.state;
         // console.log(this.props);
-        const { goods, changenum, totalPrice, totalGoods,isAllcheck } = this.props;
+        const { goods, changenum, totalPrice, totalGoods,isAllcheck,history } = this.props;
         // console.log(totalGoods);
         return (
             <div className='cart'>
-                <div className='topBack' onClick={()=>history.push(path)} style={path?{}:{display:'none'}}>
+                {/* <div className='topBack' onClick={()=>history.push(path)} style={path?{}:{display:'none'}}>
                     <i className="iconfont icon-jiantou-copy"></i>
-                </div>
+                </div> */}
                 {/* 购物车顶部 */}
                 <NavBar
                     className='cart-top'

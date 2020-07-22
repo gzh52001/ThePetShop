@@ -1,5 +1,4 @@
 import {ADD_TO_GOOD,CAHNGE_NUM,CAHNGE_CHECK,ALL_CHECK,DEL_GOODS,ADD_TO_CART,CLEAR_CART} from '../actions/cartAction';
-
 const initState = {
     goods:[],//购物车商品
 }
@@ -74,12 +73,6 @@ function reducer(state= initState,action){
                     }
                     return item
                 }): [action.good,...state.goods]
-            }
-        //清空
-        case CLEAR_CART:
-            return {
-                ...state,
-                goods:[]
             }
         default:
             return state;

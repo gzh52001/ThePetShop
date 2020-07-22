@@ -1,6 +1,6 @@
+
 const TOKEN_KEY = 'petshop-app-token';
 const USERINFO_KEY = 'petshop-app-userinfo';
-const ADDRESS_KEY = 'petshop-app-address';
 
 //获取token
 export function getToken(){
