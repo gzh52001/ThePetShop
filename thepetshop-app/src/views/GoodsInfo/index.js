@@ -78,6 +78,7 @@ function GoodsInfo(props) {
   // 加入的商品数据
   const goodsDatRef = useRef('');
   const [cartNow,changeNow] = useState(false);//控制购物车跳转
+
   // 加入购物车
   const setCart = useCallback((data)=>{
     if(data.checkBtn){
@@ -125,6 +126,9 @@ function GoodsInfo(props) {
       if(p.data.flag){
         Toast.success('加入购物车成功!', 1);
         store.dispatch(Allaction.add2cart({gid,gtitle,gimgs,gprice,ischeck:0,count,gsize}))
+        setTimeout(()=>{
+          window.location.reload();
+        },1000)
       }else{
         Toast.fail('加入购物车失败!!!', 1);
       }

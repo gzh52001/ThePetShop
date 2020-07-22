@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { TabBar, Badge } from 'antd-mobile';
 import { connect } from 'react-redux';
+import {getToken,getUser} from '@/utils/auth'
+
+import CartApi from '@/api/shoppingcart'
 import './style.scss';
 
 @withRouter
@@ -48,7 +51,29 @@ class AppFooter extends Component {
     }
 
     componentDidMount() {
+        let token = getToken()
         const { history: { location: { pathname }, listen }} = this.props;
+        if(token){
+            let {uid} = getUser()
+            CartApi.getcart(uid).then(res=>{
+                if(res.data.flag){
+                    const { ftrWrapData } = this.state;
+                    let obj = Object.assign([], ftrWrapData);
+                    obj[2] = {
+                        title: '购物车',
+                        path: '/main/cart',
+                        icon: <Badge text={res.data.data.length} overflowCount={99}><i className="iconfont icon-gouwuche2" style={{ fontSize: '24px' }} /></Badge>,
+                        iconActive: <Badge text={res.data.data.length} overflowCount={99}><i className="iconfont icon-gouwuche2" style={{ fontSize: '24px' }} /></Badge>
+                    }
+                    this.setState({
+                        ftrWrapData: obj
+                    })
+                }
+            })
+        }
+        this.setState({
+            selectedTab:pathname
+        })
         listen((location) => {
             this.setState({
                 selectedTab: location.pathname

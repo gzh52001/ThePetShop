@@ -190,6 +190,7 @@ class Cart extends Component {
 
     }
     async componentDidMount() {
+        console.log(getUser());
         this.setState({
             userinfo: getUser()
         })
@@ -206,9 +207,9 @@ class Cart extends Component {
         // console.log(totalGoods);
         return (
             <div className='cart'>
-                <div className='topBack' onClick={()=>history.push(path)} style={path?{}:{display:'none'}}>
+                {/* <div className='topBack' onClick={()=>history.push(path)} style={path?{}:{display:'none'}}>
                     <i className="iconfont icon-jiantou-copy"></i>
-                </div>
+                </div> */}
                 {/* 购物车顶部 */}
                 <NavBar
                     className='cart-top'
@@ -294,14 +295,23 @@ class Cart extends Component {
                                     </>
                                     :
                                     <div className='nologin'>
-                                        <p>请先<Link to='/main/classify'>选购商品噢</Link></p>
+                                        <div  className="isFont">
+                                            <div className='notLogin'></div>
+                                            购物车空空如也，去<Link to='/main/classify'>选购商品</Link>吧~</div>
                                     </div>
                             }
                         </>   
                         :
                         <>
                             <div className='nologin'>
-                                <p>请先<Link to='/login'>登录</Link></p>
+                                <div className='notLogin-top'>
+                                    登录后可同步账户购物车中的商品
+                                    <span><Link to='/login'>登录</Link></span>
+                                </div>
+                                <div className="isFont">
+                                    <div className='notLogin'></div>
+                                    登录后可同步购物车中商品
+                                </div>
                             </div>
                         </>
                 }

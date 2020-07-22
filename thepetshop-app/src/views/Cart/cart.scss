@@ -228,11 +228,48 @@
         height: 100%;
         padding-bottom:50px;
         font-size: 20px;
-        p{
-            height: 200px;
-            line-height: 200px;
+        .notLogin-top{
+            text-align: center;
+            height: 60px;
+            line-height: 60px;
+            font-size: 14px;
+            color: #333;
+            background-color: #fff;
+            border-radius: 0 0 10px 10px;
+            span{
+                display: inline-block;
+                margin-left: 10px;
+                width: 58px;
+                height: 30px;
+                line-height: 30px;
+                text-align: center;
+                color: #fff;
+                background-image: -webkit-gradient(linear,right top,left top,from(#f2270c),to(#ff4b2b));
+                background-image: -webkit-linear-gradient(right,#f2270c,#ff4b2b);
+                background-image: linear-gradient(270deg,#f2270c,#ff4b2b);
+                box-shadow: 0 3px 6px 0 rgba(255,65,66,.2);
+                border-radius: 15px;
+                a{
+                    color: #fff;
+                }
+            }
+        }
+        .isFont{
+            color: #333;
+            font-size: 16px;
+            height: 300px;
+            line-height: 300px;
             text-align: center;
             margin: 50px auto;
         }
     }
+}
+
+.notLogin{
+    width: 90px;
+    height: 90px;
+    background: url('../../assets/img/cart-bg.png') no-repeat;
+    background-size: 100% 100%;
+    margin: 0 auto;
+    transform: translateY(120px);
 }
