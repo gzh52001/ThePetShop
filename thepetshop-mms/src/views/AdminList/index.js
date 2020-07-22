@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { Card, Col, Row, Avatar } from 'antd';
+import { Card, Col, Row, Avatar, Badge } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 
 import "@/assets/css/AdminList.scss"
@@ -21,9 +21,18 @@ class AdminList extends Component {
         try {
             let p = await AdminListApi.getAdminList();
             if (p.data.flag) {
-                console.log(p.data)
+                console.log(p.data.data)
+                let { username } = JSON.parse(localStorage.getItem("userData"))
+                console.log(p.data.data)
+                let newList = Object.assign([], p.data.data)
+                p.data.data.forEach((item, index) => {
+                    if (item.username == username) {
+                        newList.splice(index, 1)
+                        newList.unshift(item)
+                    }
+                })
                 this.setState({
-                    adminList: p.data.data,
+                    adminList: newList,
                     total: p.data.data.length
                 })
             } else {
@@ -36,13 +45,14 @@ class AdminList extends Component {
     render() {
         const { adminList } = this.state;
         return (
-            <div className="site-card-wrapper">
-                <Row gutter={15}>
+            <div className="site-card-wrapper" style={{ padding: 60 }}>
+                <Row gutter={78}>
                     {
-                        adminList.map(item => (
-                            <Col  key={item.aid} style={{marginBottom: "15px"}}>
-                                <Card title={item.grade === 1 ? "超级管理员" : "管理员"} style={{backgroundColor: "#f0f0f0"}} bordered={true}>
-                                    <Avatar className="adminHeader" size={185} icon={<UserOutlined />} />
+                        adminList.map((item, index) => (
+                            <Col key={item.aid} style={{ marginBottom: "60px" }}>
+                                <Card title={item.grade === 1 ? "超级管理员" : "管理员"} style={{ backgroundColor: "#f0f0f0" }} bordered={true}>
+                                    {index==0?<Badge className="adminStatus" status="processing" text="当前" />:''}
+                                    <Avatar className="adminHeader" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1595437141247&di=80a32e46948fcb36fbea3e3dbd724c68&imgtype=0&src=http%3A%2F%2Fattach.bbs.miui.com%2Fforum%2F201303%2F18%2F233119quyrec7to3ws3rco.jpg" size={185} icon={<UserOutlined />} />
                                     <h2 className="adminName">{item.myname}</h2>
                                 </Card>
                             </Col>
