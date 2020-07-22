@@ -34,9 +34,9 @@ class AddGoods extends Component {
         try {
             let p = await GoodsListApi.addGoods(gtitle,gdesc,gbrandtitle,tid,gprice,gsize,stock,gimgs);
             if (p.data.flag) {
-                message.success('删除成功！');
+                message.success('添加成功！');
             } else {
-                message.error('删除失败！未知错误');
+                message.error('添加失败！未知错误');
             }
         } catch (error) {
             console.log(error);
@@ -64,8 +64,8 @@ class AddGoods extends Component {
         console.log(`selected ${value}`);
     }
     onFinish = (values) => {
-        this.addGoods(values.gtitle,values.gdesc,values.gbrandtitle,null,values.gprice,values.gsize,values.stock,null)
-        console.log('Received values of form: ');
+        this.addGoods(values.gtitle,values.gdesc,values.gbrandtitle,values.tid,values.gprice,values.gsize,values.stock,null)
+        console.log('Received values of form: ',values);
     };
     render() {
         const { Option } = Select;
@@ -204,7 +204,8 @@ class AddGoods extends Component {
                     name="stock"
                     label="库存"
                     hasFeedback
-                    rules={[{ required: true, message: '请输入库存！' },
+                    rules={[
+                    
                     {
                         message: '库存只能输入数字！',
                         pattern: /^[0-9]+$/
@@ -213,9 +214,9 @@ class AddGoods extends Component {
                     <Input allowClear={true} />
                 </Form.Item>
                 <Form.Item
-                    name="gimgs"
+                    // name="gimgs"
                     label="商品图片"
-                    rules={[{ required: true, message: 'Please input website!' }]}
+                    // rules={[{ required: true, message: 'Please input website!' }]}
                 >
                     <div className="clearfix">
                         <Upload
