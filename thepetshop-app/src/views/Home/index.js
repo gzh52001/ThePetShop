@@ -196,7 +196,7 @@ class Home extends Component {
                 istop.style.cssText = `position:sticky`;
             }
             // console.log(home.scrollTop);
-            if(istops>=domHeight){
+            if(istops>=domHeight&&istops>=1800){
                 if(classifyFD==null){
                     GoodsApi.allGoods(classifyIdx,classifyPage+1,8).then(res=>{
                         if(res.data.flag){
@@ -211,7 +211,7 @@ class Home extends Component {
                                 classifyFD:null
                             })
                         }else{
-                            Toast.offline('已经到底了 !!!', 3);
+                            Toast.offline('已经到底了 !!!', 1);
                         }
                     });
                 }

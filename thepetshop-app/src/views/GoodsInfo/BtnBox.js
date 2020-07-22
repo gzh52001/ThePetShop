@@ -77,8 +77,8 @@ class BtnBox extends Component {
                                 gdata?
                                 checkBtn?
                                     (parseFloat(checkBtn)>0)?
-                                        (parseFloat(checkBtn)*gdata.gprice)==0?
-                                            gdata.gprice:
+                                        (parseFloat(checkBtn))>100?
+                                            (parseFloat(checkBtn)*gdata.gprice/1000):
                                             (parseFloat(checkBtn)*gdata.gprice)
                                         :
                                         gdata.gprice

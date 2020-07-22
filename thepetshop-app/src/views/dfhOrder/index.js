@@ -55,7 +55,7 @@ function MyOrder (props){
                                 </div>
                             </div>
                             <div className='order-btm'>
-                                <h2 className='odr-time'>日期：{item.otime}</h2>
+                                <h2 className='odr-time'>日期：{item.otime.replace(/\//g,".")}</h2>
                                 {/* [0].replace(/\//g,".") */}
                                 <div className='order-btn'>
                                     <span className="goGoodsInfo" onClick={goto.bind(null,item.gid)}>查看商品</span>
