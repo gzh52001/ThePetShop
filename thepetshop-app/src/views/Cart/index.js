@@ -26,8 +26,8 @@ const AgreeItem = Checkbox.AgreeItem;
             gsize
         })
     },
-    changecheck(gid, check) {//修改选中状态
-        dispatch(Allaction.ischeck(gid, check))
+    changecheck(cid, check) {//修改选中状态
+        dispatch(Allaction.ischeck(cid, check))
     },
     goodsallCheck(check) {//全选
         dispatch(Allaction.allCheck(check))
@@ -72,17 +72,17 @@ class Cart extends Component {
         }
     }
     // 修改选中
-    check = async (gid, gsize, e) => {
+    check = async (cid, e) => {
         const { changecheck, goods } = this.props;
-        const { userinfo: { uid } } = this.state;
+        // const { userinfo: { uid } } = this.state;
         // console.log(gid,e);
         try {
             const num = e.target.checked ? 1 : 0;
             // console.log(gid, gsize);
             //修改后台商品选中状态
-            let p = await cartApi.checkcart(uid, gid, gsize, e.target.checked);
+            let p = await cartApi.checkcart(cid, e.target.checked);
             if (p.data.flag) {
-                changecheck(gid, num);
+                changecheck(cid, num);
                 let istrue = true;
                 goods.forEach(item => {
                     if (!item.ischeck) {
@@ -190,7 +190,6 @@ class Cart extends Component {
 
     }
     async componentDidMount() {
-        console.log(getUser());
         this.setState({
             userinfo: getUser()
         })
@@ -203,7 +202,8 @@ class Cart extends Component {
     render(login) {
         const { isnum, isdel, userinfo: { address, uid } } = this.state;
         // console.log(this.props);
-        const { goods, changenum, totalPrice, totalGoods,isAllcheck } = this.props;
+        const { goods, changenum, totalPrice, totalGoods,isAllcheck,history } = this.props;
+        // console.log(goods)
         // console.log(totalGoods);
         return (
             <div className='cart'>
@@ -233,9 +233,9 @@ class Cart extends Component {
                                             </NoticeBar>
                                             {
                                                 goods.map(item => (
-                                                    <dl key={item.gid}>
+                                                    <dl key={item.cid}>
                                                         <dd>
-                                                            <CheckboxItem checked={item.ischeck} onChange={this.check.bind(this, item.gid, item.gsize)} />
+                                                            <CheckboxItem checked={item.ischeck} onChange={this.check.bind(this, item.cid)} />
                                                             <img onClick={this.goto.bind(null,item.gid)} src={item.gimgs}></img>
                                                         </dd>
                                                         <dt>

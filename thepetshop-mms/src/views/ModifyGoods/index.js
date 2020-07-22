@@ -12,9 +12,12 @@ import {
     Row,
     Col,
     List,
-    Avatar
+    Avatar,
+    Spin,
+    Affix
 } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import InfiniteScroll from 'react-infinite-scroller';
 
 import "@/assets/css/GoodsList.scss"
 
@@ -25,19 +28,39 @@ class ModifyGoods extends Component {
         super();
         this.state = {
             goodsData: {},
+            page: 1,
             goodsDetailed: false,
             previewVisible: false,
             previewImage: '',
             previewTitle: '',
             fileList: [],
             searchText: "gtitle",
-            searchGoodsList: []
+            searchGoodsList: [],
+            total: 0,
+            searchValue: [],
+            tabsKey: "1",
+            loading: false,
+            hasMore: true,
+        }
+        this.loadMore = this.debounce(this.loadMore, 3000)
+    }
+    editGoods = async (gid,gtitle,gdesc,gbrandtitle,tid,gprice,gsize,stock,gimgs) => {     //删除商品
+        try {
+            let p = await GoodsListApi.editGoods(gid,gtitle,gdesc,gbrandtitle,tid,gprice,gsize,stock,gimgs);
+            if (p.data.flag) {
+                message.success('修改成功！');
+            } else {
+                message.error('修改失败！未知错误');
+            }
+        } catch (error) {
+            console.log(error);
         }
     }
     getGoodsDetailed = async (gid) => {     //获取商品详情
         try {
             let p = await GoodsListApi.getGoodsDetailed(gid);
             if (p.data.flag) {
+                console.log(p.data.data)
                 let imgs = JSON.parse(p.data.data[0].gimgs);
                 const { fileList } = this.state;
                 imgs.map((item, index) => {
@@ -66,10 +89,23 @@ class ModifyGoods extends Component {
         try {
             let p = await GoodsListApi.searchAllGoods(type, value, page, num);
             if (p.data.flag) {
-                this.setState({
-                    searchGoodsList: p.data.data.p2
-                })
-                console.log(p.data.data.p2)
+                if (this.state.searchGoodsList.length >= 1) {
+                    const { searchGoodsList } = this.state;
+                    p.data.data.p2.forEach(item => {
+                        searchGoodsList.push(item)
+                    })
+                    this.setState({
+                        searchGoodsList,
+                        loading: false,
+                    })
+                    console.log("增加了", this.state.searchGoodsList)
+                } else {
+                    this.setState({
+                        searchGoodsList: p.data.data.p2,
+                        total: p.data.data.total
+                    })
+                    console.log("没变化", this.state.searchGoodsList)
+                }
             } else {
                 message.error('查找的内容不存在！');
             }
@@ -78,7 +114,14 @@ class ModifyGoods extends Component {
         }
     }
     searchAllGoodsList = (value) => {
-
+        this.setState({
+            searchValue: value,
+            total: 0,
+            loading: false,
+            hasMore: true,
+            searchGoodsList: [],
+            page: 1,
+        })
         this.searchAllGoods(this.state.searchText, value, 1, 10)
     }
     searchGoods = (value) => {
@@ -96,7 +139,11 @@ class ModifyGoods extends Component {
             previewTitle: file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
         });
     };
-
+    tabsOnClick = (key) => {
+        this.setState({
+            tabsKey: key
+        })
+    }
     handleChange = ({ fileList }) => this.setState({ fileList });
 
     tidChange = (value) => {
@@ -106,12 +153,81 @@ class ModifyGoods extends Component {
         console.log(`selected ${value}`);
     }
     onFinish = (values) => {
-        console.log('Received values of form: ', values);
+
+        switch (values.tid) {
+            case "狗狗主粮":
+                values.tid = 1
+                break;
+            case "狗狗零食":
+                values.tid = 2
+                break;
+            case "狗狗窝垫":
+                values.tid = 3
+                break;
+            case "狗狗玩具":
+                values.tid = 4
+                break;
+            case "狗狗清洁":
+                values.tid = 5
+                break;
+            case "狗狗保健":
+                values.tid = 6
+                break;
+            case "狗狗护理":
+                values.tid = 7
+                break;
+            case "狗狗生活":
+                values.tid = 8
+                break;
+            case "狗狗牵引":
+                values.tid = 9
+                break;
+            case "出游洗澡":
+                values.tid = 10
+                break;
+            case "狗狗服饰":
+                values.tid = 11
+                break;
+            case "狗狗美容":
+                values.tid = 12
+                break;
+            default:
+                break;
+        }
+        this.editGoods(values.gid,values.gtitle,values.gdesc,values.gbrandtitle,values.tid,values.gprice,values.gsize,values.stock,values.gimgs)
+        console.log(values);
     };
     searchText = (value) => {
         this.setState({
             searchText: value
         })
+    }
+    debounce(fn, ms = 500) {
+        let timeoutId
+        return function () {
+            clearTimeout(timeoutId)
+            timeoutId = setTimeout(() => {
+                fn.apply(this, arguments)
+            }, ms)
+        }
+    }
+    loadMore = () => {
+        console.log(this.state.total)
+        if (this.state.searchGoodsList.length >= this.state.total) {
+            message.warning('没有更多了');
+            this.setState({
+                hasMore: false,
+                loading: false,
+            });
+            return;
+        } else {
+            let { page } = this.state;
+            page++
+            this.setState({
+                page
+            })
+            this.searchAllGoods(this.state.searchText, this.state.searchValue, this.state.page, 10)
+        }
     }
     render() {
         const { goodsData } = this.state;
@@ -123,7 +239,7 @@ class ModifyGoods extends Component {
                 <div className="ant-upload-text">上传图片</div>
             </div>
         );
-        const {searchGoodsList} = this.state;
+        const { searchGoodsList } = this.state;
         const { Search } = Input;
         const { TabPane } = Tabs;
         const formItemLayout = {
@@ -369,7 +485,7 @@ class ModifyGoods extends Component {
                         </>
                         :
                         <>
-                            <Tabs defaultActiveKey="1" centered>
+                            <Tabs defaultActiveKey={this.state.tabsKey} centered onTabClick={this.tabsOnClick}>
                                 <TabPane tab="精确搜索" key="1">
                                     <Search className="searchInput" placeholder="请输入商品ID" onSearch={value => this.searchGoods(value)} enterButton />
                                     <p style={{ position: "absolute", left: "50%", transform: "translateX(-50%)", top: "150px" }}>通过ID查找要修改的商品信息</p>
@@ -382,25 +498,54 @@ class ModifyGoods extends Component {
                                                 <Option value="gprice">价格</Option>
                                                 <Option value="gxiaoliang">销量</Option>
                                             </Select>
-                                            <Search className="searchInput2" placeholder="请输入关键字" onSearch={value => this.searchAllGoodsList(value)} enterButton />
+                                            <Search className="searchInput2" defaultValue={this.state.searchValue} placeholder="请输入关键字" onSearch={value => this.searchAllGoodsList(value)} enterButton />
                                         </Col>
                                     </Row>
-                                    <Row className="searchShowBox">
-                                        <List
-                                            style={{ width: "100%" }}
-                                            itemLayout="horizontal"
-                                            dataSource={searchGoodsList}
-                                            renderItem={item => (
-                                                <List.Item style={{paddingLeft:"10px"}}>
-                                                    <List.Item.Meta
-                                                        avatar={<Avatar size={50} shape="square" src={item.gimgs} />}
-                                                        title={<a href="https://ant.design">{item.gtitle}</a>}
-                                                        description={"￥" + item.gprice + `销量：${item.gxiaoliang}`}
-                                                    />
-                                                </List.Item>
-                                            )}
-                                        />
-                                    </Row>
+                                    {
+                                        searchGoodsList.length >= 1 ?
+                                            <>
+                                                <div className="searchTitle"><p><span>{`当前已显示 ${this.state.searchGoodsList.length} 条`}</span>{`共找到 ${this.state.total} 条数据`}</p></div>
+                                                <Row className="searchShowBox" >
+                                                    <InfiniteScroll
+                                                        style={{ position: "relative" }}
+                                                        initialLoad={false}
+                                                        pageStart={0}
+                                                        loadMore={this.loadMore}
+                                                        hasMore={!this.state.loading && this.state.hasMore}
+                                                        useWindow={false}
+                                                    >
+                                                        <List
+                                                            style={{ width: "730px", paddingTop: "25px" }}
+                                                            itemLayout="horizontal"
+                                                            dataSource={searchGoodsList}
+                                                            renderItem={item => (
+                                                                <List.Item style={{ padding: "10px 20px 10px 10px", cursor: "pointer " }} onClick={() => this.searchGoods(item.gid)}>
+                                                                    <List.Item.Meta
+                                                                        avatar={<Avatar size={50} shape="square" src={item.gimgs} />}
+                                                                        title={item.gtitle}
+                                                                        description={"价格：￥" + item.gprice + "\xa0\xa0\xa0\xa0\xa0" + `销量：${item.gxiaoliang}`}
+                                                                    />
+                                                                </List.Item>
+                                                            )}
+
+                                                        >
+                                                            {
+                                                                !this.state.loading && this.state.hasMore && this.state.searchGoodsList.length >= 10?
+                                                                    <List.Item style={{ height: "40px" }}>
+                                                                        <div className="demo-loading-container">
+                                                                            <Spin style={{ paddingTop: "10px" }} />
+                                                                        </div>
+                                                                    </List.Item> :
+                                                                    <></>
+                                                            }
+                                                        </List>
+                                                    </InfiniteScroll>
+                                                </Row>
+                                            </>
+                                            : <></>
+
+                                    }
+
                                     <p style={{ position: "absolute", left: "50%", transform: "translateX(-50%)", top: "150px" }}>通过关键字查找需要修改的商品信息</p>
                                 </TabPane>
                             </Tabs>

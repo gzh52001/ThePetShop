@@ -13,14 +13,12 @@ export default {
         })
     },
     //修改选中状态
-    checkcart(uid,gid,gsize,check) {
+    checkcart(cid,check) {
         return request({
             method: 'put',
             url: '/goods/checkcart',
             data: {
-                uid,
-                gid,
-                gsize,
+                cid,
                 check
             }
         })

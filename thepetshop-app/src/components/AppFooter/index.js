@@ -79,6 +79,27 @@ class AppFooter extends Component {
                 selectedTab: location.pathname
             })
         })
+        if (getToken()) {
+            let { uid } = getUser()
+            CartApi.getcart(uid).then(res => {
+                if (res.data.flag) {
+                    const { ftrWrapData } = this.state;
+                    let obj = Object.assign([], ftrWrapData);
+                    obj[2] = {
+                        title: '购物车',
+                        path: '/main/cart',
+                        icon: <Badge text={res.data.data.length} overflowCount={99}><i className="iconfont icon-gouwuche2" style={{ fontSize: '24px' }} /></Badge>,
+                        iconActive: <Badge text={res.data.data.length} overflowCount={99}><i className="iconfont icon-gouwuche2" style={{ fontSize: '24px' }} /></Badge>
+                    }
+                    this.setState({
+                        ftrWrapData: obj
+                    })
+                }
+            })
+        }
+        this.setState({
+            selectedTab: pathname
+        })
     }
     shouldComponentUpdate({ totalgoods }) {
         // console.log('上一个', this.props.totalgoods);
@@ -95,7 +116,7 @@ class AppFooter extends Component {
             this.setState({
                 ftrWrapData: obj
             })
-        } 
+        }
         return true;
     }
     render() {

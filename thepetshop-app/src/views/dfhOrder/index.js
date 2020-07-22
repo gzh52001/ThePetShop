@@ -16,17 +16,19 @@ function MyOrder (props){
             let num = 1;
             if(props.location.search==="?dfh"){
                 num = 0
+            }else if(props.location.search==="?dsh"){
+                num = 1
             }
-            GoodsApi.getMyOrder(uid).then(res=>{
+            GoodsApi.getMyOrder(uid,num).then(res=>{
                 if(res.data.flag){
-                    let arr = res.data.data.filter(item=>item.deliver===num)
+                    let arr = res.data.data
                     arr.forEach(item => {
                         let time = item.otime;
                         let d = new Date(time)
                         item.otime = d.toLocaleString()
                         // console.log(item.otime);
                     });
-                    setOrderData(arr)
+                    setOrderData(res.data.data)
                 }
             })
         }

@@ -151,7 +151,7 @@
                 font-size: 18px;
                 line-height: 40px;
             }
-            .ant-select-selection-item{
+            .ant-select-selection-item {
                 text-align: center;
             }
             .ant-btn-primary {
@@ -167,7 +167,7 @@
             }
         }
     }
-    .searchInputBox{
+    .searchInputBox {
         position: absolute;
         min-width: 800px;
         top: 100px;
@@ -183,7 +183,7 @@
                 font-size: 18px;
                 line-height: 40px;
             }
-                
+
             .ant-btn-primary {
                 width: 60px;
                 height: 40px;
@@ -215,7 +215,7 @@
             }
         }
     }
-    .searchShowBox{
+    .searchShowBox {
         position: absolute;
         width: 750px;
         max-height: 500px;
@@ -223,8 +223,42 @@
         top: 140px;
         left: 50%;
         transform: translateX(-50%);
-        z-index: 999;
+        z-index: 998;
         background-color: #fff;
         border: 1px solid #d9d9d9;
     }
+    .searchTitle {
+        position: absolute;
+        left: 50%;
+        top: 140px;
+        z-index: 999;
+        transform: translateX(-50%);
+        width: 750px;
+        height: 25px;
+        > p {
+            width: 733px;
+            height: 25px;
+            padding: 0 20px;
+            text-align: right;
+            background-color: #fff;
+            border: 1px solid #d9d9d9;
+            border-right: none;
+            span {
+                display: block;
+                float: left;
+                text-align: left;
+            }
+        }
+    }
+}
+.demo-infinite-container {
+    width: 100%;
+}
+.demo-loading-container {
+    position: absolute;
+    border-top: 1px solid #d9d9d9;
+    height: 40px;
+    bottom: 0px;
+    width: 100%;
+    text-align: center;
 }

@@ -1,3 +1,4 @@
+
 .myorder-wrap{
     background: #f5f5f5;
     .top{
@@ -5,6 +6,7 @@
         top: 0;
         width: 100%;
         background: #fff;
+        z-index: 99;
     }
     .noGoods{
         width: 100%;
@@ -12,6 +14,7 @@
         text-align: center;
         padding-top: 100px;
         color: #575757;
+        overflow-y: auto;
         .noGoodsBg{
             width: 180px;
             height: 180px;
@@ -20,8 +23,19 @@
             margin: 20px auto;
         }
     }
+    
+    ::-webkit-scrollbar{  
+        display: none!important;
+        width: 0px;  
+        height: 0px;  
+    }
     .myorder-goods{
         padding: 45px 0 20px;
+        height: 100%;
+        width: 100%;
+        overflow-y:scroll;
+        height:calc(100vh);
+      
         .goods-item{
             width: 100%;
             height: 150px;
@@ -62,13 +76,12 @@
                 }
                 .goods-title{
                     font-size: 15px;
-                    padding-left: 6px;
-                    width: 180px;
+                    width: 160px;
                     position: relative;
                     .goods-size{
                         position: absolute;
                         font-size: 12px;
-                        left: 6px;
+                        left: 0px;
                         bottom: -20px;
                         color: orange;
                     }
@@ -85,6 +98,8 @@
                     .goods-price{
                         font-size: 12px;
                         font-weight: 300;
+                        position: absolute;
+                        right: 0;
                         b{
                             font-size: 18px;
                         }

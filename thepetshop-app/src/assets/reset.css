@@ -60,3 +60,9 @@ input{
     transform-origin: 50% 100%;
     transform: scaleY(0.5); 
 }
+::-webkit-scrollbar  
+{  
+	display: none!important;
+    width: 0px;  
+    height: 0px;  
+}

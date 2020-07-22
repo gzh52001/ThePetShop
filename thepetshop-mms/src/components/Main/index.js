@@ -93,7 +93,7 @@ class Main extends Component {
     checkAdmin = () => {
         let userData = localStorage.getItem("userData");
         let { grade } = JSON.parse(userData);
-        if(grade===1){
+        if (grade === 1) {
             return true
         }
         return false
@@ -127,6 +127,7 @@ class Main extends Component {
         const goodsRouter = contentRouter.slice(6, 9);
         const orderRouter = contentRouter.slice(9, 12);
         const { defaultPath } = this.state;
+        console.log(this.props.history.location.pathname)
         const { SubMenu } = Menu;
         const { Header, Content, Sider } = Layout;
         const menu = (
@@ -184,11 +185,7 @@ class Main extends Component {
                                     }
                                 </SubMenu>
                                 <SubMenu key="sub2" icon={<TeamOutlined />} title="用户管理">
-                                    {
-                                        userRouter.map(item => (
-                                            <Menu.Item key={item.path}>{item.tltle}</Menu.Item>
-                                        ))
-                                    }
+                                            <Menu.Item key="/user/userList">用户列表</Menu.Item>
                                 </SubMenu>
                                 <SubMenu key="sub3" icon={<ShopOutlined />} title="商品管理">
                                     {
@@ -204,9 +201,9 @@ class Main extends Component {
                                         ))
                                     }
                                 </SubMenu>
-                                <SubMenu key="sub5" icon={<BarChartOutlined />} title="统计">
+                                {/* <SubMenu key="sub5" icon={<BarChartOutlined />} title="统计">
 
-                                </SubMenu>
+                                </SubMenu> */}
                             </Menu>
                         </Sider>
                         <Layout style={{ minWidth: "1000px", backgroundColor: "rgb(255, 255, 255)" }}>

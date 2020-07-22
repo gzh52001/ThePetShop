@@ -24,10 +24,10 @@ export function changenum(gid,count){
 }
 
 // 修改选中状态
-export function ischeck(gid,check){
+export function ischeck(cid,check){
     return {
         type:CAHNGE_CHECK,
-        gid,
+        cid,
         check
     }
 }

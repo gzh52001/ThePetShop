@@ -18,7 +18,8 @@ class OrderForm extends Component {
             changeList: {},
             delSelectID: [],
             modifyVisible: false,
-            isdeliver:1
+            isdeliver:1,
+            selectType:"gid"
         }
     }
     componentDidMount() {
@@ -65,6 +66,26 @@ class OrderForm extends Component {
             }
         } catch (error) {
             console.log(error);
+        }
+    }
+
+
+    selectOrderList = async(type,value) =>{         //模糊搜索订单
+        const {page,pageSize,isdeliver} = this.state
+        try{
+            let p = await OrderListApi.selectOrder(type,value,999,page,pageSize,isdeliver)
+            if(p.data.flag){
+                this.setState({
+                    goodsList:p.data.data.p,
+                    totalList:p.data.data.total,
+                    serchVisible: true
+                })
+                message.success('查找成功！');
+            }else{
+                message.success('查找失败！');
+            }
+        }catch(err){
+            message.success('查找的内容不存在！');
         }
     }
 
@@ -169,6 +190,20 @@ class OrderForm extends Component {
     onFinishFailed = errorInfo => {
         console.log("修改");
     };
+
+    selectChange=(value)=>{ //获取搜索type值
+        this.setState({
+            selectType:value
+        })
+    }
+    selectorderList=(value)=>{   //获取搜索value值
+        const {selectType} = this.state
+        this.setState({
+            serchVisible: false
+        })
+        this.selectOrderList(selectType,value)
+    }
+
     render() {
         const { Search } = Input;
         const { Option } = Select;
@@ -266,15 +301,15 @@ class OrderForm extends Component {
                             : <></>
                     }
                     <Select className="selectChange" defaultValue="商品名" style={{ width: 100 }} onChange={this.selectChange}>
-                        <Option value="gtitle">商品名</Option>
-                        <Option value="gid">ID</Option>
+                        <Option value="gid">订单号</Option>
+                        <Option value="uid">用户号</Option>
                     </Select>
                     <Search
                         className="formSearch"
                         placeholder="请输入关键字"
                         enterButton="查找"
                         size="large"
-                        onSearch={value => console.log(value)}
+                        onSearch={this.selectorderList}
                     />
                 </div>
                 {/* {console.log(this.state.totalList)} */}
