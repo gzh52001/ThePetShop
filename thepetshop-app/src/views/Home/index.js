@@ -253,7 +253,7 @@ class Home extends Component {
                         <i className="iconfont icon-sousuo1"></i>
                         请输入搜索关键字
                     </h1>
-                    <Link className="goCart" to="/cart">
+                    <Link className="goCart" to="/main/cart">
                         <i className="iconfont icon-gouwuche" />
                     </Link>
                 </div>
@@ -267,7 +267,7 @@ class Home extends Component {
                         {this.state.data.map(val => (
                             <a
                                 key={val}
-                                href="http://www.alipay.com"
+                                href=""
                                 style={{ display: 'inline-block', width: '100%', height: this.state.imgHeight }}
                             >
                                 <img

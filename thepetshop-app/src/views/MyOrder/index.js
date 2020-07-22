@@ -14,12 +14,15 @@ function MyOrder (props){
             let {uid} = getUser();
             GoodsApi.getMyOrder(uid).then(res=>{
                 if(res.data.flag){
-                    // let nowtime = res.data.data[0].otime
-                    // let d = new Date()
-                    // d.setTime(nowtime)
-                    // console.log(d);
-                    // console.log(d.getFullYear());
-                    setOrderData(res.data.data)
+                    let arr = res.data.data.filter(item=>item.deliver==0)
+                    arr.forEach(item => {
+                        let time = item.otime;
+                        let d = new Date(time)
+                        item.otime = d.toLocaleString()
+                        // console.log(item.deliver);
+                    });
+                    setOrderData(arr)
+                    // setOrderData(res.data.data)
                 }
             })
         }
@@ -54,7 +57,7 @@ function MyOrder (props){
                                 </div>
                             </div>
                             <div className='order-btm'>
-                                <h2 className='odr-time'>日期：2020.2.5</h2>
+                                <h2 className='odr-time'>日期：{item.otime}</h2>
                                 <div className='order-btn'>
                                     <span className="goGoodsInfo" onClick={goto.bind(null,item.gid)}>查看商品</span>
                                     <span className="order-isok" style={

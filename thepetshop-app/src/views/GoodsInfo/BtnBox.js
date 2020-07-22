@@ -76,7 +76,12 @@ class BtnBox extends Component {
                             <h3 className="goods-price">￥<span>{
                                 gdata?
                                 checkBtn?
-                                    (parseInt(checkBtn)=='NaN'?gdata.gprice:parseInt(checkBtn)*gdata.gprice)
+                                    (parseFloat(checkBtn)>0)?
+                                        (parseFloat(checkBtn)*gdata.gprice)==0?
+                                            gdata.gprice:
+                                            (parseFloat(checkBtn)*gdata.gprice)
+                                        :
+                                        gdata.gprice
                                     :
                                     gdata.gprice
                                 :

@@ -18,8 +18,8 @@ function MyOrder (props){
                     arr.forEach(item => {
                         let time = item.otime;
                         let d = new Date(time)
-                        item.otime = d.toLocaleString().split(' ')
-                        console.log(item.otime);
+                        item.otime = d.toLocaleString()
+                        // console.log(item.otime);
                     });
                     setOrderData(arr)
                 }
@@ -55,7 +55,8 @@ function MyOrder (props){
                                 </div>
                             </div>
                             <div className='order-btm'>
-                                <h2 className='odr-time'>日期：{item.otime[0].replace(/\//g,".")}</h2>
+                                <h2 className='odr-time'>日期：{item.otime}</h2>
+                                {/* [0].replace(/\//g,".") */}
                                 <div className='order-btn'>
                                     <span className="goGoodsInfo" onClick={goto.bind(null,item.gid)}>查看商品</span>
                                 </div>

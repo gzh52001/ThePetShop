@@ -3,7 +3,9 @@ import { NavBar, Icon, Tabs, Carousel, WingBlank,Toast,Card, WhiteSpace } from '
 import {Link,} from 'react-router-dom';
 import './style.scss'
 import BtnBox from './BtnBox'
-import GoodsApi from '@/api/goods'
+import {  Badge } from 'antd-mobile';
+import GoodsApi from '@/api/goods';
+import CartApi from '@/api/shoppingcart'
 import {getToken,getUser} from '@/utils/auth';
 
 function GoodsInfo(props) {
@@ -30,6 +32,18 @@ function GoodsInfo(props) {
           }
         })
   },[props])
+
+  const [cartnums,setcarNums] = useState(0)
+  useEffect(()=>{
+    if(token){
+      let {uid} = getUser()
+      CartApi.getcart(uid).then(res=>{
+        if(res.data.flag){
+          setcarNums(res.data.data.length)
+        }
+      })
+    }
+  },[])
 
   // 收藏
   const [wishlist,setWishlist] = useState(false);
@@ -85,17 +99,20 @@ function GoodsInfo(props) {
   },[onBoxshow1])
 
   const goCart = async ()=>{
-    let {uid} = getUser()
-    let count = goodsDatRef.current.goodsNum
-    let gsize = null;
-    let gid = ginfoData.gid;
-    let nowprice = goodsDatRef.current.priceDom
+    let {uid} = getUser() //uid
+    let count = goodsDatRef.current.goodsNum //数量
+    let gsize = null; 
+    let gid = ginfoData.gid; //gid
+    let nowprice = goodsDatRef.current.priceDom; //当前规格金额
+    let imgs = ginfoData.gimgs
+    let title = ginfoData.gtitle
+
     JSON.parse(ginfoData.gsize).forEach((item,index) => {
       if(goodsDatRef.current.checkBtn==item){
-        return gsize = index
+        return gsize = index  //规格
       }
     });
-    console.log("去也",'uid:'+uid,'gid:'+gid,'count:'+count,'gsize:'+gsize);
+    console.log("去也",'uid:'+uid,'gid:'+gid,'count:'+count,'gsize:'+gsize,'gprice:'+nowprice,'gimgs:'+imgs,'gtitle:'+title);
     try {
       let p = await GoodsApi.goSetGoodsCart(uid,gid,count,gsize)
       if(p.data.flag){
@@ -115,11 +132,21 @@ function GoodsInfo(props) {
             mode="light"
             icon={<Icon type="left" />}
             onLeftClick={() =>
-                props.history.push(isRouter)
+                props.history.push(isRouter?isRouter:'/')
               }
             rightContent={[
               <Link key='goCart' className="goCart" to="/main/cart">
+                {
+                  token?
+                    cartnums?
+                    <Badge dot>
+                      <i className="iconfont icon-gouwuche" style={{fontSize:'20px'}} />
+                    </Badge>
+                    :
+                    <i className="iconfont icon-gouwuche" style={{fontSize:'20px'}} />
+                  :
                   <i className="iconfont icon-gouwuche" style={{fontSize:'20px'}} />
+                }
               </Link>
               // <Icon key="1" type="ellipsis" />,
             ]}
