@@ -1,10 +1,11 @@
 import React,{useState,useEffect,useCallback} from 'react';
+import {connect} from 'react-redux';
 import Navbar from '@/components/Navbar';
 import {getToken,getUser} from '@/utils/auth';
 import GoodsApi from '@/api/goods';
 import './style.scss'
 
-const token = getToken()
+const token = getToken();
 function MyOrder (props){
 
     const [orderData,setOrderData] = useState('');
@@ -12,21 +13,25 @@ function MyOrder (props){
     useEffect(()=>{
         if(token){
             let {uid} = getUser();
+            let num = 1;
+            if(props.location.search==="?dfh"){
+                num = 0
+            }
             GoodsApi.getMyOrder(uid).then(res=>{
                 if(res.data.flag){
-                    let arr = res.data.data.filter(item=>item.deliver==0)
+                    let arr = res.data.data.filter(item=>item.deliver===num)
                     arr.forEach(item => {
                         let time = item.otime;
                         let d = new Date(time)
                         item.otime = d.toLocaleString().split(' ')
-                        console.log(item.otime);
+                        // console.log(item.otime);
                     });
                     setOrderData(arr)
                 }
             })
         }
     },[])
-
+    // console.log(props);
     const goto = useCallback((gid)=>{
         props.history.push('/goodsInfo/'+gid)
     },[])
@@ -74,4 +79,4 @@ function MyOrder (props){
     )
 }
 
-export default MyOrder
+export default connect(({user:{userinfo}})=>({userinfo}))(MyOrder)

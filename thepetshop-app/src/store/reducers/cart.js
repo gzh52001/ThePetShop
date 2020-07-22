@@ -1,8 +1,7 @@
-import {ADD_TO_GOOD,CAHNGE_NUM,CAHNGE_CHECK,ALL_CHECK,DEL_GOODS} from '../actions/cartAction';
+import {ADD_TO_GOOD,CAHNGE_NUM,CAHNGE_CHECK,ALL_CHECK,DEL_GOODS,ADD_TO_CART,CLEAR_CART} from '../actions/cartAction';
 
 const initState = {
     goods:[],//购物车商品
-    goodsnum:0//某一商品得数量
 }
 
 
@@ -62,6 +61,25 @@ function reducer(state= initState,action){
             return {
                 ...state,
                 goods:arr
+            }
+        //加入购物车
+        case ADD_TO_CART:
+            // console.log(1111);
+            // console.log(state.goods.some(item=>item.gid === action.good.gid));
+            return {
+                ...state,
+                goods:state.goods.some(item=>item.gid === action.good.gid) ? state.goods.map(item=>{
+                    if(item.gid===action.good.gid){
+                        item.count += action.good.count
+                    }
+                    return item
+                }): [action.good,...state.goods]
+            }
+        //清空
+        case CLEAR_CART:
+            return {
+                ...state,
+                goods:[]
             }
         default:
             return state;

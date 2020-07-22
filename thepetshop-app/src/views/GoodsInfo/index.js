@@ -5,6 +5,8 @@ import './style.scss'
 import BtnBox from './BtnBox'
 import GoodsApi from '@/api/goods'
 import {getToken,getUser} from '@/utils/auth';
+import Allaction from '@/store/actions/cartAction';
+import store from '@/store';
 
 function GoodsInfo(props) {
   const token = getToken()//获取token
@@ -68,7 +70,7 @@ function GoodsInfo(props) {
       goodsDatRef.current = data
     }
     if(goodsDatRef.current.checkBtn){
-      console.log("ok:",goodsDatRef.current);
+      // console.log("ok:",goodsDatRef.current);
       changeStyle({
         btnFont:goodsDatRef.current.checkBtn,
         goodsPrice:goodsDatRef.current.priceDom,
@@ -88,18 +90,27 @@ function GoodsInfo(props) {
     let {uid} = getUser()
     let count = goodsDatRef.current.goodsNum
     let gsize = null;
-    let gid = ginfoData.gid;
-    let nowprice = goodsDatRef.current.priceDom
+    let {gid,gtitle,gimgs,gprice} = ginfoData;
+    // console.log(gimgs[1]);
+    if(gimgs.length>1){
+      gimgs = gimgs[1];
+    }else{
+      gimgs = gimgs[0];
+    }
+    // console.log(gimgs);
+    // console.log(ginfoData);
+    // let nowprice = goodsDatRef.current.priceDom
     JSON.parse(ginfoData.gsize).forEach((item,index) => {
       if(goodsDatRef.current.checkBtn==item){
         return gsize = index
       }
     });
-    console.log("去也",'uid:'+uid,'gid:'+gid,'count:'+count,'gsize:'+gsize);
+    // console.log("去也",'uid:'+uid,'gid:'+gid,'count:'+count,'gsize:'+gsize);
     try {
       let p = await GoodsApi.goSetGoodsCart(uid,gid,count,gsize)
       if(p.data.flag){
         Toast.success('加入购物车成功!', 1);
+        store.dispatch(Allaction.add2cart({gid,gtitle,gimgs,gprice,ischeck:0,count,gsize}))
       }else{
         Toast.fail('加入购物车失败!!!', 1);
       }
@@ -118,7 +129,7 @@ function GoodsInfo(props) {
                 props.history.push(isRouter)
               }
             rightContent={[
-              <Link key='goCart' className="goCart" to="/cart">
+              <Link key='goCart' className="goCart" to="/main/cart">
                   <i className="iconfont icon-gouwuche" style={{fontSize:'20px'}} />
               </Link>
               // <Icon key="1" type="ellipsis" />,
