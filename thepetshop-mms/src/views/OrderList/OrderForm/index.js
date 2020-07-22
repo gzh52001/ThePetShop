@@ -17,7 +17,8 @@ class OrderForm extends Component {
             totalList: 0,
             changeList: {},
             delSelectID: [],
-            modifyVisible: false
+            modifyVisible: false,
+            selectType:"gid"
         }
     }
     componentDidMount() {
@@ -66,7 +67,7 @@ class OrderForm extends Component {
         }
     }
 
-    deliverGoods = async(uid,gid,otime)=>{
+    deliverGoods = async(uid,gid,otime)=>{      //显示发货前后订单
         try{
             let p = await OrderListApi.deliverGoods(uid,gid,otime)
             if(p.data.flag){
@@ -76,6 +77,25 @@ class OrderForm extends Component {
             }
         }catch(err){
             console.log(err)
+        }
+    }
+
+    selectOrderList = async(type,value) =>{         //模糊搜索订单
+        const {page,pageSize} = this.state
+        try{
+            let p = await OrderListApi.selectOrder(type,value,999,page,pageSize,999)
+            if(p.data.flag){
+                this.setState({
+                    goodsList:p.data.data.p,
+                    totalList:p.data.data.total,
+                    serchVisible: true
+                })
+                message.success('查找成功！');
+            }else{
+                message.success('查找失败！');
+            }
+        }catch(err){
+            message.success('查找的内容不存在！');
         }
     }
 
@@ -119,13 +139,11 @@ class OrderForm extends Component {
         })
     }
     handleDelete = (record) => {     //删除某行
-        const {page,pageSize} = this.state
         let newList = this.state.goodsList.filter(item => item.otime !== record.otime);
         this.setState({
             goodsList: newList
         })
         this.delgoodsList(record.uid,record.otime);
-        this.getGoodsOrder(999,page,pageSize)
     }
     delSelect = () => {     //批量删除
         const {goodsList,delSelectID} = this.state
@@ -189,6 +207,18 @@ class OrderForm extends Component {
             goodsList
         })
         // this.getGoodsOrder(this.state.sort,this.state.page, this.state.pageSize)
+    }
+    selectChange=(value)=>{ //获取搜索type值
+        this.setState({
+            selectType:value
+        })
+    }
+    selectorderList=(value)=>{   //获取搜索value值
+        const {selectType} = this.state
+        this.setState({
+            serchVisible: false
+        })
+        this.selectOrderList(selectType,value)
     }
     render() {
         const { Search } = Input;
@@ -294,16 +324,16 @@ class OrderForm extends Component {
                             </Button>
                             : <></>
                     }
-                    <Select className="selectChange" defaultValue="商品名" style={{ width: 100 }} onChange={this.selectChange}>
-                        <Option value="gtitle">商品名</Option>
-                        <Option value="gid">ID</Option>
+                    <Select className="selectChange" defaultValue="订单号" style={{ width: 100 }} onChange={this.selectChange}>
+                        <Option value="gid">订单号</Option>
+                        <Option value="uid">用户号</Option>
                     </Select>
                     <Search
                         className="formSearch"
                         placeholder="请输入关键字"
                         enterButton="查找"
                         size="large"
-                        onSearch={value => console.log(value)}
+                        onSearch={this.selectorderList}
                     />
                 </div>
                 {/* {console.log(this.state.totalList)} */}

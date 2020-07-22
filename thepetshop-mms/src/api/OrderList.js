@@ -3,11 +3,11 @@ import request from '@/utils/request';//引入axios对象
 const BAST_API = process.env.REACT_APP_SERVICE_URL;
 
 export default {
-    getGoodsOrder(sort,page,num,isDeliver) {      //获取订单列表
+    getGoodsOrder(sort, page, num, isDeliver) {      //获取订单列表
         return request({
             method: 'get',
             url: `${BAST_API}/admin/getallorder`,
-            params:{
+            params: {
                 sort,
                 page,
                 num,
@@ -15,22 +15,22 @@ export default {
             }
         });
     },
-    getOrderDetailed(uid,gid,otime) {   //获取订单详情
+    getOrderDetailed(uid, gid, otime) {   //获取订单详情
         return request({
             method: 'get',
             url: `${BAST_API}/admin/getorderinfo`,
-            params:{
+            params: {
                 uid,
                 gid,
                 otime
             }
         });
     },
-    deliverGoods(uid,gid,otime) {        //发货
+    deliverGoods(uid, gid, otime) {        //发货
         return request({
             method: 'post',
             url: `${BAST_API}/admin/delivergoods`,
-            data:{
+            data: {
                 uid,
                 gid,
                 otime
@@ -41,8 +41,22 @@ export default {
         return request({
             method: 'delete',
             url: `${BAST_API}/admin/delpartorder`,
-            data:{
+            data: {
                 otime
+            }
+        });
+    },
+    selectOrder(type, value, sort, page, num,isDeliver) {        //搜索订单
+        return request({
+            method: 'get',
+            url: `${BAST_API}/admin/searchorder`,
+            params: {
+                type,
+                value,
+                sort,
+                page,
+                num,
+                isDeliver
             }
         });
     },

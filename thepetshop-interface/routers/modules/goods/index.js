@@ -497,30 +497,30 @@ router.put('/checkcart', async (req, res) => {
 })
 
 //购物车全选
-router.put('/checkcartall',async(req,res)=>{
-    let {uid,check} = req.body
+router.put('/checkcartall', async (req, res) => {
+    let { uid, check } = req.body
     // console.log(uid,check)
-    try{
-       let p = await query(`update goodscart set ischeck='${check}' where uid='${uid}'`) 
-       if(p.affectedRows){
-           inf= {
-               code:2000,
-               flag:true,
-               message:"选中成功"
-           }
-       }else{
-        inf= {
-            code:3000,
-            flag:false,
-            message:"选中失败"
+    try {
+        let p = await query(`update goodscart set ischeck='${check}' where uid='${uid}'`)
+        if (p.affectedRows) {
+            inf = {
+                code: 2000,
+                flag: true,
+                message: "选中成功"
+            }
+        } else {
+            inf = {
+                code: 3000,
+                flag: false,
+                message: "选中失败"
+            }
         }
-       }
-       res.send(inf)
-    }catch(err){
-        inf= {
-            code:err.errno,
-            flag:false,
-            message:"服务器错误"
+        res.send(inf)
+    } catch (err) {
+        inf = {
+            code: err.errno,
+            flag: false,
+            message: "服务器错误"
         }
         res.send(inf)
     }
@@ -560,61 +560,72 @@ router.put('/changecartcount', async (req, res) => {
 })
 
 //购物车某商品库存
-router.get('/getsomestock',async(req,res)=>{
-    let {gid} = req.query
-    try{
-        let p = await query(`select stock from goodsinfo where gid='${gid}'`) 
-        if(p.length){
-            inf= {
-                code:2000,
-                flag:true,
-                message:"获取成功",
-                data:p[0]
+router.get('/getsomestock', async (req, res) => {
+    let { gid } = req.query
+    try {
+        let p = await query(`select stock from goodsinfo where gid='${gid}'`)
+        if (p.length) {
+            inf = {
+                code: 2000,
+                flag: true,
+                message: "获取成功",
+                data: p[0]
             }
-        }else{
-         inf= {
-             code:3000,
-             flag:false,
-             message:"获取失败"
-         }
+        } else {
+            inf = {
+                code: 3000,
+                flag: false,
+                message: "获取失败"
+            }
         }
         res.send(inf)
-     }catch(err){
-         inf= {
-             code:err.errno,
-             flag:false,
-             message:"服务器错误"
-         }
-         res.send(inf)
-     }
+    } catch (err) {
+        inf = {
+            code: err.errno,
+            flag: false,
+            message: "服务器错误"
+        }
+        res.send(inf)
+    }
 })
 
 //添加订单
 router.put('/addorder', async (req, res) => {
-    let {uid} = req.body
+    let { uid } = req.body
     let inf = 'ddd'
     let deliver = 0
     let check = true
     try {
-        let p = await query(`select gid,count,gsize from goodscart where ischeck='1' and uid='${uid}'`)
-        if (p.length) {
-            p.forEach(async item => {
+        let p1 = await query(`select gid,count,gsize from goodscart where ischeck='1' and uid='${uid}'`)
+        if (p1.length) {
+            p1.forEach(async item => {
                 let time = Date.now() - 0
                 let { gid, count, gsize } = item
-                let p = await query(`insert goodsorder(uid,gid,count,gsize,otime,deliver) values('${uid}','${gid}','${count}','${gsize}','${time}','${deliver}')`)
-                if (p.affectedRows) {
-                    check = true
+                let p2 = await query(`select stock from goodsinfo where gid='${gid}'`)
+                if (p2[0].stock > count) {
+                    let thisCount = p2[0].stock - count
+                    let p3 = await query(`update goodsinfo set stock='${thisCount}' where gid='${gid}'`)
+                    if (p3.affectedRows) {
+                        let p4 = await query(`insert goodsorder(uid,gid,count,gsize,otime,deliver) values('${uid}','${gid}','${count}','${gsize}','${time}','${deliver}')`)
+                        if (p4.affectedRows) {
+                            check = true
+                        } else {
+                            check = false
+                        }
+                    }else{
+                        check = false
+                    }
                 } else {
                     check = false
                 }
             })
-            if(check){
+            if (check) {
                 inf = {
                     code: 2000,
                     flag: true,
                     message: '添加成功'
                 }
-            }else{
+            } else {
                 inf = {
                     code: 3000,
                     flag: false,
@@ -641,10 +652,18 @@ router.put('/addorder', async (req, res) => {
 
 //获取订单信息
 router.get('/getorder', async (req, res) => {
-    let { uid } = req.query
+    let { uid, isDeliver } = req.query
+    let sql
     // console.log(uid)
+    if (isDeliver == 0) {
+        sql = `select gid,count,gsize,otime,deliver from goodsorder where uid='${uid}' and deliver='0'`
+    } else if (isDeliver == 1) {
+        sql = `select gid,count,gsize,otime,deliver from goodsorder where uid='${uid}' and deliver='1'`
+    } else {
+        sql = `select gid,count,gsize,otime,deliver from goodsorder where uid='${uid}'`
+    }
     try {
-        let p = await query(`select gid,count,gsize,otime,deliver from goodsorder where uid='${uid}'`)
+        let p = await query(sql)
         let str = ''
         // console.log(p)
         p.forEach(item => {
@@ -702,7 +721,7 @@ router.get('/getorder', async (req, res) => {
 
 //取消订单
 router.delete('/delorder', async (req, res) => {
-    let { uid , otime } = req.body
+    let { uid, otime } = req.body
     // console.log(uid,otime)
     let inf
     try {
