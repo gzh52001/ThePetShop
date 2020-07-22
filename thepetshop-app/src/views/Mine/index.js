@@ -3,9 +3,9 @@ import { Toast } from 'antd-mobile';
 import { Link } from 'react-router-dom';
 import '../../assets/icon/iconfont.css';
 import './mine.scss';
-import { getUser } from '@/utils/auth';
+import { getUser,getToken } from '@/utils/auth';
 import { withLogin } from '@/utils/hoc';
-
+import GoodsApi from '@/api/goods'
 @withLogin
 class Mine extends Component {
     constructor() {
@@ -102,14 +102,14 @@ class Mine extends Component {
                     id: 1,
                     icon: 'icon-fukuan',
                     title: '订单',
-                    path: '',
+                    path: '/MyOrder',
                     count: 0
                 },
                 {
                     id: 2,
                     icon: 'icon-daifahuo1',
                     title: '代发货',
-                    path: '',
+                    path: '/dfhOrder',
                     count: 1
                 },
                 {
@@ -156,7 +156,7 @@ class Mine extends Component {
                 }
             ],
             userimg: '',
-            myname: ''
+            myname: '',
         }
     }
     clickTool(path) {
@@ -174,6 +174,26 @@ class Mine extends Component {
         Toast.fail('请先登录!!',2)
     }
     componentDidMount() {
+        let token = getToken();
+        const { orders } = this.state
+        if(token){
+            let {uid} = getUser();
+            GoodsApi.getMyOrder(uid).then(res=>{
+                if(res.data.flag){
+                    let num = 0;
+                    res.data.data.forEach(item => {
+                        if(item.deliver==0){
+                            num++
+                        }
+                    });
+                    orders[1].count = num
+                    this.setState({
+                        ...this.state,
+                        orders:[...orders]
+                    })
+                }
+            })
+        }
         let userimg = getUser().userface;
         let myname = getUser().myname;
         this.setState({
@@ -199,7 +219,7 @@ class Mine extends Component {
                                     <img src={userimg} alt='用户头像' />
                                     :
                                     (
-                                        <img src={require('@/assets/img/1.png')} alt='用户头像' />
+                                        <img src={require('@/assets/img/lgf4.png')} alt='用户头像' />
                                     )
                             }
                         </a>
@@ -226,7 +246,7 @@ class Mine extends Component {
                         <div className='mine-order_content'>
                             {
                                 orders.map(item => (
-                                    <dl key={item.id}>
+                                    <dl key={item.id} onClick={()=>this.props.history.push(item.path)}>
                                         <dt>
                                             <i className={'iconfont ' + item.icon} />
                                             {

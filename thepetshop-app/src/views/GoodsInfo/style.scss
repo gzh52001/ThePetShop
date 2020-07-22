@@ -201,7 +201,7 @@
         justify-content: space-between;
         align-items: center;
         padding: 10px;
-        box-shadow: 0 0px 20px 5px rgba(0,0,0,.1);
+        box-shadow: 0 0px 20px rgba(0,0,0,.1);
         .btmIcon{
             display: flex;
             div{
@@ -239,6 +239,20 @@
             .set-cart{
                 background: linear-gradient(to right, #ff9282, #ff4436);;
                 border-radius: 0 22px 22px 0;
+            }
+        }
+        // 收藏
+        .wishlistShow{
+            color: rgb(255, 200, 19);
+            // transition: .3s;
+            animation: fontMove .3s forwards;
+            @keyframes fontMove {
+                0%{
+                    transform: scale(0);
+                }
+                100%{
+                    transform: scale(1);
+                }
             }
         }
     }

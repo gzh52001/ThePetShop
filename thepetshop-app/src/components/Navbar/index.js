@@ -12,7 +12,7 @@ function Navbar(props) {//顶部导航
     return (
         <NavBar
             mode="light"
-            icon={<Icon type="left" size='md' />}
+            icon={<Icon type="left" size='xs' />}
             onLeftClick={gotohome}
             className='border-1px navbar'
         >

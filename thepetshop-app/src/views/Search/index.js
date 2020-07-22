@@ -1,5 +1,5 @@
 import React,{useState,useEffect,useCallback} from 'react';
-import { NavBar, Icon,SearchBar, SegmentedControl,NoticeBar, WhiteSpace ,Toast } from 'antd-mobile';
+import { NavBar, Icon,SearchBar, SegmentedControl,Toast } from 'antd-mobile';
 import './style.scss'
 
 import SearchApi from '@/api/goods/search'
@@ -8,14 +8,42 @@ function Search(props){
     let autoFocusInst,manualFocusInst;
     const [value, changeValue] = useState('');
     const [gShow , changeShow] = useState(false)
-    const [searchData , setSearchData] = useState([])
+    const [searchData , setSearchData] = useState('')
     const [sortNum , changeSortNum] = useState(null)
     const [sortNumShow , changeSortNumShow] = useState(false)
     const [iconShow , changeIconShow] = useState(null)
+    const [searchTitle , setTitle] = useState(null)
+    const [noShow , changeNoShow] = useState(false)
 
     useEffect(()=>{
         autoFocusInst.focus();
     },[gShow])
+    useEffect(()=>{
+        if(searchData){
+            lazyShow()
+        }
+    },[searchData])
+
+    let myTimer = null
+    const getTitle = (val)=>{
+        if(gShow){
+            return
+        }
+        if(myTimer!=null){
+            clearTimeout(myTimer);
+            myTimer=null;
+        }
+        myTimer = setTimeout(async() => {
+            let p = await SearchApi.searchGoods(val);
+            if(p.data.flag){
+                setTitle(p.data.data)
+                changeNoShow(false)
+            }else{
+                setSearchData([])
+                changeNoShow(true)
+            }
+        }, 300);
+    }
 
     const getSearch = useCallback(async (value)=>{
         changeValue(value)
@@ -31,6 +59,39 @@ function Search(props){
             console.log(error);
         }
     },[])
+
+
+    const [lazyData,changeLazy] = useState({
+        num:2,
+        classifyFD:null
+    })
+    // 懒加载
+    const lazyShow = ()=>{
+        let boxDom = document.getElementById('root')
+        let domHeight = document.querySelector('.search-show').offsetHeight
+        let istops = 0
+        let domScrollTop ;
+        window.onscroll = async()=>{
+            domScrollTop = document.documentElement.scrollTop;
+            istops = domScrollTop + window.innerHeight;
+            if(istops>=domHeight){
+                if(lazyData.classifyFD==null){
+                    SearchApi.searchGoods(value,lazyData.num).then(res=>{
+
+                        if(res.data.flag){
+                            setSearchData([...searchData,...res.data.data])
+                            changeLazy({
+                                num:++lazyData.num,
+                                classifyFD:null
+                            })
+                        }else{
+                            Toast.offline('已经到底了 !!!', 3);
+                        }
+                    });
+                }
+            }
+        }
+    }
 
     // 排序
     const isSales = useCallback(async (value,e)=>{
@@ -64,7 +125,6 @@ function Search(props){
             {/* 顶部搜索 */}
             <div className='search-input'>
                 <NavBar
-                
                     mode="light"
                     icon={<Icon type="left" style={{fontSize:'24px',color:'#c1c1c1'}} />}
                     onLeftClick={() => props.history.push("/main/home")}
@@ -76,6 +136,7 @@ function Search(props){
                         placeholder="点击开始搜索商品"  
                         ref={ref => autoFocusInst = ref} 
                         onSubmit={getSearch}
+                        onChange={getTitle}
                     />
                 </NavBar>
             </div>
@@ -92,8 +153,10 @@ function Search(props){
                     {/* 搜索的商品 */}
                     <div className='search-show'>
                         {
-                            searchData.map(item=>(
-                                <div className='goods-item' key={item.gid}>
+                            searchData?searchData.map((item,index)=>(
+                                <div className='goods-item' key={index} onClick={()=>{
+                                    props.history.push('/goodsInfo/'+item.gid)
+                                }}>
                                     <div className='img-item'>
                                         <img src={item.gimgs} />
                                     </div>
@@ -109,13 +172,29 @@ function Search(props){
                                         </h4>
                                     </div>
                                 </div>
-                            ))
+                            )):''
                         }
                     </div>
                 </>
                 :
-                <div className='notSearch' style={{paddingTop:'10px'}}>
-                    <div>
+                <div className='notSearch'>
+                    
+                    <div className='search-title'>
+                        <ul>
+                            {
+                                searchTitle?searchTitle.map((item,index)=>(
+                                    <li key={index} onClick={getSearch.bind(null,(item.gtitle).substring(0,4))}>{item.gtitle}</li>
+                                ))
+                                :
+                                <div className='noGoods' style={noShow?{}:{display:'none'}}>
+                                    <div className='noGoodsBg'></div>
+                                    <h2>什么也找不到……</h2>
+                                </div>
+                            }
+                        </ul>
+                    </div>
+
+                    {/* <div>
                         <WhiteSpace size="lg" />
                         <NoticeBar marqueeProps={{ loop: true, style: { padding: '0 7.5px' } }}>
                         别问，问就是濑
@@ -138,7 +217,7 @@ function Search(props){
                         <NoticeBar mode="link" action={<span>去看看</span>}>
                         别问，问就是濑
                         </NoticeBar>
-                    </div>
+                    </div> */}
                 </div>
             }
         </div>
