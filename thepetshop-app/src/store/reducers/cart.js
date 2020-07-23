@@ -1,4 +1,4 @@
-import {ADD_TO_GOOD,CAHNGE_NUM,CAHNGE_CHECK,ALL_CHECK,DEL_GOODS,ADD_TO_CART,CLEAR_CART} from '../actions/cartAction';
+import {ADD_TO_GOOD,CAHNGE_NUM,CAHNGE_CHECK,ALL_CHECK,DEL_GOODS,ADD_TO_CART,CLEAR_CART,CHANGE_ISNUM} from '../actions/cartAction';
 const initState = {
     goods:[],//购物车商品
 }
@@ -73,6 +73,17 @@ function reducer(state= initState,action){
                     }
                     return item
                 }): [action.good,...state.goods]
+            }
+        //修改isnum
+        case CHANGE_ISNUM:
+            return {
+                ...state,
+                goods:state.goods.map(item=>{
+                    if(item.cid===action.cid){
+                        item.isnum = action.istrue
+                    }
+                    return item;
+                })
             }
         default:
             return state;

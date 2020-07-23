@@ -4,6 +4,7 @@ import { List, InputItem, Toast, Button, Flex } from 'antd-mobile';
 
 import Loginfoot from '@/components/Loginfoot';
 import regApi from '@/api/reg';
+import { Link } from 'react-router-dom';
 
 // const Loginfoot = lazy(()=> import('@/components/Loginfoot')) 
 // const regApi = lazy(()=> import('@/api/reg')) 
@@ -32,7 +33,7 @@ class Reg extends Component {
     }
     //验证用户名
     checkUser =async (val)=>{
-        if(!val){
+        if(!val || !/[a-zA-Z\d]{5,}/.test(val)){
             this.setState({
                 isUserError:true
             })
@@ -52,8 +53,10 @@ class Reg extends Component {
     //用户名感叹号
     onUserError = () => {
         const {username} = this.state;
-        if(username){
+        if(username && /[a-zA-Z\d]{5,}/.test(username)){
             Toast.fail('用户名已存在', 3);
+        }else if(username && !/[a-zA-Z\d]{5,10}/.test(username)){
+            Toast.fail('请输入5-10位数字和字母', 3);
         }else{
             Toast.fail('请输入用户名', 3);
         }
@@ -226,7 +229,8 @@ class Reg extends Component {
                 }
                 {/* 转跳注册按钮 */}
                 <Flex justify='end' className='loginfoo'>
-                    <a href='#/login'>&gt;&gt;&gt;去登录</a>
+                    {/* <a href='#/login'>&gt;&gt;&gt;去登录</a> */}
+                    <Link to='/login'>&gt;&gt;&gt;去登录</Link>
                 </Flex>
                 {/* 登录页底部 */}
                 <Loginfoot />

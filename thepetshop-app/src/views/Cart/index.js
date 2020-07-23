@@ -38,6 +38,9 @@ const AgreeItem = Checkbox.AgreeItem;
     },
     delgoods(gids) {//删除选中商品
         dispatch(Allaction.delGoods(gids))
+    },
+    changeshownum(cid,istrue){//修改isnum
+        dispatch(Allaction.changeisnum(cid,istrue))
     }
 }))
 @withLogin
@@ -47,20 +50,7 @@ class Cart extends Component {
         this.state = {
             userinfo: {},
             num: 1,
-            isnum: false,
             isdel: false
-        }
-    }
-    //显示修改数量
-    shownum = (e) => {
-        if (e.target.nodeName.toLowerCase() === 'use') {
-            this.setState({
-                isnum: false
-            })
-        } else if (e.target.nodeName.toLowerCase() === 'div') {
-            this.setState({
-                isnum: true
-            })
         }
     }
     //管理
@@ -212,6 +202,10 @@ class Cart extends Component {
             let p = await cartApi.getcart(uid);
             // console.log(p.data);
             if(p.data.flag){
+                p.data.data.forEach(item=>{
+                    item.isnum = false;
+                })
+                console.log(p.data.data);
                 addgoods(p.data.data)
             }else{
             //   console.log('获取失败');
@@ -225,9 +219,9 @@ class Cart extends Component {
       }
 
     render(login) {
-        const { isnum, isdel, userinfo: { address, uid } } = this.state;
+        const { isdel, userinfo: { address, uid } } = this.state;
         // console.log(this.props);
-        const { goods, changenum, totalPrice, totalGoods,isAllcheck,history } = this.props;
+        const { goods, changenum, totalPrice, totalGoods,isAllcheck,changeshownum } = this.props;
         // console.log(goods)
         // console.log(totalGoods);
         return (
@@ -272,7 +266,7 @@ class Cart extends Component {
                                                                 </span>
                                                                 <div className='cart-main-num_1'>
                                                                     {
-                                                                        isnum ?
+                                                                        item.isnum ?
                                                                             <>
                                                                                 <Stepper
                                                                                     style={{ width: '70px', minWidth: '70px', height: '20px' }}
@@ -282,10 +276,10 @@ class Cart extends Component {
                                                                                     max={6}
                                                                                     min={1}
                                                                                 />
-                                                                                <Icon type="cross-circle-o" size='sm' color='#ff6e2d' onClick={this.shownum} />
+                                                                                <Icon type="cross-circle-o" size='sm' color='#ff6e2d' onClick={changeshownum.bind(this,item.cid,false)} />
                                                                             </>
                                                                             :
-                                                                            <div className='smNum' onClick={this.shownum}>
+                                                                            <div className='smNum' onClick={changeshownum.bind(this,item.cid,true)}>
                                                                                 x{item.count}
                                                                             </div>
                                                                     }
