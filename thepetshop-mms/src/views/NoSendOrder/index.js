@@ -25,7 +25,7 @@ class OrderList extends Component {
         })
         if (DetailedFlag) {
              this.getOrderDetailed(data.uid,data.gid,data.otime);
-            console.log(data)
+            // console.log(data)
         }
     }
     getOrderDetailed = async (uid,gid,otime) => {     //获取商品详情

@@ -32,3 +32,10 @@ input{
     outline:none;
     display:block;
 }
+.example {
+    text-align: center;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    padding: 30px 50px;
+    margin: 300px 0;
+  }
