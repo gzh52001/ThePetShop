@@ -14,5 +14,9 @@ module.exports = override(
     addWebpackAlias({
         '@': path.resolve(__dirname, 'src')
     }),
-    addPostcssPlugins([require("postcss-px2rem")({ remUnit: 37.5 })])
+    addPostcssPlugins([require("postcss-px2rem")({ remUnit: 37.5 })]),
+    (config)=>{
+        config.devtool = false;
+        return config
+    }
 );

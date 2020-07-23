@@ -10,12 +10,16 @@ import './cart.scss';
 const CheckboxItem = Checkbox.CheckboxItem;
 const AgreeItem = Checkbox.AgreeItem;
 
-@connect(({ cart: { goods } }) => ({
+@connect(({ cart: { goods } ,user:{userinfo}}) => ({
     goods: goods,
     totalPrice: goods.filter(item => item.ischeck === 1).reduce((prev, item) => prev + item.gprice * item.count, 0),
     totalGoods: goods.length,
-    isAllcheck:goods.every(item=>item.ischeck)// 设置全选是否是选中状态
+    isAllcheck:goods.every(item=>item.ischeck),// 设置全选是否是选中状态
+    userinfo
 }), dispatch => ({
+    addgoods(goods){
+        dispatch(Allaction.add(goods))
+    },
     changenum(gid, uid, gsize, count) {//改变商品数量
         // console.log(gid, uid,gsize,count);
         dispatch({
@@ -134,7 +138,7 @@ class Cart extends Component {
                 return
             }
         })
-        let gids = goods.filter(item => item.ischeck)
+        let cids = goods.filter(item => item.ischeck)
         if (!istrue) {
             Toast.fail('请先选中商品', 2);
             return;
@@ -150,7 +154,7 @@ class Cart extends Component {
                         try {
                             let p = await cartApi.delgood();
                             if (p.data.flag) {
-                                delgoods(gids);
+                                delgoods(cids);
                                 Toast.success('删除成功', 2);
                             } else {
                                 Toast.fail('删除失败', 2)
@@ -170,7 +174,7 @@ class Cart extends Component {
                         Toast.success('结算成功', 2);
                         let p = await cartApi.delgood();
                         if (p.data.flag) {
-                            delgoods(gids);
+                            delgoods(cids);
                             // Toast.success('删除成功', 2);
                         } else {
                             // Toast.fail('删除失败', 2)
@@ -193,11 +197,32 @@ class Cart extends Component {
         this.setState({
             userinfo: getUser()
         })
+        this.getCartGoods();
     }
 
     goto = (gid)=>{
         this.props.history.push('/goodsInfo/'+gid)
     }
+    getCartGoods = async ()=>{
+        const {userinfo,addgoods} = this.props;
+        let uid = userinfo.uid || '';
+        // console.log(uid);
+        if(uid){
+          try{
+            let p = await cartApi.getcart(uid);
+            // console.log(p.data);
+            if(p.data.flag){
+                addgoods(p.data.data)
+            }else{
+              console.log('获取失败');
+            }
+          }catch(err){
+            console.log(err);
+          }
+        }else{
+            addgoods([])
+        }
+      }
 
     render(login) {
         const { isnum, isdel, userinfo: { address, uid } } = this.state;

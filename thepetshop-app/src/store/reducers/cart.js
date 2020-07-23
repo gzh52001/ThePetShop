@@ -50,7 +50,7 @@ function reducer(state= initState,action){
             let arr = Object.assign([],state.goods);
             arr.forEach(item=>{
                 action.goods.forEach(goods=>{
-                    if(item.gid === goods.gid){
+                    if(item.cid === goods.cid){
                         arr = Object.assign([],arr)
                         arr.splice(arr.indexOf(item),1);
                     }

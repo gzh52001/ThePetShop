@@ -25,7 +25,7 @@ class App extends Component {
     this.props.history.listen((location) => {
       this.props.history.location.state = this.props.location.pathname
     })
-    this.getCartGoods();
+    // this.getCartGoods();
   }
   getCartGoods = async ()=>{
     const {userinfo} = this.props;
@@ -47,10 +47,10 @@ class App extends Component {
       store.dispatch(add([]))
     }
   }
-  // shouldComponentUpdate(){
-  //   this.getCartGoods();
-  //   return true
-  // }
+  shouldComponentUpdate(){
+    this.getCartGoods();
+    return true
+  }
   render() {
     return (
       <div className="App">
