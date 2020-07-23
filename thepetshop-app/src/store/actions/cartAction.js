@@ -6,6 +6,7 @@ export const ALL_CHECK = 'all_check';
 export const DEL_GOODS = 'del_goods';
 export const ADD_TO_CART = 'add_to_cart';
 export const CLEAR_CART = 'clear_cart';
+export const CHANGE_ISNUM = 'change_isnum';
 
 // 获取购物车商品
 export function add(goods){
@@ -60,6 +61,14 @@ export function clearcart(){
         type:CLEAR_CART
     }
 }
+//修改isnum 状态
+export function changeisnum(cid,istrue){
+    return {
+        type:CHANGE_ISNUM,
+        cid,
+        istrue
+    }
+}
 
 export default{
     add,
@@ -67,5 +76,6 @@ export default{
     ischeck,
     allCheck,
     delGoods,
-    add2cart
+    add2cart,
+    changeisnum
 }
