@@ -1,9 +1,12 @@
-import React,{useState,useEffect,useCallback} from 'react';
+import React,{useState,useEffect,useCallback,lazy} from 'react';
 import { NavBar, Icon,SearchBar, SegmentedControl,Toast } from 'antd-mobile';
 import './style.scss';
-import GoTop from '@/components/GoTop'
 
+import GoTop from '@/components/GoTop'
 import SearchApi from '@/api/goods/search'
+
+// const GoTop = lazy(()=> import('../../components/GoTop')) 
+// const SearchApi = lazy(()=> import('../../api/goods/search')) 
 
 function Search(props){
     let autoFocusInst,manualFocusInst;
@@ -62,7 +65,7 @@ function Search(props){
     },[])
 
 
-    const [lazyData,changeLazy] = useState({
+    const [lazyData,changelazy] = useState({
         num:2,
         classifyFD:null
     })
@@ -86,7 +89,7 @@ function Search(props){
 
                         if(res.data.flag){
                             setSearchData([...searchData,...res.data.data])
-                            changeLazy({
+                            changelazy({
                                 num:++lazyData.num,
                                 classifyFD:null
                             })

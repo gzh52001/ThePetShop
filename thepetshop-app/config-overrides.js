@@ -3,7 +3,10 @@ const path = require('path');
 const { override, fixBabelImports, addBabelPlugins, addWebpackAlias, addPostcssPlugins } = require('customize-cra');
 
 module.exports = override(
-    addBabelPlugins(['@babel/plugin-proposal-decorators', { legacy: true }]),
+    addBabelPlugins(
+        ['@babel/plugin-proposal-decorators', { legacy: true }],
+        '@babel/plugin-syntax-dynamic-import'
+    ),
     fixBabelImports('import', {
         libraryName: 'antd-mobile',
         style: 'css'

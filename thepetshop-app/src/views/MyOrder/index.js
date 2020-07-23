@@ -1,8 +1,12 @@
-import React,{useState,useEffect,useCallback} from 'react';
+import React,{useState,useEffect,useCallback,lazy} from 'react';
 import Navbar from '@/components/Navbar';
 import {getToken,getUser} from '@/utils/auth';
 import GoodsApi from '@/api/goods';
 import './style.scss'
+
+// const Navbar = lazy(()=> import('@/components/Navbar')) 
+// const {getToken,getUser} = lazy(()=> import('@/utils/auth')) 
+// const GoodsApi = lazy(()=> import('@/api/goods')) 
 
 const token = getToken()
 function MyOrder (props){

@@ -1,15 +1,19 @@
-import React, { Component } from 'react';
-// import 'antd/dist/antd.css';
+import React, { Component,lazy } from 'react';
 import { withRouter } from 'react-router-dom';
 import 'lib-flexible';
-// import 'antd-mobile/dist/antd-mobile.css';
 import '@/assets/icon/iconfont.css';
 import {connect} from 'react-redux';
+
 import store from './store';
 import cartApi from '@/api/shoppingcart';
 import {add} from '@/store/actions/cartAction';
-// components
+// // components
 import Layout from '@/views/Layout';
+
+// const store = lazy(()=> import('./store')) 
+// const cartApi = lazy(()=> import('@/api/shoppingcart')) 
+// const {add} = lazy(()=> import('@/store/actions/cartAction')) 
+// const Layout = lazy(()=> import('@/views/Layout')) 
 
 @withRouter
 @connect(({user:{userinfo}})=>({
