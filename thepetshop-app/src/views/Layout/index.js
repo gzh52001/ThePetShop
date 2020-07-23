@@ -19,10 +19,10 @@ const Reg = lazy(()=> import('../Reg'))
 const Search = lazy(()=> import('../Search')) 
 const GoodsInfo = lazy(()=> import('../GoodsInfo')) 
 const Changeinfo = lazy(()=> import('../Changeinfo')) 
-const Address = lazy(()=> import('../Changeinfo/address')) 
+const Address = lazy(()=> import('../Address')) 
 const MyOrder = lazy(()=> import('../MyOrder')) 
 const dfhOrder = lazy(()=> import('../dfhOrder')) 
-const ChangePass = lazy(()=> import('../Changeinfo/ChangePass')) 
+const ChangePass = lazy(()=> import('../ChangePass')) 
 
 
 function Layout (){//总路由转跳页面显示到这
@@ -42,7 +42,7 @@ function Layout (){//总路由转跳页面显示到这
                 <Route path='/dfhorder' component={dfhOrder}/> 
                 <Redirect from="/" to='/main' exact/>
             </Switch>
-        </Suspense>
+            </Suspense>
         </>
     )
 }
