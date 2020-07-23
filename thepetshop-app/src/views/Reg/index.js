@@ -4,6 +4,7 @@ import { List, InputItem, Toast, Button, Flex } from 'antd-mobile';
 
 import Loginfoot from '@/components/Loginfoot';
 import regApi from '@/api/reg';
+import { Link } from 'react-router-dom';
 
 // const Loginfoot = lazy(()=> import('@/components/Loginfoot')) 
 // const regApi = lazy(()=> import('@/api/reg')) 
@@ -228,7 +229,8 @@ class Reg extends Component {
                 }
                 {/* 转跳注册按钮 */}
                 <Flex justify='end' className='loginfoo'>
-                    <a href='#/login'>&gt;&gt;&gt;去登录</a>
+                    {/* <a href='#/login'>&gt;&gt;&gt;去登录</a> */}
+                    <Link to='/login'>&gt;&gt;&gt;去登录</Link>
                 </Flex>
                 {/* 登录页底部 */}
                 <Loginfoot />
