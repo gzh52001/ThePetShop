@@ -1,5 +1,6 @@
 import React,{lazy,Suspense} from 'react';
-import {Route,Switch, Redirect,withRouter} from 'react-router-dom';
+import {Route,Switch, Redirect} from 'react-router-dom';
+import { ActivityIndicator } from 'antd-mobile';
 
 
 // import AppMain from '@/components/AppMain';
@@ -28,7 +29,7 @@ const ChangePass = lazy(()=> import('../Changeinfo/ChangePass'))
 function Layout (){//总路由转跳页面显示到这
     return (
         <>
-        <Suspense fallback=''>
+        <Suspense fallback={<div><ActivityIndicator toast text="正在加载中..." /></div>}>
             <Switch>
                 <Route path='/main' component={AppMain}/>
                 <Route path='/login' component={Login}/>
