@@ -34,19 +34,19 @@
 
 宠物商城
 
-<img src="C:\Users\李国富\Desktop\react项目\ThePetShop\petshop\app-1.png" alt="app-1" style="zoom:25%;" /><img src="C:\Users\李国富\Desktop\react项目\ThePetShop\petshop\app-2.png" alt="app-2" style="zoom:25%;" /><img src="C:\Users\李国富\Desktop\react项目\ThePetShop\petshop\app-3.png" alt="app-3" style="zoom:25%;" /><img src="C:\Users\李国富\Desktop\react项目\ThePetShop\petshop\app-4.png" alt="app-4" style="zoom:25%;" /><img src="C:\Users\李国富\Desktop\react项目\ThePetShop\petshop\app-5.png" alt="app-5" style="zoom:25%;" />
+<img src="./petshop/app-1.png" alt="'app-1'" style="zoom:25%;" /><img src="./petshop/app-2.png" alt="app-2" style="zoom:25%;" /><img src="./petshop/app-3.png" alt="app-3" style="zoom:25%;" /><img src="./petshop/app-4.png" alt="app-4" style="zoom:25%;" /><img src="./petshop/app-5.png" alt="app-5" style="zoom:25%;" />
 
 宠物后台管理系统
 
 <img src="C:\Users\李国富\Desktop\react项目\ThePetShop\petshop\mms-2.png" alt="mms-2" style="zoom:2%;" />
 
-<img src="C:\Users\李国富\Desktop\react项目\ThePetShop\petshop\mms-3.png" alt="mms-3" style="zoom:25%;" />
+<img src="./petshop/mms-3.png" alt="mms-3" style="zoom:25%;" />
 
-<img src="C:\Users\李国富\Desktop\react项目\ThePetShop\petshop\mms-4.png" alt="mms-4" style="zoom:25%;" />
+<img src="./petshop/mms-4.png" alt="mms-4" style="zoom:25%;" />
 
-<img src="C:\Users\李国富\Desktop\react项目\ThePetShop\petshop\mms-5.png" alt="mms-5" style="zoom:25%;" />
+<img src="./petshop/mms-5.png" alt="mms-5" style="zoom:25%;" />
 
-<img src="C:\Users\李国富\Desktop\react项目\ThePetShop\petshop\mms-1.png" alt="mms-1" style="zoom:25%;" />
+<img src="./petshop/mms-1.png" alt="mms-1" style="zoom:25%;" />
 
 #### 项目目录说明
 
