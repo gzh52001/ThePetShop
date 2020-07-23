@@ -43,7 +43,7 @@ function MyOrder (props){
                 <Navbar name="待发货商品" props={props} />
             </div>
             {/* <div className='myorder-goods' style={orderData&&token?{}:{display:'none'}}> */}
-            <div className='myorder-goods'>
+            <div className='myorder-goods' style={orderData?{}:{display:'none'}}>
                 {
                     orderData?orderData.map((item,index)=>(
                         <div className='goods-item' key={index}>

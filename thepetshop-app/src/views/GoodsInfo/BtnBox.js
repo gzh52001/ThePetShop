@@ -67,7 +67,7 @@ class BtnBox extends Component {
                         <i className="iconfont icon-cuowu3"></i>
                     </div>
 
-                    <div className="spec-wrap" style={btmBoxStyle=='box1'?{minHeight:'360px'}:{display:'none'}}>
+                    <div className="spec-wrap" style={btmBoxStyle=='box1'?{}:{display:'none'}}>
                         <div className='goods-box'>
                         <div className='img-item'>
                             <img alt="" src={gdata?gdata.gimgs[0]:''}></img>

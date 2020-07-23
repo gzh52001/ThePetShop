@@ -20,10 +20,10 @@ const Reg = lazy(()=> import('../Reg'))
 const Search = lazy(()=> import('../Search')) 
 const GoodsInfo = lazy(()=> import('../GoodsInfo')) 
 const Changeinfo = lazy(()=> import('../Changeinfo')) 
-const Address = lazy(()=> import('../Address')) 
+const Address = lazy(()=> import('../Changeinfo/address')) 
 const MyOrder = lazy(()=> import('../MyOrder')) 
 const dfhOrder = lazy(()=> import('../dfhOrder')) 
-const ChangePass = lazy(()=> import('../ChangePass')) 
+const ChangePass = lazy(()=> import('../Changeinfo/ChangePass')) 
 
 
 function Layout (){//总路由转跳页面显示到这

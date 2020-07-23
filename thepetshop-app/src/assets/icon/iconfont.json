@@ -6,6 +6,55 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "681799",
+      "name": "商店",
+      "font_class": "shop2",
+      "unicode": "e636",
+      "unicode_decimal": 58934
+    },
+    {
+      "icon_id": "4528605",
+      "name": "邀请",
+      "font_class": "yaoqing",
+      "unicode": "e637",
+      "unicode_decimal": 58935
+    },
+    {
+      "icon_id": "6021689",
+      "name": "店铺",
+      "font_class": "dianpu",
+      "unicode": "e64b",
+      "unicode_decimal": 58955
+    },
+    {
+      "icon_id": "8701554",
+      "name": "邀请",
+      "font_class": "yaoqing1",
+      "unicode": "e75b",
+      "unicode_decimal": 59227
+    },
+    {
+      "icon_id": "12255875",
+      "name": "优惠券",
+      "font_class": "youhuiquan2",
+      "unicode": "e638",
+      "unicode_decimal": 58936
+    },
+    {
+      "icon_id": "12564207",
+      "name": "优惠券",
+      "font_class": "youhuiquan3",
+      "unicode": "e6a9",
+      "unicode_decimal": 59049
+    },
+    {
+      "icon_id": "12699746",
+      "name": "购物车",
+      "font_class": "gouwuche4",
+      "unicode": "e639",
+      "unicode_decimal": 58937
+    },
+    {
       "icon_id": "3219722",
       "name": "收藏",
       "font_class": "shoucang2",

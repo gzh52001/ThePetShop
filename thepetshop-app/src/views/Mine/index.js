@@ -18,7 +18,7 @@ class Mine extends Component {
             tools: [
                 {
                     id: 1,
-                    icon: 'icon-gouwuchekong',
+                    icon: 'icon-gouwuche4',
                     title: '购物车',
                     span: '',
                     path: '/main/cart'
@@ -46,7 +46,7 @@ class Mine extends Component {
                 },
                 {
                     id: 5,
-                    icon: 'icon-youhuiquan',
+                    icon: 'icon-youhuiquan2',
                     title: '优惠卷',
                     span: '',
                     path: ''
@@ -67,7 +67,7 @@ class Mine extends Component {
                 },
                 {
                     id: 8,
-                    icon: 'icon-shangdian',
+                    icon: 'icon-shop2',
                     title: '0元开店',
                     span: '最高返利70%',
                     path: ''
@@ -88,7 +88,7 @@ class Mine extends Component {
                 },
                 {
                     id: 11,
-                    icon: 'icon-yaoqingfanli',
+                    icon: 'icon-yaoqing',
                     title: '邀请返利',
                     span: '首单返15%',
                     path: ''

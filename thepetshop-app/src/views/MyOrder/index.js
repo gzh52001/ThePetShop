@@ -2,7 +2,7 @@ import React,{useState,useEffect,useCallback,lazy} from 'react';
 import Navbar from '@/components/Navbar';
 import {getToken,getUser} from '@/utils/auth';
 import GoodsApi from '@/api/goods';
-import './style.scss'
+import '../dfhOrder/style.scss'
 
 // const Navbar = lazy(()=> import('@/components/Navbar')) 
 // const {getToken,getUser} = lazy(()=> import('@/utils/auth')) 
@@ -12,9 +12,9 @@ const token = getToken()
 function MyOrder (props){
 
     const [orderData,setOrderData] = useState('');
-
     useEffect(()=>{
         if(token){
+            console.log(token);
             let {uid} = getUser();
             GoodsApi.getMyOrder(uid).then(res=>{
                 if(res.data.flag){
@@ -42,7 +42,7 @@ function MyOrder (props){
                 <Navbar name="全部订单" props={props} />
             </div>
             {/* <div className='myorder-goods' style={orderData&&token?{}:{display:'none'}}> */}
-            <div className='myorder-goods'>
+            <div className='myorder-goods' style={orderData?{}:{display:'none'}}>
                 {
                     orderData?orderData.map((item,index)=>(
                         <div className='goods-item' key={index}>
@@ -75,7 +75,7 @@ function MyOrder (props){
                     :''
                 }
             </div>
-            <div className='noGoods' style={!orderData||!token?{}:{display:'none'}}>
+            <div className='noGoods' style={!token?{}:{display:'none'}}>
                 <div className='noGoodsBg'></div>
                 <h2>什么也找不到……</h2>
             </div>
