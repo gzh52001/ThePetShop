@@ -214,7 +214,7 @@ class Cart extends Component {
             if(p.data.flag){
                 addgoods(p.data.data)
             }else{
-              console.log('获取失败');
+            //   console.log('获取失败');
             }
           }catch(err){
             console.log(err);

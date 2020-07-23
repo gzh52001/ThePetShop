@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Navbar from '@/components/Navbar';
+import {Link} from 'react-router-dom';
 import { List, InputItem, Toast, Button, Flex, Checkbox } from 'antd-mobile';
 import './style.scss';
 
@@ -132,7 +133,7 @@ class Login extends Component {
                 }
                 {/* 转跳注册按钮 */}
                 <Flex justify='between' className='loginfoo'>
-                    <a href='#/reg'>注册账号</a>
+                    <Link to='/reg'>注册账号</Link>
                     <a>忘记密码</a>
                 </Flex>
                 {/* 登录页底部 */}

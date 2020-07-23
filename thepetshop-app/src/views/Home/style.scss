@@ -185,6 +185,10 @@
         }
     }
     .newDay-wrap{
+        touch-action: none;
+        .slider-list{
+            height: 170px !important;
+        }
         .new-title{
             overflow: hidden;
             text-overflow: ellipsis;

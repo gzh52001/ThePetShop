@@ -6,7 +6,7 @@ import './style.scss';
 function Navbar(props) {//顶部导航
     const gotohome = function(){
         const {props:{history,location:{pathname,state}}} = props;
-        if(pathname=='/dfhOrder'||pathname=='/MyOrder'){
+        if(pathname=='/dfhOrder'||pathname=='/MyOrder'||pathname=='/changeinfo'||pathname=='/login'){
             history.push('/main/mine')
         }else if(!state){
             history.push('/main/home');
