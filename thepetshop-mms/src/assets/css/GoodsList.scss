@@ -81,10 +81,10 @@
 }
 
 .ant-table-pagination-right {
-    position: fixed;
-    bottom: 10px;
+    position: absolute;
+    bottom: -50px;
     left: 50%;
-    transform: translateX(-25%);
+    transform: translateX(-50%);
 }
 
 .goodsDetailed {

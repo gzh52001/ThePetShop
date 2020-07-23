@@ -42,7 +42,7 @@ class ModifyGoods extends Component {
             loading: false,
             hasMore: true,
         }
-        this.loadMore = this.debounce(this.loadMore, 3000)
+        this.loadMore = this.debounce(this.loadMore, 1000)
     }
     editGoods = async (gid,gtitle,gdesc,gbrandtitle,tid,gprice,gsize,stock,gimgs) => {     //删除商品
         try {

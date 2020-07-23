@@ -105,6 +105,10 @@ class Main extends Component {
         const { history } = this.props;
         history.go(0);
     }
+    goMe = () =>{
+        const { history } = this.props;
+        history.push("/backstage/adminList")
+    }
     rootSubmenuKeys = ['sub1', 'sub2', 'sub3', 'sub4', 'sub5'];
     onOpenChange = (openKeys) => {
         const latestOpenKey = openKeys.find(key => this.state.openKeys.indexOf(key) === -1);
@@ -131,13 +135,10 @@ class Main extends Component {
         const menu = (
             <Menu>
                 <Menu.Item>
-                    <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">个人信息</a>
+                    <a rel="noopener noreferrer" href="###" onClick={this.goMe}>个人信息</a>
                 </Menu.Item>
                 <Menu.Item>
-                    <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">预留</a>
-                </Menu.Item>
-                <Menu.Item>
-                    <a rel="noopener noreferrer" href="http://localhost:3000/#/login" onClick={this.loginOut}>注销登录</a>
+                    <a rel="noopener noreferrer" href="###" onClick={this.loginOut}>注销登录</a>
                 </Menu.Item>
             </Menu>
         );
