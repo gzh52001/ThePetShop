@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { Input, Form, Table, Button, Modal, Popconfirm, message,Select ,Badge} from 'antd';
+import { Input, Table, Button, Popconfirm, message,Select ,Badge} from 'antd';
 import "@/assets/css/OrderList.scss"
 
 

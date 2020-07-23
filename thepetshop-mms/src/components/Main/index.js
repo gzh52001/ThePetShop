@@ -1,25 +1,23 @@
-import React, { Component } from "react";
+import React, { Component ,Suspense,lazy} from "react";
 import { Route, Redirect, Switch } from 'react-router-dom';
 
 import { VerifyLogin } from '@/utils/HOC';
 
 import { DownCircleOutlined } from '@ant-design/icons';
-import { Layout, Menu, Row, Col, Dropdown, Button } from 'antd';
-import { HomeOutlined, TeamOutlined, ShopOutlined, BarChartOutlined, SnippetsOutlined } from '@ant-design/icons';
-
-import LoginApi from "@/api/Login";
+import { Layout, Menu, Row, Col, Dropdown, Button ,Spin} from 'antd';
+import { HomeOutlined, TeamOutlined, ShopOutlined,  SnippetsOutlined } from '@ant-design/icons';
 
 import "@/assets/css/Main.scss"
-import Home from '@/views/Home'
-import AdminList from '@/views/AdminList'
-import AdminReg from '@/views/AdminList/AdminReg'
-import UserList from '@/views/UserList'
-import GoodsList from '@/views/GoodsList'
-import OrderList from '@/views/OrderList'
-import AddGoods from "@/views/AddGoods";
-import ModifyGoods from "@/views/ModifyGoods";
-import NoSendOrder from "@/views/NoSendOrder";
-import SendOrder from "@/views/SendOrder";
+const Home = lazy(()=>import('@/views/Home'))
+const AdminList = lazy(()=>import('@/views/AdminList'))
+const AdminReg = lazy(()=>import('@/views/AdminList/AdminReg'))
+const UserList = lazy(()=>import('@/views/UserList'))
+const GoodsList = lazy(()=>import('@/views/GoodsList'))
+const OrderList = lazy(()=>import('@/views/OrderList'))
+const AddGoods = lazy(()=>import("@/views/AddGoods"))
+const ModifyGoods = lazy(()=>import("@/views/ModifyGoods"))
+const NoSendOrder = lazy(()=>import("@/views/NoSendOrder"))
+const SendOrder = lazy(()=>import("@/views/SendOrder"))
 
 class Main extends Component {
     constructor() {
@@ -127,7 +125,7 @@ class Main extends Component {
         const goodsRouter = contentRouter.slice(6, 9);
         const orderRouter = contentRouter.slice(9, 12);
         const { defaultPath } = this.state;
-        console.log(this.props.history.location.pathname)
+        // console.log(this.props.history.location.pathname)
         const { SubMenu } = Menu;
         const { Header, Content, Sider } = Layout;
         const menu = (
@@ -215,6 +213,7 @@ class Main extends Component {
                                     minHeight: 280,
                                 }}
                             >
+                                <Suspense fallback={<div className="example"><Spin /></div>}>
                                 <Switch>
                                     {
                                         contentRouter.map(item => (
@@ -223,6 +222,7 @@ class Main extends Component {
                                     }
                                     <Redirect from="/" to="/home"></Redirect>
                                 </Switch>
+                                </Suspense>
                             </Content>
                         </Layout>
                     </Layout>

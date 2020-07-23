@@ -52,7 +52,7 @@ class AdminList extends Component {
                             <Col key={item.aid} style={{ marginBottom: "60px" }}>
                                 <Card title={item.grade === 1 ? "超级管理员" : "管理员"} style={{ backgroundColor: "#f0f0f0" }} bordered={true}>
                                     {index==0?<Badge className="adminStatus" status="processing" text="当前" />:''}
-                                    <Avatar className="adminHeader" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1595437141247&di=80a32e46948fcb36fbea3e3dbd724c68&imgtype=0&src=http%3A%2F%2Fattach.bbs.miui.com%2Fforum%2F201303%2F18%2F233119quyrec7to3ws3rco.jpg" size={185} icon={<UserOutlined />} />
+                                    <Avatar className="adminHeader" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1595482395309&di=e35fc7d5d101ec4dfed1d582e5cfce19&imgtype=0&src=http%3A%2F%2Ft9.baidu.com%2Fit%2Fu%3D3172368063%2C2201035007%26fm%3D193" size={185} icon={<UserOutlined />} />
                                     <h2 className="adminName">{item.myname}</h2>
                                 </Card>
                             </Col>

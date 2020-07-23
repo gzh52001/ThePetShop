@@ -100,7 +100,7 @@ class OrderForm extends Component {
     }
 
     handleChange = (value) => {
-        console.log(`selected ${value}`);
+        // console.log(`selected ${value}`);
     }
     onChange = (pagination,a, sorter, extra) => {     //分页、排序、筛选变化时触发
         if (sorter.order === "ascend" && sorter.field === "otime") {

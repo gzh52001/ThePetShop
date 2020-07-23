@@ -3,19 +3,13 @@ import React, { Component } from "react";
 import {
     Form,
     Input,
-    Tooltip,
-    Cascader,
     Select,
-    Row,
-    Col,
-    Checkbox,
     Button,
-    AutoComplete,
     Upload,
     Modal,
     message
 } from 'antd';
-import { QuestionCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons';
 
 import GoodsListApi from "@/api/GoodsList";
 class AddGoods extends Component {

@@ -24,7 +24,7 @@ class OrderForm extends Component {
     }
     componentDidMount() {
         const {page,pageSize,isdeliver} = this.state
-        console.log(isdeliver)
+        // console.log(isdeliver)
         this.getGoodsOrder(999,page,pageSize,isdeliver)
     }
     getGoodsOrder = async (sort,page,pageSize,isdeliver) => {     //获取订单列表
