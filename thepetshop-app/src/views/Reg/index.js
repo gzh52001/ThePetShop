@@ -1,9 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component,lazy} from 'react';
 import Navbar from '@/components/Navbar';
 import { List, InputItem, Toast, Button, Flex } from 'antd-mobile';
 
 import Loginfoot from '@/components/Loginfoot';
 import regApi from '@/api/reg';
+
+// const Loginfoot = lazy(()=> import('@/components/Loginfoot')) 
+// const regApi = lazy(()=> import('@/api/reg')) 
 class Reg extends Component {
     constructor() {
         super();
