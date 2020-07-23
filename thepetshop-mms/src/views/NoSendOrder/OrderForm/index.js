@@ -171,7 +171,7 @@ class OrderForm extends Component {
         this.delPartOrder(delSelectID)
     }
     showModal = (data) => {     //显示修改框,传入数据
-        console.log(data)
+        // console.log(data)
         this.setState({
             modifyVisible: true,
             changeList: data
@@ -184,25 +184,25 @@ class OrderForm extends Component {
         this.getGoodsOrder(this.state.sort,this.state.page, this.state.pageSize,this.state.isdeliver)
     }
     handleOk = values => {  //确定修改
-        console.log(values);
+        // console.log(values);
         this.setState({
             modifyVisible: false,
         });
     };
 
     handleCancel = e => {
-        console.log("取消");
+        // console.log("取消");
         this.setState({
             modifyVisible: false,
             changeList: ""
         });
     };
     onFinish = values => {
-        console.log("修改");
+        // console.log("修改");
     };
 
     onFinishFailed = errorInfo => {
-        console.log("修改");
+        // console.log("修改");
     };
     sendGoods = (record) =>{   //发货
         const {goodsList} = this.state

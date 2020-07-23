@@ -46,7 +46,7 @@ class AdminList extends Component {
         const { adminList } = this.state;
         return (
             <div className="site-card-wrapper" style={{ padding: 60 }}>
-                <Row gutter={78}>
+                <Row gutter={66}>
                     {
                         adminList.map((item, index) => (
                             <Col key={item.aid} style={{ marginBottom: "60px" }}>

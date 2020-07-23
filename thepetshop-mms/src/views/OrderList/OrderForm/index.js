@@ -144,6 +144,7 @@ class OrderForm extends Component {
             goodsList: newList
         })
         this.delgoodsList(record.uid,record.otime);
+        this.getGoodsOrder(this.state.sort,this.state.page, this.state.pageSize)
     }
     delSelect = () => {     //批量删除
         const {goodsList,delSelectID} = this.state
@@ -206,7 +207,6 @@ class OrderForm extends Component {
         this.setState({
             goodsList
         })
-        // this.getGoodsOrder(this.state.sort,this.state.page, this.state.pageSize)
     }
     selectChange=(value)=>{ //获取搜索type值
         this.setState({

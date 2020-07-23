@@ -137,6 +137,7 @@ class UserForm extends Component {
             userList: newList
         })
         this.delUserList(record.uid);
+        this.getUserList(this.state.sort,this.state.page, this.state.pageSize)
     }
     delSelect = () => {     //批量删除
         this.delAllUserList(this.state.delSelectID)
