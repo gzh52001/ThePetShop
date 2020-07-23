@@ -51,8 +51,10 @@ function GoodsInfo(props) {
   const [wishlist,setWishlist] = useState(false);
   const changeWish = useCallback(()=>{
     if(!wishlist){
+      changebtnshow1(0)
       Toast.success('收藏成功!', 1);
     }else{
+      changebtnshow1(0)
       Toast.fail('取消收藏!', 1);
     }
     setWishlist(!wishlist)
@@ -187,7 +189,6 @@ function GoodsInfo(props) {
                           ginfoData.gimgs?ginfoData.gimgs.map((val,index) => (
                             <a
                               key={index}
-                              href="###"
                               style={{ display: 'inline-block', width: '100%', height: `${lbImgHeight.imgHeight}px`,overflow:'hidden' }}
                             >
                               <img

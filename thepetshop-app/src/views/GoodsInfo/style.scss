@@ -53,6 +53,7 @@
 
     // 轮播图
     .goodsInfo-banner{
+        touch-action: none;
         width: 100%;
         .slider-list{
             height: 375px !important;

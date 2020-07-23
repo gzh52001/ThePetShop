@@ -337,7 +337,7 @@ class Home extends Component {
                      isCarousel 
                      hasLine={false}
                     //  onClick={_el => console.log(_el)} 
-                    itemStyle={{height:'170px' ,padding:'5px 0' }}
+                    itemStyle={{minHeight:'170px' ,padding:'5px 0' }}
                      renderItem={dataItem => (
                         <div style={{ padding: '5px' }} onClick={()=>this.props.history.push(`/goodsInfo/${dataItem.gid}`)}>
                           <img src={dataItem.icon} style={{ width: '75px', height: '75px' }} alt="" />
