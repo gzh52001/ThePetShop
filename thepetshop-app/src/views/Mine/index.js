@@ -247,7 +247,7 @@ class Mine extends Component {
                                     <img src={userimg} alt='用户头像' />
                                     :
                                     (
-                                        <img src={require('@/assets/img/lgf4.png')} alt='用户头像' />
+                                        <img src={require('@/assets/img/nologin.jpg')} alt='用户头像' />
                                     )
                             }
                         </a>
