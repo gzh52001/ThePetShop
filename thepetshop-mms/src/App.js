@@ -1,9 +1,7 @@
 import React from 'react';
 import { Route, withRouter,  Switch } from 'react-router-dom'
 
-import Main from '@/components/Main'
-
-import "@/assets/css/reset.css"
+import Main from "@/components/Main"
 
 function App() {
   return (

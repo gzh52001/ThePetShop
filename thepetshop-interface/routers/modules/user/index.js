@@ -42,7 +42,10 @@ router.post('/reg', async (req, res) => {
     let miwen = bcryptjs.hashSync(password)
     let time = Date.now()
     time = time - 0
-    let userface = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1595014189445&di=c7f719e793b77c081e5a037484158eb8&imgtype=0&src=http%3A%2F%2Fqny.smzdm.com%2F202007%2F03%2F5efe844574cd74989.jpg_d250.jpg'
+    let userface = Math.floor(Math.random()*2)==0?
+    'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1595485826440&di=791adfc21d3ab672f03973749440c048&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20180203%2F0b7441afb9cb4fe3a6d7a1f7cb556e45.jpeg'
+    :
+    'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1215489595,3910135200&fm=26&gp=0.jpg'
     let myname = Math.floor(Math.random()*2)%2==0?'梅小鸡':'梅没鸡'
     try {
         let sql = `insert into user(myname,username,password,userface,time,phonenum,email) values('${myname}','${username}','${miwen}','${userface}','${time}','${phonenum}','${email}')`

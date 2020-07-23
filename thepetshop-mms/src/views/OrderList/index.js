@@ -25,7 +25,7 @@ class OrderList extends Component {
         })
         if (DetailedFlag) {
              this.getOrderDetailed(data.uid,data.gid,data.otime);
-            console.log(data)
+            // console.log(data)
         }
     }
     getOrderDetailed = async (uid,gid,otime) => {     //获取商品详情
@@ -43,23 +43,6 @@ class OrderList extends Component {
             console.log(error);
         }
     }
-    // getGoodsDetailed = async (gid) => {     //获取商品详情
-    //     try {
-    //         let p = await GoodsListApi.getGoodsDetailed(gid);
-    //         if (p.data.flag) {
-    //             console.log(p.data.data[0])
-    //             let a = JSON.parse(p.data.data[0].gimgs);
-    //             this.setState({
-    //                 goodsData: p.data.data[0],
-    //                 imgs: a
-    //             })
-    //         } else {
-    //             console.log("获取失败")
-    //         }
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
     toDate = (now) => {
         let a = new Date(now)
         var year = a.getFullYear();  //取得4位数的年份

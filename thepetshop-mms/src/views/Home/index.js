@@ -29,7 +29,7 @@ class Home extends Component {
                     <Timeline.Item onClick={() => { this.props.history.push("/order/sendOrder") }} style={{ cursor: "pointer" }} dot={<FileDoneOutlined />}>已发货订单</Timeline.Item>
                 </Timeline>
                 <Card bordered={false} style={{ width: 250, position: "absolute", top: "50%", left: "50%",transform: "translateY(-50%) translateX(-50%)" }}>
-                    <Avatar className="adminHeader" size={150} icon={<UserOutlined />} />
+                    <Avatar className="adminHeader" size={150} src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1595482395309&di=e35fc7d5d101ec4dfed1d582e5cfce19&imgtype=0&src=http%3A%2F%2Ft9.baidu.com%2Fit%2Fu%3D3172368063%2C2201035007%26fm%3D193" icon={<UserOutlined />} />
                     <h2 className="adminName">{myname}</h2>
                 </Card>
             </div>
