@@ -34,7 +34,7 @@
 
 宠物商城
 
-<img src="./petshop/app-1.png" alt="'app-1'" style="zoom:25%;" /><img src="./petshop/app-2.png" alt="app-2" style="zoom:25%;" /><img src="./petshop/app-3.png" alt="app-3" style="zoom:25%;" /><img src="./petshop/app-4.png" alt="app-4" style="zoom:25%;" /><img src="./petshop/app-5.png" alt="app-5" style="zoom:25%;" />
+<img src="petshop/app-1.png" alt="'app-1'" style="zoom:25%;" /><img src="petshop/app-2.png" alt="app-2" style="zoom:25%;" /><img src="./petshop/app-3.png" alt="app-3" style="zoom:25%;" /><img src="./petshop/app-4.png" alt="app-4" style="zoom:25%;" /><img src="./petshop/app-5.png" alt="app-5" style="zoom:25%;" />
 
 宠物后台管理系统
 
