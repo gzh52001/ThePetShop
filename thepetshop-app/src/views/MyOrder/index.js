@@ -18,7 +18,7 @@ function MyOrder (props){
             let {uid} = getUser();
             GoodsApi.getMyOrder(uid).then(res=>{
                 if(res.data.flag){
-                    let arr = res.data.data.filter(item=>item.deliver==0)
+                    let arr = res.data.data
                     arr.forEach(item => {
                         let time = item.otime;
                         let d = new Date(time)
@@ -49,7 +49,7 @@ function MyOrder (props){
                             {/* <div className='topTitle'>
                                 <h2 className="gbrandtitle">沙雕国富旗舰店 {'>'}</h2>
                             </div> */}
-                            <span className="fh-title">{item.deliver?'':'商家还未发货'}</span>
+                            <span className="fh-title">{item.deliver?'待收货':'商家还未发货'}</span>
                             <div className='goods-message'>
                                 <img alt="" src={item.gimgs}  onClick={(goto.bind(null,item.gid))}/>
                                 <h3 className="goods-title"  onClick={goto.bind(null,item.gid)}>{item.gtitle}
@@ -65,7 +65,7 @@ function MyOrder (props){
                                 <div className='order-btn'>
                                     <span className="goGoodsInfo" onClick={goto.bind(null,item.gid)}>查看商品</span>
                                     <span className="order-isok" style={
-                                        item.deliver?{}:{display:'none'}
+                                        item.deliver==1?{}:{display:'none'}
                                     }>确认收货</span>
                                 </div>
                                 

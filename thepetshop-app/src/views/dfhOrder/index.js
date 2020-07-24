@@ -9,7 +9,7 @@ const token = getToken();
 function MyOrder (props){
 
     const [orderData,setOrderData] = useState('');
-
+    const [topTitle,setTitle] = useState(0)
     useEffect(()=>{
         if(token){
             let {uid} = getUser();
@@ -40,7 +40,7 @@ function MyOrder (props){
     return (
         <div className='myorder-wrap'>
             <div className='top'>
-                <Navbar name="待发货商品" props={props} />
+                <Navbar name={props.location.search==="?dfh"?'待发货商品':"待收货商品"} props={props} />
             </div>
             {/* <div className='myorder-goods' style={orderData&&token?{}:{display:'none'}}> */}
             <div className='myorder-goods' style={orderData?{}:{display:'none'}}>
@@ -50,7 +50,7 @@ function MyOrder (props){
                             {/* <div className='topTitle'>
                                 <h2 className="gbrandtitle">沙雕国富旗舰店 {'>'}</h2>
                             </div> */}
-                            <span className="fh-title">商家还未发货</span>
+                            <span className="fh-title">{item.deliver==1?'待收货':'商家还未发货'}</span>
                             <div className='goods-message'>
                                 <img alt="" src={item.gimgs} onClick={goto.bind(null,item.gid)} />
                                 <h3 className="goods-title" onClick={goto.bind(null,item.gid)} >{item.gtitle}
@@ -66,6 +66,9 @@ function MyOrder (props){
                                 {/* [0].replace(/\//g,".") */}
                                 <div className='order-btn'>
                                     <span className="goGoodsInfo" onClick={goto.bind(null,item.gid)}>查看商品</span>
+                                    <span className="order-isok" style={
+                                        item.deliver==1?{}:{display:'none'}
+                                    }>确认收货</span>
                                 </div>
                                 
                             </div>
