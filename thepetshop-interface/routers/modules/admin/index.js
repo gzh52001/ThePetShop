@@ -496,7 +496,7 @@ router.get("/searchgoods", async (req, res) => {
         res.send(inf)
     }
 })
-//添加商品(**************************88888)
+//添加商品
 router.put("/addgoods",async(req,res)=>{
     let {gtitle,gdesc,gbrandtitle,tid,gprice,gsize,stock,gimgs} = req.body
     console.log(tid)
@@ -626,7 +626,14 @@ router.get('/getallorder', async (req, res) => {
                         }
                     })
                 })
-                let plength = await query(`select uid,gid,count,gsize,otime from goodsorder`)
+                if(isDeliver == 0){
+                    sql2 = `select uid from goodsorder where deliver='0'`
+                }else if(isDeliver == 1){
+                    sql2 = `select uid from goodsorder where deliver='1'`
+                }else{
+                    sql2 = `select uid from goodsorder`
+                }
+                let plength = await query(sql2)
                 let total = plength.length
                 inf = {
                     code: 2000,
