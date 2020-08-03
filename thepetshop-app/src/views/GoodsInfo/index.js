@@ -124,7 +124,8 @@ function GoodsInfo(props) {
     });
     // console.log("去也",'uid:'+uid,'gid:'+gid,'count:'+count,'gsize:'+gsize);
     try {
-      let p = await GoodsApi.goSetGoodsCart(uid,gid,count,gsize)
+      let p = await GoodsApi.goSetGoodsCart(uid,gid,count,gsize);
+      console.log(p.data)
       if(p.data.flag){
         Toast.success('加入购物车成功!', 1);
         store.dispatch(Allaction.add2cart({gid,gtitle,gimgs,gprice,ischeck:0,count,gsize}))

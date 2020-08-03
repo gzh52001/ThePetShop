@@ -42,14 +42,13 @@ export default {
         })
     },
     //修改商品数量
-    changenum(uid,gid,gsize,count){
+    changenum(uid,cid,count){
         return request({
             method:'put',
             url:'/goods/changecartcount',
             data:{
                 uid,
-                gid,
-                gsize,
+                cid,
                 count
             }
         })

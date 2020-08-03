@@ -19,7 +19,7 @@ function reducer(state= initState,action){
             return {
                 ...state,
                 goods:state.goods.map(item=>{
-                    if(item.gid===action.gid){
+                    if(item.cid===action.cid){
                         item.count = action.count
                     }
                     return item;

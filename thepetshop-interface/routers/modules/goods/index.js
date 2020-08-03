@@ -171,7 +171,7 @@ router.get('/searchgoods', async (req, res) => {
     try {
         let sql = `select gid,gtitle,gprice,gxiaoliang,gimgs from goodsinfo where gtitle like '%${gtitle}%'`;
         let p = await query(sql)
-        console.log(p)
+        // console.log(p)
         if (p.length) {
             inf = {
                 code: 2000,
@@ -290,7 +290,7 @@ router.get('/searchandsort', async (req, res) => {
 //添加购物车
 router.put('/addcart', async (req, res) => {
     let { uid, gid, count, gsize } = req.body
-    // console.log(uid, gid, count, gsize)
+    console.log(uid, gid, count, gsize)
     let inf
     try {
         let p1 = await query(`select * from goodscart where uid='${uid}' and gid='${gid}' and gsize='${gsize}'`)
@@ -528,13 +528,13 @@ router.put('/checkcartall', async (req, res) => {
 
 //购物车改变数量
 router.put('/changecartcount', async (req, res) => {
-    let { uid, gid, gsize, count } = req.body
-    // console.log(uid,gid,gsize,count)
+    let { uid, cid, count } = req.body
+    // console.log( uid, cid, count)
     let inf
     try {
-        let result = await query(`select gsize from goodsinfo where gid='${gid}'`)
-        gsize = JSON.parse(result[0].gsize).indexOf(gsize)
-        let p = await query(`update goodscart set count=${count} where uid='${uid}' and gid='${gid}' and gsize='${gsize}'`)
+        // let result = await query(`select gsize from goodsinfo where gid='${gid}'`)
+        // gsize = JSON.parse(result[0].gsize).indexOf(gsize)
+        let p = await query(`update goodscart set count=${count} where uid='${uid}' and cid='${cid}'`)
         if (p.affectedRows) {
             inf = {
                 code: 2000,

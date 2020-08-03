@@ -3,7 +3,7 @@ import cartApi from '@/api/shoppingcart';
 import { Toast } from 'antd-mobile';
 import {changenum} from '../actions/cartAction';
 
-function* changegoodsnum({type, gid,count,uid,gsize}){
+function* changegoodsnum({gid,count,uid,cid}){
     // console.log(type, gid,count,uid,gsize);
     const p = yield cartApi.getStock(gid);
     // console.log(p.data.flag);
@@ -11,8 +11,8 @@ function* changegoodsnum({type, gid,count,uid,gsize}){
         if(count>p.data.data.stock){
             Toast.fail('库存量不足');
         }else{
-            yield put(changenum(gid,count));//设置redux的商品数量
-            yield cartApi.changenum(uid,gid,gsize,count);//设置数据库的商品数量
+            yield put(changenum(cid,count));//设置redux的商品数量
+            yield cartApi.changenum(uid,cid,count);//设置数据库的商品数量
         }
     }else{
         Toast.fail('库存量不足');

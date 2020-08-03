@@ -16,10 +16,10 @@ export function add(goods){
     }
 }
 // 修改数量
-export function changenum(gid,count){
+export function changenum(cid,count){
     return {
         type:CAHNGE_NUM,
-        gid,
+        cid,
         count
     }
 }

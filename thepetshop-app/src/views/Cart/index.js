@@ -20,14 +20,14 @@ const AgreeItem = Checkbox.AgreeItem;
     addgoods(goods){
         dispatch(Allaction.add(goods))
     },
-    changenum(gid, uid, gsize, count) {//改变商品数量
+    changenum(gid, uid, cid, count) {//改变商品数量
         // console.log(gid, uid,gsize,count);
         dispatch({
             type: 'CHANGE_NUM',
             gid,
             count,
             uid,
-            gsize
+            cid
         })
     },
     changecheck(cid, check) {//修改选中状态
@@ -205,7 +205,7 @@ class Cart extends Component {
                 p.data.data.forEach(item=>{
                     item.isnum = false;
                 })
-                console.log(p.data.data);
+                // console.log(p.data.data);
                 addgoods(p.data.data)
             }else{
             //   console.log('获取失败');
@@ -272,7 +272,7 @@ class Cart extends Component {
                                                                                     style={{ width: '70px', minWidth: '70px', height: '20px' }}
                                                                                     showNumber
                                                                                     value={item.count}
-                                                                                    onChange={changenum.bind(this, item.gid, uid, item.gsize)}
+                                                                                    onChange={changenum.bind(this, item.gid, uid, item.cid)}
                                                                                     max={6}
                                                                                     min={1}
                                                                                 />
